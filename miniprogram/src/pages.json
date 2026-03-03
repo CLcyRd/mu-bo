@@ -1,0 +1,60 @@
+{
+  "pages": [
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "博物馆介绍"
+      }
+    },
+    {
+      "path": "pages/exhibits/exhibits",
+      "style": {
+        "navigationBarTitleText": "馆藏展品"
+      }
+    },
+    {
+      "path": "pages/booking/booking",
+      "style": {
+        "navigationBarTitleText": "参观预约"
+      }
+    },
+    {
+      "path": "pages/my-bookings/my-bookings",
+      "style": {
+        "navigationBarTitleText": "我的预约"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "电影艺术家故居",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/exhibits/exhibits",
+        "text": "展品"
+      },
+      {
+        "pagePath": "pages/my-bookings/my-bookings",
+        "text": "我的"
+      }
+    ]
+  }
+}

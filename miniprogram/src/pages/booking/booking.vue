@@ -1,0 +1,179 @@
+<template>
+  <view class="container">
+    <view class="form-card">
+      <view class="form-title">预约参观</view>
+      
+      <view class="form-item">
+        <text class="label">姓名</text>
+        <input class="input" v-model="form.visitor_name" placeholder="请输入姓名" />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">手机号</text>
+        <view class="phone-group">
+          <input class="input" v-model="form.visitor_phone" placeholder="请输入手机号" type="number" />
+        </view>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">参观日期</text>
+        <picker mode="date" :start="startDate" :end="endDate" @change="onDateChange">
+          <view class="picker-value">{{ form.visit_date || '请选择日期' }}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">参观时间</text>
+        <picker mode="selector" :range="timeSlots" @change="onTimeChange">
+          <view class="picker-value">{{ form.visit_time || '请选择时间段' }}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">人数</text>
+        <slider :value="form.visitor_count" @change="onCountChange" min="1" max="5" show-value />
+      </view>
+      
+      <button class="submit-btn" type="button" @click="submitBooking">立即预约</button>
+    </view>
+  </view>
+</template>
+
+<script setup lang="ts">
+import { ref, reactive, computed } from 'vue'
+
+const form = reactive({
+  visitor_name: '',
+  visitor_phone: '',
+  visit_date: '',
+  visit_time: '',
+  visitor_count: 1
+})
+
+const countdown = ref(0)
+const timeSlots = ['10:00-11:00', '11:00-12:00', '12:00-13:00', '13:00-14:00', '14:00-15:00']
+
+const startDate = computed(() => {
+  const d = new Date()
+  return d.toISOString().split('T')[0]
+})
+
+const endDate = computed(() => {
+  const d = new Date()
+  d.setDate(d.getDate() + 30)
+  return d.toISOString().split('T')[0]
+})
+
+const onDateChange = (e: any) => {
+  form.visit_date = e.detail.value
+}
+
+const onTimeChange = (e: any) => {
+  form.visit_time = timeSlots[e.detail.value]
+}
+
+const onCountChange = (e: any) => {
+  form.visitor_count = e.detail.value
+}
+
+
+const submitBooking = () => {
+  if (!form.visitor_name || !form.visitor_phone || !form.visit_date || !form.visit_time) {
+    uni.showToast({ title: '请完善预约信息', icon: 'none' })
+    return
+  }
+  
+  const token = uni.getStorageSync('token')
+  
+  uni.showLoading({ title: '提交中...' })
+  uni.request({
+    url: 'http://localhost:8000/api/bookings/',
+    method: 'POST',
+    data: form,
+    header: token ? {
+      'Authorization': `Bearer ${token}`
+    } : {},
+    success: (res: any) => {
+      uni.hideLoading()
+      if (res.statusCode === 200) {
+        uni.showToast({ title: '预约成功', icon: 'success' })
+        setTimeout(() => {
+          uni.switchTab({
+            url: '/pages/my-bookings/my-bookings'
+          })
+        }, 1500)
+      } else {
+        uni.showToast({ title: '预约失败', icon: 'none' })
+      }
+    },
+    fail: () => {
+      uni.hideLoading()
+      uni.showToast({ title: '网络请求失败', icon: 'none' })
+    }
+  })
+}
+</script>
+
+<style>
+.container {
+  padding: 20rpx;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+}
+.form-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+}
+.form-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 40rpx;
+  color: #333;
+}
+.form-item {
+  margin-bottom: 30rpx;
+}
+.label {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+}
+.input, .picker-value {
+  background: #f5f5f5;
+  height: 80rpx;
+  line-height: 80rpx;
+  padding: 0 24rpx;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+}
+.phone-group {
+  display: flex;
+  gap: 20rpx;
+}
+.phone-group .input {
+  flex: 1;
+}
+.code-btn {
+  width: 200rpx;
+  font-size: 24rpx;
+  line-height: 80rpx;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.submit-btn {
+  margin-top: 60rpx;
+  background-color: #07c160;
+  color: white;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+}
+.submit-btn:active {
+  background-color: #06ad56;
+}
+</style>
