@@ -1,90 +1,220 @@
 <template>
   <view class="container">
-    <image class="hero-image" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=A%20vintage%20movie%20artist%20museum%20exterior%2C%20historical%20building%2C%20cinematic%20lighting&image_size=landscape_16_9" mode="aspectFill"></image>
-    
-    <view class="content">
-      <view class="title">电影艺术家故居</view>
-      <view class="description">
-        这里是著名电影艺术家的故居，记录了中国电影百年的发展历程。馆内珍藏了大量珍贵的电影剧本、海报、道具以及艺术家的生活用品，带您穿越时空，感受光影艺术的魅力。
-      </view>
-      
-      <view class="section-title">参观须知</view>
-      <view class="info-item">
-        <text class="label">开放时间：</text>
-        <text>周二至周日 9:00 - 17:00</text>
-      </view>
-      <view class="info-item">
-        <text class="label">地址：</text>
-        <text>上海市徐汇区安福路201号</text>
-      </view>
+    <view class="header">
+      <view class="title-main">谢晋故居</view>
+      <view class="title-sub">上海谢晋电影艺术基金会</view>
+    </view>
 
-      <view class="action-area">
-        <button class="book-now-btn" @click="goToBooking">立即预约</button>
+    <view class="banner-wrap">
+      <swiper class="banner-swiper" circular autoplay :interval="3000" :duration="500">
+        <swiper-item v-for="item in bannerImages" :key="item">
+          <image class="banner-image" :src="item" mode="aspectFill"></image>
+        </swiper-item>
+      </swiper>
+    </view>
+
+    <view class="nav-grid">
+      <view
+        v-for="item in navItems"
+        :key="item.action"
+        class="nav-item"
+        @click="handleNavClick(item.action)"
+      >
+        <view class="nav-icon">
+          <image class="nav-icon-image" :src="item.icon" mode="aspectFit"></image>
+        </view>
+        <view class="nav-cn">{{ item.cn }}</view>
+        <view class="nav-en">{{ item.en }}</view>
       </view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
+type NavAction = 'guide' | 'booking' | 'news' | 'volunteer'
+
+const bannerImages = [
+  '/static/museum_img/f9c3cb52f1859ff33b569b6024773334.jpg',
+  '/static/museum_img/7f28e5732e1916bc8d48645ae3b33299.jpg',
+  '/static/museum_img/eb9d69490f1ea168c46078c50544e1de.jpg',
+  '/static/museum_img/b880576a8e57193e054f4abf4c94e7d8.jpg',
+  '/static/museum_img/62ff29be24a9748931d6e4f1854338c8.jpg'
+]
+
+const toSvgDataUri = (svg: string) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
+
+const createIcon = (body: string) =>
+  toSvgDataUri(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="#3a60a7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`
+  )
+
+const navItems: { action: NavAction; cn: string; en: string; icon: string }[] = [
+  {
+    action: 'guide',
+    cn: '参观导览',
+    en: 'Visitor Information',
+    icon: createIcon('<path d="M10 8v32"/><path d="M10 10h14l4 4h10v14H24l-4-4H10"/><path d="M24 28h14v10H24"/>')
+  },
+  {
+    action: 'booking',
+    cn: '点击预约',
+    en: 'Visit Booking',
+    icon: createIcon('<path d="M8 16h32v18H8z"/><path d="M16 16v-4h16v4"/><path d="M16 25h16"/>')
+  },
+  {
+    action: 'news',
+    cn: '最新资讯',
+    en: 'Latest News',
+    icon: createIcon('<rect x="8" y="10" width="32" height="28"/><path d="M15 18h18"/><path d="M15 24h18"/><path d="M15 30h12"/>')
+  },
+  {
+    action: 'volunteer',
+    cn: '加入志愿者',
+    en: 'Be a volunteer',
+    icon: createIcon('<path d="M8 20h32v18H8z"/><path d="M8 20h32"/><path d="M24 20v18"/><path d="M24 20c0-4 3-7 7-7 2 0 4 1 5 3-1 2-3 3-5 3h-7"/><path d="M24 20c0-4-3-7-7-7-2 0-4 1-5 3 1 2 3 3 5 3h7"/>')
+  }
+]
+
 const goToBooking = () => {
   uni.navigateTo({
     url: '/pages/booking/booking'
   })
 }
+
+const goToGuide = () => {
+  uni.showToast({
+    title: '功能建设中',
+    icon: 'none'
+  })
+}
+
+const goToNews = () => {
+  uni.navigateTo({
+    url: '/pages/news/news'
+  })
+}
+
+const goToVolunteer = () => {
+  uni.showToast({
+    title: '功能建设中',
+    icon: 'none'
+  })
+}
+
+const handleNavClick = (action: NavAction) => {
+  if (action === 'booking') {
+    goToBooking()
+    return
+  }
+  if (action === 'guide') {
+    goToGuide()
+    return
+  }
+  if (action === 'news') {
+    goToNews()
+    return
+  }
+  goToVolunteer()
+}
 </script>
 
-<style>
+<style lang="scss">
 .container {
-  padding-bottom: 20px;
+  min-height: 100vh;
+  background: #2b3a6b;
+  padding: 80rpx 40rpx 30rpx;
+  box-sizing: border-box;
 }
-.hero-image {
+
+.header {
+  margin: 0 0 20rpx;
+}
+
+.title-main {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #e3d90f;
+  letter-spacing: 1rpx;
+  line-height: 1.25;
+}
+
+.title-sub {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #e3d90f;
+  line-height: 1.3;
+}
+
+.banner-wrap {
   width: 100%;
-  height: 240px;
+  height: 360rpx;
+  border-radius: 32rpx;
+  overflow: hidden;
+  background: #d8d8d8;
 }
-.content {
-  padding: 20px;
+
+.banner-swiper {
+  width: 100%;
+  height: 100%;
 }
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 16px;
+
+.banner-image {
+  width: 100%;
+  height: 100%;
 }
-.description {
-  font-size: 14px;
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 24px;
+
+.nav-grid {
+  margin-top: 32rpx;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24rpx;
 }
-.section-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 12px;
-  border-left: 4px solid #3cc51f;
-  padding-left: 10px;
+
+.nav-item {
+  background: #f6f8e1;
+  border-radius: 28rpx;
+  border: 1rpx solid #e0e0e0;
+  height: 284rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
 }
-.info-item {
-  margin-bottom: 8px;
-  font-size: 14px;
+
+.nav-item:active {
+  transform: scale(0.98);
 }
-.label {
-  color: #333;
-  font-weight: bold;
+
+.nav-icon {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 24rpx;
+  background: rgba(143, 192, 9, 0.1);
+  color: #3563bd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.action-area {
-  margin-top: 30px;
-  padding: 0 20px;
+
+.nav-icon-image {
+  width: 58rpx;
+  height: 58rpx;
 }
-.book-now-btn {
-  background-color: #07c160;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px;
-  padding: 10px 0;
-  box-shadow: 0 4px 6px rgba(7, 193, 96, 0.3);
+
+.nav-cn {
+  margin-top: 20rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.2;
 }
-.book-now-btn:active {
-  background-color: #06ad56;
-  transform: translateY(1px);
+
+.nav-en {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #5f6368;
+  line-height: 1.2;
 }
 </style>

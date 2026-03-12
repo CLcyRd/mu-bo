@@ -1,19 +1,19 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
+from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 import os
-
-# Load environment variables
 load_dotenv()
 
-from . import models, schemas, database
+from . import models, database
 from .database import engine
-from .routers import exhibits, bookings, auth, auth_wechat, users
+from .routers import bookings, auth, auth_wechat, users, consultations
+from .api_utils import api_success, register_exception_handlers
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Museum Booking API")
+register_exception_handlers(app)
 
 origins = [
     "http://localhost",
@@ -31,20 +31,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Dependency
-def get_db():
-    db = database.SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-app.include_router(exhibits.router)
 app.include_router(bookings.router)
 app.include_router(auth.router)
 app.include_router(auth_wechat.router)
 app.include_router(users.router)
+app.include_router(consultations.router)
+uploads_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads")
+os.makedirs(uploads_dir, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to Museum Booking API"}
+    return api_success({"service": "Museum Booking API"}, "服务运行正常")

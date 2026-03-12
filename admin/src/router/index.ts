@@ -1,17 +1,21 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
-import Exhibits from '../views/Exhibits.vue'
 import Bookings from '../views/Bookings.vue'
+import CreateBlog from '../views/CreateBlog.vue'
+import ConsultationManage from '../views/ConsultationManage.vue'
+import ConsultationEdit from '../views/ConsultationEdit.vue'
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   { path: '/login', component: Login },
   { 
     path: '/', 
     component: Dashboard,
     children: [
-      { path: 'exhibits', component: Exhibits },
-      { path: 'bookings', component: Bookings }
+      { path: 'bookings', component: Bookings },
+      { path: 'blog/create', component: CreateBlog },
+      { path: 'blog/manage', component: ConsultationManage },
+      { path: 'blog/edit/:id', component: ConsultationEdit }
     ]
   }
 ]

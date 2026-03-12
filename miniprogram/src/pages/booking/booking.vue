@@ -1,7 +1,11 @@
 <template>
   <view class="container">
+    <view class="page-header">
+      <view class="page-title">参观预约</view>
+      <view class="page-subtitle">Visit Booking</view>
+    </view>
     <view class="form-card">
-      <view class="form-title">预约参观</view>
+      <view class="form-title">填写预约信息</view>
       
       <view class="form-item">
         <text class="label">姓名</text>
@@ -116,39 +120,59 @@ const submitBooking = () => {
 
 <style>
 .container {
-  padding: 20rpx;
-  background-color: #f8f8f8;
+  padding: 80rpx 40rpx 40rpx;
+  background: #2b3a6b;
   min-height: 100vh;
+  box-sizing: border-box;
+}
+.page-header {
+  margin-bottom: 28rpx;
+}
+.page-title {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #e3d90f;
+  line-height: 1.25;
+}
+.page-subtitle {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #e3d90f;
+  line-height: 1.3;
 }
 .form-card {
-  background: #fff;
-  border-radius: 20rpx;
+  background: #f6f8e1;
+  border: 1rpx solid #e0e0e0;
+  border-radius: 28rpx;
   padding: 40rpx;
-  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
 }
 .form-title {
-  font-size: 36rpx;
+  font-size: 34rpx;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 40rpx;
-  color: #333;
+  margin-bottom: 34rpx;
+  color: #1a1a1a;
 }
 .form-item {
   margin-bottom: 30rpx;
 }
 .label {
   display: block;
-  font-size: 28rpx;
-  color: #666;
-  margin-bottom: 12rpx;
+  font-size: 26rpx;
+  color: #2c3f67;
+  margin-bottom: 10rpx;
 }
 .input, .picker-value {
-  background: #f5f5f5;
+  background: #ffffff;
   height: 80rpx;
   line-height: 80rpx;
   padding: 0 24rpx;
-  border-radius: 12rpx;
+  border-radius: 18rpx;
   font-size: 28rpx;
+  color: #1a1a1a;
+  border: 1rpx solid #d5dbe8;
 }
 .phone-group {
   display: flex;
@@ -157,23 +181,16 @@ const submitBooking = () => {
 .phone-group .input {
   flex: 1;
 }
-.code-btn {
-  width: 200rpx;
-  font-size: 24rpx;
-  line-height: 80rpx;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .submit-btn {
   margin-top: 60rpx;
-  background-color: #07c160;
+  background-color: #3a60a7;
   color: white;
-  border-radius: 40rpx;
+  border-radius: 48rpx;
   font-size: 32rpx;
+  font-weight: 700;
+  border: none;
 }
 .submit-btn:active {
-  background-color: #06ad56;
+  background-color: #2f4f8f;
 }
 </style>

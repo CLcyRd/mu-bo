@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineEra | Movie Museum</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Base Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        body { background-color: #e5e5e5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+
+        /* Mobile Device Simulator */
+        .device-simulator {
+            width: 375px;        /* iPhone Standard Width */
+            height: 812px;       /* iPhone Standard Height */
+            background: linear-gradient(135deg, #12151C 0%, #080A0E 100%);
+            border-radius: 40px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4), inset 0 0 0 8px #222;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Status Bar Simulation */
+        .status-bar { height: 30px; display: flex; justify-content: center; align-items: flex-end; padding-bottom: 5px; }
+        .notch { width: 120px; height: 25px; background: #222; border-radius: 0 0 15px 15px; position: absolute; top: 0; left: 50%; transform: translateX(-50%); }
+
+        /* Header Area */
+        .header { padding: 20px 20px 10px; display: flex; justify-content: space-between; align-items: center; }
+        .title h1 { font-size: 22px; color: #E5C07B; font-weight: 600; letter-spacing: 1px; }
+        .title p { font-size: 12px; color: #8892B0; margin-top: 4px; }
+        .avatar { width: 36px; height: 36px; background: #2C313C; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #fff; }
+
+        /* ====== Updated Section: Pure CSS Seamless Loop Auto-Carousel ====== */
+        .carousel-container { 
+            margin: 15px 20px; 
+            width: 335px; /* 375px - 20px margins on both sides */
+            height: 160px;
+            overflow: hidden; 
+            border-radius: 16px; /* Outer mask rounded corners */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .carousel-track { 
+            display: flex; 
+            /* Calculation: 4 real images + 1 cloned image = 5 images. Total width 500% */
+            width: 500%; 
+            height: 100%;
+            /* Apply seamless loop animation: 12s per cycle, infinite loop */
+            animation: loopSlide 12s cubic-bezier(0.4, 0, 0.2, 1) infinite; 
+        }
+        .banner { 
+            /* Calculation: Each image occupies 1/5 of total width = 20% */
+            width: 20%; 
+            height: 100%; 
+            background-size: cover; 
+            background-position: center; 
+            position: relative;
+        }
+        .banner::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 60%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        }
+        .banner-text { position: absolute; bottom: 15px; left: 15px; color: #fff; z-index: 2; }
+        .banner-text h3 { font-size: 16px; font-weight: 500; }
+
+        /* Seamless Loop Keyframes Algorithm (for 5 images, each occupies 20% displacement) */
+        @keyframes loopSlide {
+            0%, 15% { transform: translateX(0); }             /* Stay at Image 1 */
+            20%, 35% { transform: translateX(-20%); }         /* Stay at Image 2 */
+            40%, 55% { transform: translateX(-40%); }         /* Stay at Image 3 */
+            60%, 75% { transform: translateX(-60%); }         /* Stay at Image 4 */
+            80%, 95% { transform: translateX(-80%); }         /* Stay at Image 1 (Clone) */
+            100% { transform: translateX(0); }                /* Instantly jump back to Image 1 */
+        }
+        /* =========================================== */
+
+        /* Four Navigation Buttons */
+        .nav-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 10px 20px; }
+        .nav-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(229, 192, 123, 0.15);
+            border-radius: 16px; padding: 20px 15px; text-align: center;
+            transition: all 0.3s ease; backdrop-filter: blur(10px); cursor: pointer;
+        }
+        .nav-item:hover { background: rgba(229, 192, 123, 0.08); } 
+        .nav-item:active { transform: scale(0.95); background: rgba(229, 192, 123, 0.15); }
+        .nav-icon { 
+            width: 48px; height: 48px; margin: 0 auto 12px; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(229, 192, 123, 0.2), rgba(229, 192, 123, 0.05));
+            color: #E5C07B; display: flex; justify-content: center; align-items: center; font-size: 20px;
+        }
+        .nav-item h4 { color: #fff; font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+        .nav-item p { color: #8892B0; font-size: 11px; }
+
+        /* Design Notes Section */
+        .design-notes {
+            margin: auto 20px 25px; padding: 15px; background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px; border-left: 3px solid #E5C07B;
+        }
+        .design-notes h4 { color: #E5C07B; font-size: 13px; margin-bottom: 6px; }
+        .design-notes ul { color: #A0AABF; font-size: 11px; line-height: 1.6; padding-left: 15px; }
+
+        /* Bottom Operation Bar Simulation */
+        .home-indicator { width: 130px; height: 5px; background: rgba(255,255,255,0.2); border-radius: 3px; position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); }
+    </style>
+</head>
+<body>
+
+    <div class="device-simulator">
+        <div class="notch"></div>
+        <div class="status-bar"></div>
+
+        <div class="header">
+            <div class="title">
+                <h1>CineEra</h1>
+                <p>Explore the Century-Old Movie Museum</p>
+            </div>
+            <div class="avatar"><i class="fas fa-user"></i></div>
+        </div>
+
+        <div class="carousel-container">
+            <div class="carousel-track">
+                <div class="banner" style="background-image: url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');">
+                    <div class="banner-text"><h3>Memories of the Film Era</h3></div>
+                </div>
+                <div class="banner" style="background-image: url('https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');">
+                    <div class="banner-text"><h3>Monthly Special: A Century of Sci-Fi</h3></div>
+                </div>
+                <div class="banner" style="background-image: url('https://images.unsplash.com/photo-1594917544320-9118c86d8b67?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');">
+                    <div class="banner-text"><h3>Classic Projector Exhibition</h3></div>
+                </div>
+                <div class="banner" style="background-image: url('https://images.unsplash.com/photo-1579751626657-72bc17010498?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');">
+                    <div class="banner-text"><h3>Architectural Aesthetics of Light and Shadow</h3></div>
+                </div>
+                <div class="banner" style="background-image: url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');">
+                    <div class="banner-text"><h3>Memories of the Film Era</h3></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-grid">
+            <div class="nav-item">
+                <div class="nav-icon"><i class="fas fa-map-signs"></i></div>
+                <h4>Visitor Info</h4>
+                <p>Opening Hours & Directions</p>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon"><i class="fas fa-ticket-alt"></i></div>
+                <h4>Booking</h4>
+                <p>Get Your E-Ticket</p>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon"><i class="fas fa-newspaper"></i></div>
+                <h4>Latest News</h4>
+                <p>Exhibitions & Movie Updates</p>
+            </div>
+            <div class="nav-item">
+                <div class="gift"></div> <div class="nav-icon"><i class="fas fa-gift"></i></div>
+                <h4>Gift Shop</h4>
+                <p>Authentic Movie Merchandise</p>
+            </div>
+        </div>
+
+
+
+        <div class="home-indicator"></div>
+    </div>
+
+</body>
+</html>

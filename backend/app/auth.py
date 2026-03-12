@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 # Secret key for JWT encoding/decoding
 SECRET_KEY = "your-secret-key-should-be-in-env-file"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/token")

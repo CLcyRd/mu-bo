@@ -42,6 +42,18 @@ def upgrade_db():
     else:
         print("user_id already exists in bookings")
 
+    cursor.execute("PRAGMA table_info(consultation)")
+    consultation_columns = [info[1] for info in cursor.fetchall()]
+
+    if 'cover' not in consultation_columns:
+        try:
+            cursor.execute("ALTER TABLE consultation ADD COLUMN cover VARCHAR(1024) NOT NULL DEFAULT ''")
+            print("Added cover column to consultation")
+        except Exception as e:
+            print(f"cover error: {e}")
+    else:
+        print("cover already exists in consultation")
+
     # Make username nullable (SQLite doesn't support ALTER COLUMN easily, so we skip enforcing this constraints strictly for now as SQLAlchemy handles it on app level usually, but DB constraint remains. 
     # To properly fix NOT NULL constraint in SQLite, we'd need to recreate table. 
     # For this dev task, we assume existing users have usernames and new users might not (but SQLite schema might complain if we insert NULL).

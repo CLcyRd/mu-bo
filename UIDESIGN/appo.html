@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking | Cinema Museum</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Base Resets */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #e5e5e5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+
+        /* Mobile Device Simulator */
+        .device-simulator {
+            width: 375px;
+            height: 812px;
+            background: linear-gradient(135deg, #12151C 0%, #080A0E 100%);
+            border-radius: 40px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4), inset 0 0 0 8px #222;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+        }
+
+        /* Status Bar & Notch */
+        .status-bar { height: 35px; }
+        .notch { width: 120px; height: 25px; background: #222; border-radius: 0 0 15px 15px; position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 10; }
+
+        /* App Header */
+        .app-header { padding: 15px 20px; display: flex; align-items: center; gap: 15px; }
+        .back-btn { font-size: 18px; color: #E5C07B; cursor: pointer; transition: 0.3s; }
+        .back-btn:hover { opacity: 0.7; }
+        .app-header h2 { font-size: 20px; font-weight: 500; letter-spacing: 0.5px; }
+
+        /* Main Content */
+        .content { flex: 1; overflow-y: auto; padding: 0 20px; scrollbar-width: none; }
+        .content::-webkit-scrollbar { display: none; }
+
+        section { margin-bottom: 25px; }
+        .section-title { font-size: 14px; color: #8892B0; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+
+        /* Date Selector */
+        .date-picker { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .date-item { 
+            min-width: 60px; height: 80px; background: rgba(255,255,255,0.03); 
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            cursor: pointer; transition: 0.3s;
+        }
+        .date-item.active { background: #E5C07B; border-color: #E5C07B; }
+        .date-item.active span { color: #000 !important; }
+        .date-item .day { font-size: 12px; color: #8892B0; margin-bottom: 4px; }
+        .date-item .num { font-size: 18px; font-weight: 600; }
+
+        /* Time Slots */
+        .time-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .time-slot {
+            padding: 12px 5px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px; text-align: center; font-size: 13px; cursor: pointer; transition: 0.3s;
+        }
+        .time-slot:hover { border-color: #E5C07B; color: #E5C07B; }
+        .time-slot.selected { background: rgba(229, 192, 123, 0.2); border-color: #E5C07B; color: #E5C07B; }
+
+        /* Input Form */
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 12px; color: #8892B0; margin-bottom: 6px; }
+        .input-group input {
+            width: 100%; padding: 12px 15px; background: #1A1D24; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px; color: #fff; font-size: 14px; outline: none; transition: 0.3s;
+        }
+        .input-group input:focus { border-color: #E5C07B; box-shadow: 0 0 10px rgba(229, 192, 123, 0.1); }
+
+        /* Footer Button */
+        .footer-action { padding: 20px; background: transparent; }
+        .btn-confirm {
+            width: 100%; padding: 16px; background: #E5C07B; border: none; border-radius: 12px;
+            color: #000; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 8px 20px rgba(229, 192, 123, 0.2);
+        }
+        .btn-confirm:active { transform: scale(0.98); opacity: 0.9; }
+
+        /* Design Notes Overlay */
+        .design-notes {
+            margin: 10px 20px 25px; padding: 15px; background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px; border-left: 3px solid #E5C07B;
+        }
+        .design-notes h4 { color: #E5C07B; font-size: 13px; margin-bottom: 6px; }
+        .design-notes p { color: #A0AABF; font-size: 11px; line-height: 1.5; }
+
+        .home-indicator { width: 130px; height: 5px; background: rgba(255,255,255,0.2); border-radius: 3px; position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); }
+    </style>
+</head>
+<body>
+
+    <div class="device-simulator">
+        <div class="notch"></div>
+        <div class="status-bar"></div>
+
+        <header class="app-header">
+            <i class="fas fa-chevron-left back-btn"></i>
+            <h2>Book a Visit</h2>
+        </header>
+
+        <div class="content">
+            <section>
+                <p class="section-title">Select Date</p>
+                <div class="date-picker">
+                    <div class="date-item">
+                        <span class="day">Mon</span>
+                        <span class="num">12</span>
+                    </div>
+                    <div class="date-item active">
+                        <span class="day">Tue</span>
+                        <span class="num">13</span>
+                    </div>
+                    <div class="date-item">
+                        <span class="day">Wed</span>
+                        <span class="num">14</span>
+                    </div>
+                    <div class="date-item">
+                        <span class="day">Thu</span>
+                        <span class="num">15</span>
+                    </div>
+                    <div class="date-item">
+                        <span class="day">Fri</span>
+                        <span class="num">16</span>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <p class="section-title">Select Time Slot</p>
+                <div class="time-grid">
+                    <div class="time-slot">09:00 AM</div>
+                    <div class="time-slot selected">10:30 AM</div>
+                    <div class="time-slot">01:00 PM</div>
+                    <div class="time-slot">02:30 PM</div>
+                    <div class="time-slot">04:00 PM</div>
+                    <div class="time-slot">05:30 PM</div>
+                </div>
+            </section>
+
+            <section>
+                <p class="section-title">Visitor Information</p>
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="Enter your name" value="">
+                </div>
+                <div class="input-group">
+                    <label>Phone Number</label>
+                    <input type="tel" placeholder="Enter phone number">
+                </div>
+            </section>
+
+
+        </div>
+
+        <div class="footer-action">
+            <button class="btn-confirm">Confirm Booking</button>
+        </div>
+
+        <div class="home-indicator"></div>
+    </div>
+
+</body>
+</html>

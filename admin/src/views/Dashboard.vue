@@ -2,13 +2,17 @@
   <el-container class="layout-container">
     <el-aside width="200px">
       <el-menu router :default-active="$route.path" class="el-menu-vertical">
-        <el-menu-item index="/exhibits">
-          <el-icon><document /></el-icon>
-          <span>Exhibits</span>
-        </el-menu-item>
         <el-menu-item index="/bookings">
           <el-icon><calendar /></el-icon>
           <span>Bookings</span>
+        </el-menu-item>
+        <el-menu-item index="/blog/create">
+          <el-icon><edit-pen /></el-icon>
+          <span>发布咨询</span>
+        </el-menu-item>
+        <el-menu-item index="/blog/manage">
+          <el-icon><management /></el-icon>
+          <span>咨询管理</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -28,7 +32,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { Document, Calendar } from '@element-plus/icons-vue'
+import { Document, Calendar, EditPen, Management } from '@element-plus/icons-vue'
 
 const router = useRouter()
 
