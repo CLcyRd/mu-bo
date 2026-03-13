@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h2>Bookings</h2>
+    <h2>参馆预约</h2>
     <el-table :data="bookings" style="width: 100%">
-      <el-table-column prop="booking_id" label="Booking ID" />
-      <el-table-column prop="visitor_name" label="Name" />
-      <el-table-column prop="visit_date" label="Date" />
-      <el-table-column prop="visit_time" label="Time" />
-      <el-table-column prop="visitor_count" label="Count" />
-      <el-table-column prop="status" label="Status">
+      <el-table-column prop="booking_id" label="预定号" />
+      <el-table-column prop="visitor_name" label="访客名" />
+      <el-table-column prop="visit_date" label="预定日期" />
+      <el-table-column prop="visit_time" label="预定时间" />
+      <el-table-column prop="visitor_count" label="访客人数" />
+      <el-table-column prop="status" label="状态">
         <template #default="scope">
           <el-tag>{{ scope.row.status }}</el-tag>
         </template>

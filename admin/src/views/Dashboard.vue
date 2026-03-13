@@ -4,7 +4,7 @@
       <el-menu router :default-active="$route.path" class="el-menu-vertical">
         <el-menu-item index="/bookings">
           <el-icon><calendar /></el-icon>
-          <span>Bookings</span>
+          <span>参馆预约</span>
         </el-menu-item>
         <el-menu-item index="/blog/create">
           <el-icon><edit-pen /></el-icon>
@@ -19,8 +19,8 @@
     <el-container>
       <el-header>
         <div class="header-content">
-          <h3>Museum Admin</h3>
-          <el-button type="text" @click="logout">Logout</el-button>
+          <h3>谢晋故居数据管理平台</h3>
+          <el-button type="text" @click="logout">退出登录</el-button>
         </div>
       </el-header>
       <el-main>

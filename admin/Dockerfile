@@ -3,6 +3,7 @@
 # 构建阶段
 FROM node:18-alpine as build-stage
 WORKDIR /app
+ENV NODE_OPTIONS=--max-old-space-size=4096
 COPY package*.json ./
 RUN npm install
 COPY . .
