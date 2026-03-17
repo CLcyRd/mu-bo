@@ -286,6 +286,66 @@ def update_volunteer_note(
         return _internal_error(request_id)
 
 
+@router.get("/my")
+def get_my_volunteer(
+    db: Session = Depends(database.get_db),
+    current_user: models.User = Depends(auth.get_current_active_user),
+):
+    volunteer = db.query(models.Volunteer).filter(models.Volunteer.user_id == current_user.user_id).first()
+    if not volunteer:
+        return api_success({"item": None}, message="当前用户未报名志愿者")
+    return api_success(
+        {
+            "item": {
+                "volunteer_id": volunteer.volunteer_id,
+                "user_id": volunteer.user_id,
+                "name": volunteer.name,
+                "phone": volunteer.phone,
+                "email": volunteer.email,
+                "status": volunteer.status,
+                "note": volunteer.note,
+                "created_at": volunteer.created_at.isoformat() if volunteer.created_at else None,
+                "updated_at": volunteer.updated_at.isoformat() if volunteer.updated_at else None,
+            }
+        }
+    )
+
+
+@router.delete("/my")
+def delete_my_volunteer(
+    request: Request,
+    db: Session = Depends(database.get_db),
+    current_user: models.User = Depends(auth.get_current_active_user),
+):
+    request_id = _extract_request_id(request)
+    try:
+        volunteer = db.query(models.Volunteer).filter(models.Volunteer.user_id == current_user.user_id).first()
+        if not volunteer:
+            return JSONResponse(
+                status_code=status.HTTP_404_NOT_FOUND,
+                content={"code": 4040, "message": "志愿者记录不存在", "data": {"user_id": current_user.user_id}},
+            )
+        if volunteer.status != "未审核":
+            return JSONResponse(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                content={"code": 4002, "message": "仅未审核状态可取消报名", "data": {"status": volunteer.status}},
+            )
+        volunteer_id = volunteer.volunteer_id
+        db.delete(volunteer)
+        db.commit()
+        return api_success({"volunteer_id": volunteer_id}, message="取消报名成功")
+    except Exception as exc:
+        db.rollback()
+        logger.error(
+            "volunteer_delete_my_error request_id=%s user_id=%s error=%s stack=%s",
+            request_id,
+            current_user.user_id,
+            str(exc),
+            traceback.format_exc(),
+        )
+        return _internal_error(request_id)
+
+
 @router.delete("/{volunteer_id}")
 def delete_volunteer(
     volunteer_id: int,

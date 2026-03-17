@@ -1,6 +1,40 @@
 <template>
   <view class="container">
-    <!-- Upcoming Bookings -->
+    <view class="section-title volunteer-title">志愿者报名</view>
+    <view v-if="!myVolunteer" class="empty-tip">
+      暂无志愿者报名信息
+    </view>
+    <view v-else class="booking-card">
+      <view class="card-header">
+        <text class="booking-id">志愿者信息</text>
+        <text class="status volunteer-status" :class="getVolunteerStatusClass(myVolunteer.status)">
+          {{ myVolunteer.status }}
+        </text>
+      </view>
+      <view class="card-body">
+        <view class="info-row">
+          <text class="label">报名人：</text>
+          <text class="value">{{ myVolunteer.name }}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">报名时间：</text>
+          <text class="value">{{ formatVolunteerTime(myVolunteer.created_at) }}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">状态：</text>
+          <text class="value">{{ myVolunteer.status }}</text>
+        </view>
+      </view>
+      <view class="card-footer" v-if="myVolunteer.status === '未审核'">
+        <button
+          class="cancel-btn"
+          size="mini"
+          type="button"
+          plain
+          @click="handleVolunteerCancel"
+        >取消报名</button>
+      </view>
+    </view>
     <view class="section-title">我的预约</view>
     <view v-if="upcomingBookings.length === 0" class="empty-tip">
       暂无即将到来的预约
@@ -42,7 +76,8 @@
       </view>
     </view>
 
-    <!-- Past Bookings -->
+
+
     <view class="history-section">
       <view class="section-header" @click="toggleHistory">
         <text class="section-title">历史记录</text>
@@ -92,8 +127,28 @@ interface Booking {
   status: string
 }
 
+interface Volunteer {
+  volunteer_id: number
+  user_id: number
+  name: string
+  phone: string
+  email: string | null
+  status: '已审核' | '未审核'
+  note: string | null
+  created_at: string
+  updated_at: string
+}
+
+interface ApiResponse<T> {
+  code: number
+  message: string
+  data: T
+}
+
 const bookings = ref<Booking[]>([])
+const myVolunteer = ref<Volunteer | null>(null)
 const showHistory = ref(false)
+const apiHost = 'http://localhost:8000'
 
 const upcomingBookings = computed(() => {
   const now = new Date()
@@ -137,35 +192,63 @@ const getStatusText = (status: string) => {
   return map[status] || status
 }
 
-const fetchBookings = async () => {
+const getVolunteerStatusClass = (status: Volunteer['status']) => {
+  return status === '已审核' ? 'approved' : 'unreviewed'
+}
+
+const formatVolunteerTime = (value?: string) => {
+  if (!value) return '-'
+  return value.replace('T', ' ').slice(0, 19)
+}
+
+const requestWithToken = <T>(url: string, method: 'GET' | 'DELETE') => {
   const token = uni.getStorageSync('token')
   if (!token) {
     uni.navigateTo({ url: '/pages/login/login' })
-    return
+    return Promise.reject(new Error('未登录'))
   }
-
-  try {
-    const res = await new Promise<any>((resolve, reject) => {
-      uni.request({
-        url: 'http://localhost:8000/api/bookings/my',
-        method: 'GET',
-        header: {
-          'Authorization': `Bearer ${token}`
-        },
-        success: (res) => {
-          if (res.statusCode === 200) {
-            resolve(res.data)
-          } else {
-            reject(res)
-          }
-        },
-        fail: reject
-      })
+  return new Promise<T>((resolve, reject) => {
+    uni.request({
+      url: `${apiHost}${url}`,
+      method,
+      header: {
+        Authorization: `Bearer ${token}`
+      },
+      success: (res: any) => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          resolve(res.data as T)
+          return
+        }
+        reject(res.data || res)
+      },
+      fail: reject
     })
+  })
+}
+
+const fetchBookings = async () => {
+  try {
+    const res = await requestWithToken<Booking[]>('/api/bookings/my', 'GET')
     bookings.value = res
   } catch (e) {
     console.error(e)
     uni.showToast({ title: '加载失败', icon: 'none' })
+  }
+}
+
+const fetchMyVolunteer = async () => {
+  try {
+    const res = await requestWithToken<ApiResponse<{ item: Volunteer | null }>>('/api/volunteers/my', 'GET')
+    if (res.code !== 0) {
+      throw new Error(res.message || '加载失败')
+    }
+    myVolunteer.value = res.data?.item || null
+  } catch (e: any) {
+    myVolunteer.value = null
+    const message = e?.message || e?.detail
+    if (message && message !== '未登录') {
+      uni.showToast({ title: '志愿者信息加载失败', icon: 'none' })
+    }
   }
 }
 
@@ -180,27 +263,9 @@ const handleCancel = (item: Booking) => {
     success: async (res) => {
       if (res.confirm) {
         try {
-          const token = uni.getStorageSync('token')
-          await new Promise((resolve, reject) => {
-            uni.request({
-              url: `http://localhost:8000/api/bookings/${item.booking_id}`,
-              method: 'DELETE',
-              header: {
-                'Authorization': `Bearer ${token}`
-              },
-              success: (res) => {
-                if (res.statusCode === 204 || res.statusCode === 200) {
-                  resolve(res.data)
-                } else {
-                  reject(res.data)
-                }
-              },
-              fail: reject
-            })
-          })
-          
+          await requestWithToken(`/api/bookings/${item.booking_id}`, 'DELETE')
           uni.showToast({ title: '已取消', icon: 'success' })
-          fetchBookings() // Refresh list
+          fetchBookings()
         } catch (e: any) {
           uni.showToast({ title: e.detail || '取消失败', icon: 'none' })
         }
@@ -209,51 +274,84 @@ const handleCancel = (item: Booking) => {
   })
 }
 
+const handleVolunteerCancel = () => {
+  if (!myVolunteer.value) {
+    return
+  }
+  uni.showModal({
+    title: '确认取消',
+    content: '未审核状态下可取消志愿者报名，确认取消吗？',
+    success: async (res) => {
+      if (!res.confirm) {
+        return
+      }
+      try {
+        const response = await requestWithToken<ApiResponse<{ volunteer_id: number }>>('/api/volunteers/my', 'DELETE')
+        if (response.code !== 0) {
+          throw new Error(response.message || '取消失败')
+        }
+        uni.showToast({ title: '已取消报名', icon: 'success' })
+        myVolunteer.value = null
+      } catch (e: any) {
+        const message = e?.message || e?.detail || '取消失败'
+        uni.showToast({ title: message, icon: 'none' })
+      }
+    }
+  })
+}
+
 onShow(() => {
   fetchBookings()
+  fetchMyVolunteer()
 })
 </script>
 
 <style>
 .container {
-  padding: 20rpx;
-  background-color: #f8f8f8;
+  padding: 5rpx 40rpx;
+  background: #2b3a6b;
   min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .section-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  margin: 20rpx 0;
-  color: #333;
+  font-size: 40rpx;
+  font-weight: 700;
+  margin: 0 0 24rpx;
+  color: #e3d90f;
 }
 
 .empty-tip {
   text-align: center;
-  color: #999;
-  padding: 40rpx;
+  color: rgba(255, 255, 255, 0.75);
+  padding: 50rpx 20rpx;
   font-size: 28rpx;
+  border: 1rpx dashed rgba(227, 217, 15, 0.35);
+  border-radius: 22rpx;
+  background: rgba(11, 21, 40, 0.35);
 }
 
 .booking-card {
-  background: #fff;
-  border-radius: 12rpx;
-  padding: 24rpx;
+  background: #f6f8e1;
+  border: 1rpx solid #e0e0e0;
+  border-radius: 28rpx;
+  padding: 30rpx;
   margin-bottom: 24rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1rpx solid #eee;
+  align-items: center;
+  border-bottom: 1rpx solid rgba(44, 63, 103, 0.2);
   padding-bottom: 16rpx;
   margin-bottom: 16rpx;
 }
 
 .booking-id {
   font-size: 24rpx;
-  color: #999;
+  color: #5f6368;
 }
 
 .status {
@@ -261,9 +359,11 @@ onShow(() => {
   font-weight: bold;
 }
 
-.status.confirmed { color: #07c160; }
-.status.pending { color: #ff9900; }
-.status.cancelled { color: #999; }
+.status.confirmed { color: #2c8f5a; }
+.status.pending { color: #9b7400; }
+.status.cancelled { color: #7a8088; }
+.status.volunteer-status.approved { color: #2c8f5a; }
+.status.volunteer-status.unreviewed { color: #9b7400; }
 
 .info-row {
   display: flex;
@@ -272,17 +372,17 @@ onShow(() => {
 }
 
 .label {
-  color: #666;
+  color: #2c3f67;
   width: 160rpx;
 }
 
 .value {
-  color: #333;
+  color: #1a1a1a;
   flex: 1;
 }
 
 .card-footer {
-  border-top: 1rpx solid #eee;
+  border-top: 1rpx solid rgba(44, 63, 103, 0.2);
   padding-top: 16rpx;
   margin-top: 16rpx;
   text-align: right;
@@ -290,8 +390,12 @@ onShow(() => {
 
 .history-section {
   margin-top: 60rpx;
-  border-top: 1rpx solid #ddd;
+  border-top: 1rpx solid rgba(227, 217, 15, 0.35);
   padding-top: 20rpx;
+}
+
+.volunteer-title {
+  margin-top: 36rpx;
 }
 
 .section-header {
@@ -303,11 +407,21 @@ onShow(() => {
 
 .toggle-icon {
   font-size: 24rpx;
-  color: #666;
+  color: rgba(227, 217, 15, 0.95);
 }
 
 .history-card {
-  opacity: 0.8;
-  background-color: #f9f9f9;
+  opacity: 0.92;
+}
+
+.cancel-btn {
+  background: transparent;
+  border: 1rpx solid #2c3f67;
+  color: #2c3f67;
+  border-radius: 32rpx;
+  font-size: 24rpx;
+  padding: 0 24rpx;
+  height: 56rpx;
+  line-height: 56rpx;
 }
 </style>

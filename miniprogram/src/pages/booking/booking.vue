@@ -8,7 +8,7 @@
       <view class="form-title">填写预约信息</view>
       
       <view class="form-item">
-        <text class="label">姓名</text>
+        <text class="label">参观人/领队 姓名</text>
         <input class="input" v-model="form.visitor_name" placeholder="请输入姓名" />
       </view>
       
