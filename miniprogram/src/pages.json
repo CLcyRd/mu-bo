@@ -3,25 +3,49 @@
     {
       "path": "pages/login/login",
       "style": {
-        "navigationBarTitleText": "登录"
+        "navigationBarTitleText": "登录",
+        "navigationBarTextStyle": "white",
+        "navigationBarBackgroundColor": "#2B3A6B"
       }
     },
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "博物馆介绍"
+        "navigationBarTitleText": "博物馆介绍",
+        "navigationBarTextStyle": "white",
+        "navigationBarBackgroundColor": "#2B3A6B"
       }
     },
     {
       "path": "pages/booking/booking",
       "style": {
-        "navigationBarTitleText": "参观预约"
+        "navigationBarTitleText": "参观预约",
+        "navigationBarTextStyle": "white",
+        "navigationBarBackgroundColor": "#2B3A6B"
+      }
+    },
+    {
+      "path": "pages/guide/guide",
+      "style": {
+        "navigationBarTitleText": "参观导览",
+        "navigationBarTextStyle": "white",
+        "navigationBarBackgroundColor": "#0B1528"
+      }
+    },
+    {
+      "path": "pages/volunteer/volunteer",
+      "style": {
+        "navigationBarTitleText": "加入志愿者",
+        "navigationBarTextStyle": "white",
+        "navigationBarBackgroundColor": "#0B1528"
       }
     },
     {
       "path": "pages/news/news",
       "style": {
-        "navigationBarTitleText": "最新资讯"
+        "navigationBarTitleText": "最新资讯",
+        "navigationBarTextStyle": "white",
+        "navigationBarBackgroundColor": "#2B3A6B"
       }
     },
     {
@@ -33,15 +57,21 @@
     {
       "path": "pages/my-bookings/my-bookings",
       "style": {
-        "navigationBarTitleText": "我的预约"
+        "navigationBarTitleText": "我的预约",
+        "navigationBarTextStyle": "white",
+        "navigationBarBackgroundColor": "#2B3A6B"
       }
     }
   ],
   "globalStyle": {
-    "navigationBarTextStyle": "black",
+    "navigationBarTextStyle": "white",
     "navigationBarTitleText": "电影艺术家故居",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarBackgroundColor": "#2B3A6B",
+    "backgroundColor": "#2B3A6B",
+    "navigationBarShadow": {
+      "colorType": "custom",
+      "color": "#00000000"
+    }
   },
   "tabBar": {
     "color": "#7A7E83",

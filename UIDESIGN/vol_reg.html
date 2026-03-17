@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>志愿者招募 - 寻找爱电影的你</title>
+    <style>
+        :root {
+            --bg-color: #0b1528;         /* 深蓝色背景 */
+            --card-bg: rgba(26, 42, 71, 0.4); 
+            --text-primary: #f0f4f8;
+            --text-secondary: #a0aec0;
+            --accent-color: #d4af37;     /* 暖阳金/电影质感金 */
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --input-border: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        .container {
+            padding: 0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- 顶部视觉：电影感排版 --- */
+        .hero-section {
+            padding: 60px 20px 40px;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(212, 175, 55, 0.05) 0%, transparent 100%);
+            position: relative;
+        }
+
+        /* 模拟电影场记板或胶片装饰 */
+        .hero-section::before {
+            content: 'SCENE 01 - TAKE 1';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 2px;
+            font-family: monospace;
+        }
+
+        .title-wrapper {
+            margin-bottom: 30px;
+        }
+
+        .title-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--accent-color);
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .title-line::before, .title-line::after {
+            content: '';
+            height: 1px;
+            width: 30px;
+            background-color: var(--accent-color);
+            opacity: 0.5;
+        }
+
+        .main-title {
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            color: #ffffff;
+            font-family: "KaiTi", "STKaiti", serif; /* 使用楷体增加文学感 */
+        }
+
+        /* --- 散文诗文案区 --- */
+        .poetic-text {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 2;
+            text-align: justify;
+            text-align-last: center; /* 让最后一行也居中 */
+            margin: 0 10px;
+        }
+
+        .poetic-text p {
+            margin-bottom: 16px;
+        }
+
+        .highlight {
+            color: var(--accent-color);
+            font-style: italic;
+        }
+
+        /* --- 志愿者的日常 (卡片区) --- */
+        .content-section {
+            padding: 0 20px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 16px;
+            color: var(--accent-color);
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .section-subtitle::before, .section-subtitle::after {
+            content: '—';
+            color: rgba(212, 175, 55, 0.4);
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-list li {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: var(--accent-color);
+            margin-bottom: 4px;
+            opacity: 0.9;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* --- 注册表单区 --- */
+        .form-card {
+            background: transparent;
+            padding: 0 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            padding-left: 4px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: #fff;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        textarea.form-control {
+            resize: none;
+            height: 100px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--accent-color);
+            color: #0b1528;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .submit-btn:active {
+            opacity: 0.8;
+        }
+
+        /* 底部装饰 */
+        .footer-decor {
+            text-align: center;
+            margin-top: 40px;
+            opacity: 0.3;
+        }
+        .footer-decor img {
+            width: 40px;
+            filter: invert(1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <section class="hero-section">
+            <div class="title-wrapper">
+                <div class="title-line">寻找</div>
+                <h1 class="main-title">爱电影的你</h1>
+            </div>
+
+            <div class="poetic-text">
+                <p>作为谢晋故居的一位志愿者，<br>您是“工作人员”，也是故居当天的“临时主人”。</p>
+                <p>您会看见清晨的阳光照进玄关的<span class="highlight">金句墙</span>，<br>听见下午的脚步声在老地板上轻轻响起，<br>遇见来自不同地方的观众——</p>
+                <p>有人是看了他的电影后来的，<br>有人是陪父母或孩子来的，<br>有人只是想来看看，<br>一位导演曾经住过的地方是什么样子。</p>
+                <p style="margin-top: 24px; color: var(--accent-color); font-weight: 500;">您的一天，将成为光影故事的一页。</p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="info-card">
+                <h2 class="section-subtitle">志愿者的日常</h2>
+                <ul class="info-list">
+                    <li>
+                        <span class="info-label">工作时间</span>
+                        <span class="info-value">每周三、周六 10:00 - 16:00</span>
+                    </li>
+                    <li>
+                        <span class="info-label">工作地点</span>
+                        <span class="info-value">谢晋故居纪念馆内</span>
+                    </li>
+                    <li>
+                        <span class="info-label">工作内容</span>
+                        <span class="info-value">配合游客参观，做好引导与秩序维护，闭馆前整理工作台账。在需要的时候，为来访者指一指路、聊一聊谢晋、聊一聊电影。</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="form-card">
+            <h2 class="section-subtitle">加入我们</h2>
+            <form onsubmit="event.preventDefault(); alert('报名信息已模拟提交！');">
+                <div class="form-group">
+                    <label>您的姓名</label>
+                    <input type="text" class="form-control" placeholder="请输入真实姓名" required>
+                </div>
+
+                <div class="form-group">
+                    <label>联系电话</label>
+                    <input type="tel" class="form-control" placeholder="请输入手机号码" required>
+                </div>
+
+                <div class="form-group">
+                    <label>最喜欢的谢晋导演作品 / 报名初衷</label>
+                    <textarea class="form-control" placeholder="聊聊您为什么想来这里，或者您与电影的故事..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">提交报名</button>
+            </form>
+        </section>
+
+        <div class="footer-decor">
+            🎬
+        </div>
+
+    </div>
+
+</body>
+</html>

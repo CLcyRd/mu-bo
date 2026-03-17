@@ -82,9 +82,8 @@ const goToBooking = () => {
 }
 
 const goToGuide = () => {
-  uni.showToast({
-    title: '功能建设中',
-    icon: 'none'
+  uni.navigateTo({
+    url: '/pages/guide/guide'
   })
 }
 
@@ -95,9 +94,8 @@ const goToNews = () => {
 }
 
 const goToVolunteer = () => {
-  uni.showToast({
-    title: '功能建设中',
-    icon: 'none'
+  uni.navigateTo({
+    url: '/pages/volunteer/volunteer'
   })
 }
 

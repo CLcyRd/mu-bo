@@ -235,7 +235,7 @@ onUnload(() => {
 }
 
 .news-title {
-  font-size: 48rpx;
+  font-size: 45rpx;
   font-weight: 700;
   color: #111111;
   line-height: 1.35;

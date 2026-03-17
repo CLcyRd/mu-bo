@@ -205,8 +205,7 @@ onShareAppMessage(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(0, 27, 53, 0.92);
-  border-bottom: 1rpx solid rgba(255, 255, 255, 0.08);
+  background: #001b35;
 }
 
 .header-btn,

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>博物馆参观指南</title>
+    <style>
+        /* CSS 变量：深蓝色系与高级感点缀色 */
+        :root {
+            --bg-color: #0b1528;         /* 深蓝色背景 */
+            --card-bg: rgba(26, 42, 71, 0.6); /* 卡片半透明背景 */
+            --text-primary: #f0f4f8;     /* 主要文字内容 */
+            --text-secondary: #a0aec0;   /* 次要文字内容 */
+            --accent-color: #d4af37;     /* 博物馆常用的复古金色点缀 */
+            --border-color: rgba(212, 175, 55, 0.2); 
+        }
+
+        /* 基础重置与排版 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+
+        /* 页面主容器 */
+        .container {
+            padding: 20px 16px;
+            max-width: 600px; /* 兼容PC端预览时的宽度 */
+            margin: 0 auto;
+        }
+
+        /* 顶部装饰/标题 */
+        .header-section {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-top: 10px;
+        }
+
+        .header-section h1 {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+        }
+
+        .header-section p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* 卡片基础样式 */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px); /* 磨砂玻璃效果 */
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 模块标题 */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            color: var(--text-primary);
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 16px;
+            background-color: var(--accent-color);
+            margin-right: 8px;
+            border-radius: 2px;
+        }
+
+        /* 1. 参观导览 */
+        .welcome-text {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--accent-color);
+        }
+
+        .desc-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-align: justify;
+        }
+
+        /* 2. 展厅介绍 */
+        .preface {
+            font-size: 14px;
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        .zone-list {
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .zone-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        .zone-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            flex: 0 0 240px;
+            scroll-snap-align: start;
+        }
+
+        .zone-img-placeholder {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            flex-shrink: 0;
+            margin-bottom: 12px;
+        }
+
+        .zone-info h3 {
+            font-size: 15px;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .zone-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+            overflow: hidden;
+        }
+
+        /* 3. 参观须知 */
+        .notice-list {
+            list-style: none;
+        }
+
+        .notice-list li {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .notice-list li::before {
+            content: '•';
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 18px;
+            line-height: 1.4;
+        }
+
+        .notice-list li:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="header-section">
+            <h1>谢晋故居纪念馆</h1>
+            <p>Xie Jin Former Residence</p>
+        </header>
+
+        <section class="card">
+            <h2 class="section-title">参观导览</h2>
+            <div class="welcome-text">欢迎走进光影与记忆交织的时光之门。</div>
+            <p class="desc-text">
+                谢晋故居位于上海市静安区江宁路 83 号江宁大楼 501 室，是谢晋导演在上海定居期间生活与工作的重要场所。在这里，他与无数创作者彻夜长谈，酝酿出一部部撼动时代的经典；在这里，他接待过海内外电影人，见证了中国电影的起承转合。这里，不仅是谢晋的家，更是中国电影的一个舞台。
+            </p>
+        </section>
+
+        <section class="card">
+            <h2 class="section-title">展厅介绍</h2>
+            <div class="preface">
+                “金杯银杯，不如老百姓的口碑。”“艺术家要有赤子之心，要有历史的忧患感。”——这里辑录了谢晋广为流传的部分名言，请您在此停留，感受谢晋的温度与厚度。
+            </div>
+            
+            <div class="zone-list">
+                <div class="zone-item">
+                    <div class="zone-img-placeholder">展区一</div>
+                    <div class="zone-info">
+                        <h3>家庭 | 朋友</h3>
+                        <p>展现谢晋的生活日常与师友群像，聆听他对故乡、亲人、朋友的深情话语，感受谢晋时代的高原与高峰。</p>
+                    </div>
+                </div>
+
+                <div class="zone-item">
+                    <div class="zone-img-placeholder">展区二</div>
+                    <div class="zone-info">
+                        <h3>场景 | 创作</h3>
+                        <p>从分镜手稿到导演工作本，从案头笔记到现场调度，复原一位导演如何将故事变成光影的全过程。</p>
+                    </div>
+                </div>
+
+                <div class="zone-item">
+                    <div class="zone-img-placeholder">展区三</div>
+                    <div class="zone-info">
+                        <h3>作品与荣誉</h3>
+                        <p>1948—2008 年 60 年创作足迹汇聚于此，代表作与荣誉见证中国电影走向世界的历程。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2 class="section-title">参观须知</h2>
+            <ul class="notice-list">
+                <li>开放时间：每周三、周六 10:00 - 16:00（15:00 前入场）。</li>
+                <li>个人参观请通过“个人预约”实名分时段预约，入馆时凭预约码或有效身份证件核验。</li>
+                <li>团队参观（10 人及以上）请通过“团队预约”提前 5 个工作日预约。</li>
+                <li>允许非商业用途拍摄，禁用闪光灯、三脚架及自拍杆。</li>
+                <li>请勿触摸或损伤展品、展柜，馆内禁烟、禁食、禁携危险品。</li>
+                <li>请将手机调至静音，轻声细语；家长请照看好随行儿童。</li>
+            </ul>
+        </section>
+    </div>
+
+</body>
+</html>

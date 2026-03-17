@@ -2,7 +2,7 @@
   <view class="login-container">
     <view class="logo-area">
       <image class="logo" src="/static/logo.png" mode="aspectFit"></image>
-      <text class="app-name">电影艺术家故居</text>
+      <text class="app-name">谢晋故居</text>
     </view>
     
     <view class="action-area">
