@@ -1,6 +1,6 @@
 import time
 import threading
-from sqlalchemy import Column, Integer, BigInteger, String, Boolean, Date, DateTime, ForeignKey, Text, Index, UniqueConstraint, func
+from sqlalchemy import Column, Integer, BigInteger, String, Boolean, Date, DateTime, ForeignKey, Text, Index, UniqueConstraint, Enum, func
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -105,3 +105,19 @@ class ConsultationIdempotency(Base):
     request_hash = Column(String(64), nullable=False)
     response_body = Column(Text, nullable=False)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+
+class Volunteer(Base):
+    __tablename__ = "volunteers"
+
+    volunteer_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, unique=True, index=True)
+    name = Column(String(30), nullable=False)
+    phone = Column(String(11), nullable=False)
+    email = Column(String(100), nullable=True)
+    status = Column(Enum("已审核", "未审核", name="volunteer_status", native_enum=False), nullable=False, default="未审核")
+    note = Column(Text, nullable=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+    user = relationship("User", backref="volunteer_profile")

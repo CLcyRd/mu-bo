@@ -120,7 +120,7 @@ const handleNavClick = (action: NavAction) => {
 .container {
   min-height: 100vh;
   background: #2b3a6b;
-  padding: 80rpx 40rpx 30rpx;
+  padding: 50rpx 40rpx 30rpx;
   box-sizing: border-box;
 }
 

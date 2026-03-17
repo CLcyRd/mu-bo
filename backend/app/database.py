@@ -3,8 +3,8 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 import os
 
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./museum.db")
-POOL_SIZE = int(os.getenv("DB_POOL_SIZE", "10"))
-MAX_OVERFLOW = int(os.getenv("DB_MAX_OVERFLOW", "20"))
+POOL_SIZE = int(os.getenv("DB_POOL_SIZE", "100"))
+MAX_OVERFLOW = int(os.getenv("DB_MAX_OVERFLOW", "100"))
 POOL_RECYCLE = int(os.getenv("DB_POOL_RECYCLE", "1800"))
 POOL_TIMEOUT = int(os.getenv("DB_POOL_TIMEOUT", "30"))
 

@@ -14,6 +14,10 @@
           <el-icon><management /></el-icon>
           <span>咨询管理</span>
         </el-menu-item>
+        <el-menu-item index="/volunteers">
+          <el-icon><user /></el-icon>
+          <span>志愿者管理</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>
@@ -32,7 +36,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { Document, Calendar, EditPen, Management } from '@element-plus/icons-vue'
+import { Calendar, EditPen, Management, User } from '@element-plus/icons-vue'
 
 const router = useRouter()
 

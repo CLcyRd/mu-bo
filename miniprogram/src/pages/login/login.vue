@@ -102,7 +102,7 @@ const onGetPhoneNumber = async (e: any) => {
   height: 100vh;
   padding: 100rpx 40rpx;
   box-sizing: border-box;
-  background-color: #ffffff;
+  background-color: #2b3a6b;
 }
 
 .logo-area {
@@ -121,7 +121,7 @@ const onGetPhoneNumber = async (e: any) => {
   .app-name {
     font-size: 36rpx;
     font-weight: bold;
-    color: #333;
+    color: #ffffff;
   }
 }
 
@@ -138,7 +138,7 @@ const onGetPhoneNumber = async (e: any) => {
     line-height: 90rpx;
     border-radius: 45rpx;
     font-size: 32rpx;
-    background-color: #07c160;
+    background-color: #d4af37;
     margin-bottom: 30rpx;
     
     &::after {

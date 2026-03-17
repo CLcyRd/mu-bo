@@ -54,11 +54,39 @@ def upgrade_db():
     else:
         print("cover already exists in consultation")
 
-    # Make username nullable (SQLite doesn't support ALTER COLUMN easily, so we skip enforcing this constraints strictly for now as SQLAlchemy handles it on app level usually, but DB constraint remains. 
-    # To properly fix NOT NULL constraint in SQLite, we'd need to recreate table. 
-    # For this dev task, we assume existing users have usernames and new users might not (but SQLite schema might complain if we insert NULL).
-    # Let's check if username is NOT NULL.
-    # PRAGMA table_info returns: cid, name, type, notnull, dflt_value, pk
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS volunteers (
+            volunteer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL UNIQUE,
+            name VARCHAR(30) NOT NULL,
+            phone VARCHAR(11) NOT NULL,
+            email VARCHAR(100),
+            status VARCHAR(20) NOT NULL DEFAULT '未审核',
+            note TEXT,
+            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        )
+        """
+    )
+
+    cursor.execute("PRAGMA table_info(volunteers)")
+    volunteer_columns = [info[1] for info in cursor.fetchall()]
+
+    if "created_at" not in volunteer_columns:
+        try:
+            cursor.execute("ALTER TABLE volunteers ADD COLUMN created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP")
+            print("Added created_at column to volunteers")
+        except Exception as e:
+            print(f"created_at error: {e}")
+
+    if "updated_at" not in volunteer_columns:
+        try:
+            cursor.execute("ALTER TABLE volunteers ADD COLUMN updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP")
+            print("Added updated_at column to volunteers")
+        except Exception as e:
+            print(f"updated_at error: {e}")
     
     conn.commit()
     conn.close()

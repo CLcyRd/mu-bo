@@ -1,0 +1,794 @@
+2026-03-17 16:20:05,842 ERROR app.error request_id=675e77d7-096e-4994-a3af-d61149137e53 path=/api/bookings/ method=GET http_error=Not authenticated stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\security\oauth2.py", line 493, in __call__
+    raise HTTPException(
+    ...<3 lines>...
+    )
+fastapi.exceptions.HTTPException: 401: Not authenticated
+
+2026-03-17 16:20:06,052 ERROR app.error request_id=5dc9e580-94ac-4a0c-bcf5-f07288611505 path=/api/bookings/ method=GET http_error=The user doesn't have enough privileges stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 81, in get_current_admin_user
+    raise HTTPException(
+    ...<2 lines>...
+    )
+fastapi.exceptions.HTTPException: 403: The user doesn't have enough privileges
+
+2026-03-17 16:20:13,607 ERROR app.error request_id=debe0d53-c52f-43d7-baff-a2f44258e964 path=/api/auth/wechat/login method=POST http_error=WeChat session verification failed: 400: WeChat Error: invalid code, rid: 69b90ebe-17f06fcf-5ad87dde stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 29, in wechat_login
+    session_info = await wechat_client.code_2_session(request.code)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\wechat.py", line 84, in code_2_session
+    raise HTTPException(status_code=400, detail=f"WeChat Error: {data.get('errmsg')}")
+fastapi.exceptions.HTTPException: 400: WeChat Error: invalid code, rid: 69b90ebe-17f06fcf-5ad87dde
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 213, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 33, in wechat_login
+    raise HTTPException(status_code=400, detail=f"WeChat session verification failed: {str(e)}")
+fastapi.exceptions.HTTPException: 400: WeChat session verification failed: 400: WeChat Error: invalid code, rid: 69b90ebe-17f06fcf-5ad87dde
+
+2026-03-17 16:20:16,043 ERROR app.error request_id=3a605a41-8fc1-44c0-a881-339387b06983 path=/api/auth/wechat/login method=POST http_error=WeChat session verification failed: 400: WeChat Error: invalid code, rid: 69b90ec0-75d82df2-59abe752 stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 29, in wechat_login
+    session_info = await wechat_client.code_2_session(request.code)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\wechat.py", line 84, in code_2_session
+    raise HTTPException(status_code=400, detail=f"WeChat Error: {data.get('errmsg')}")
+fastapi.exceptions.HTTPException: 400: WeChat Error: invalid code, rid: 69b90ec0-75d82df2-59abe752
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 213, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 33, in wechat_login
+    raise HTTPException(status_code=400, detail=f"WeChat session verification failed: {str(e)}")
+fastapi.exceptions.HTTPException: 400: WeChat session verification failed: 400: WeChat Error: invalid code, rid: 69b90ec0-75d82df2-59abe752
+
+2026-03-17 16:20:59,648 ERROR app.error request_id=8316297a-0f10-4f8d-bf33-4e661338c841 path=/api/bookings/ method=GET http_error=Not authenticated stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\security\oauth2.py", line 493, in __call__
+    raise HTTPException(
+    ...<3 lines>...
+    )
+fastapi.exceptions.HTTPException: 401: Not authenticated
+
+2026-03-17 16:20:59,860 ERROR app.error request_id=9a613826-cf8a-4ed5-a881-2acee8e9d03d path=/api/bookings/ method=GET http_error=The user doesn't have enough privileges stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 81, in get_current_admin_user
+    raise HTTPException(
+    ...<2 lines>...
+    )
+fastapi.exceptions.HTTPException: 403: The user doesn't have enough privileges
+
+2026-03-17 16:21:06,376 ERROR app.error request_id=c6d61306-1672-49e8-97c0-94e4eac15e0c path=/api/auth/wechat/login method=POST http_error=WeChat session verification failed: 400: WeChat Error: Invalid code (Mock) stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 29, in wechat_login
+    session_info = await wechat_client.code_2_session(request.code)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\wechat.py", line 70, in code_2_session
+    raise HTTPException(status_code=400, detail="WeChat Error: Invalid code (Mock)")
+fastapi.exceptions.HTTPException: 400: WeChat Error: Invalid code (Mock)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 213, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 33, in wechat_login
+    raise HTTPException(status_code=400, detail=f"WeChat session verification failed: {str(e)}")
+fastapi.exceptions.HTTPException: 400: WeChat session verification failed: 400: WeChat Error: Invalid code (Mock)
+
+2026-03-17 16:30:01,766 ERROR app.error request_id=976fe527-e494-4eaa-8d6e-abca4e4b6556 path=/api/bookings/ method=GET http_error=Not authenticated stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\security\oauth2.py", line 493, in __call__
+    raise HTTPException(
+    ...<3 lines>...
+    )
+fastapi.exceptions.HTTPException: 401: Not authenticated
+
+2026-03-17 16:30:01,972 ERROR app.error request_id=45a536eb-5a4c-4061-8348-84b4157faff4 path=/api/bookings/ method=GET http_error=The user doesn't have enough privileges stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 81, in get_current_admin_user
+    raise HTTPException(
+    ...<2 lines>...
+    )
+fastapi.exceptions.HTTPException: 403: The user doesn't have enough privileges
+
+2026-03-17 16:30:09,499 ERROR app.error request_id=6e0cd3bb-24af-4500-8583-b54959967557 path=/api/auth/wechat/login method=POST http_error=WeChat session verification failed: 400: WeChat Error: Invalid code (Mock) stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 29, in wechat_login
+    session_info = await wechat_client.code_2_session(request.code)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\wechat.py", line 70, in code_2_session
+    raise HTTPException(status_code=400, detail="WeChat Error: Invalid code (Mock)")
+fastapi.exceptions.HTTPException: 400: WeChat Error: Invalid code (Mock)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 213, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 33, in wechat_login
+    raise HTTPException(status_code=400, detail=f"WeChat session verification failed: {str(e)}")
+fastapi.exceptions.HTTPException: 400: WeChat session verification failed: 400: WeChat Error: Invalid code (Mock)
+
+2026-03-17 16:38:37,879 ERROR app.error request_id=d67bb1b2-0e79-405e-8bcc-c5f6bc951bab path=/api/bookings/ method=GET http_error=Not authenticated stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\security\oauth2.py", line 493, in __call__
+    raise HTTPException(
+    ...<3 lines>...
+    )
+fastapi.exceptions.HTTPException: 401: Not authenticated
+
+2026-03-17 16:38:38,088 ERROR app.error request_id=666de691-7c2f-40e7-84a3-923e5ecbe712 path=/api/bookings/ method=GET http_error=The user doesn't have enough privileges stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 81, in get_current_admin_user
+    raise HTTPException(
+    ...<2 lines>...
+    )
+fastapi.exceptions.HTTPException: 403: The user doesn't have enough privileges
+
+2026-03-17 16:38:45,772 ERROR app.error request_id=df487c9c-abfb-4cdb-8df0-eb9549d68afa path=/api/auth/wechat/login method=POST http_error=WeChat session verification failed: 400: WeChat Error: Invalid code (Mock) stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 29, in wechat_login
+    session_info = await wechat_client.code_2_session(request.code)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\wechat.py", line 70, in code_2_session
+    raise HTTPException(status_code=400, detail="WeChat Error: Invalid code (Mock)")
+fastapi.exceptions.HTTPException: 400: WeChat Error: Invalid code (Mock)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 213, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 33, in wechat_login
+    raise HTTPException(status_code=400, detail=f"WeChat session verification failed: {str(e)}")
+fastapi.exceptions.HTTPException: 400: WeChat session verification failed: 400: WeChat Error: Invalid code (Mock)
+
+2026-03-17 16:44:49,743 ERROR app.error request_id=bf093391-c9ba-4a76-867c-c5d447915c48 path=/api/bookings/ method=GET http_error=Not authenticated stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\security\oauth2.py", line 493, in __call__
+    raise HTTPException(
+    ...<3 lines>...
+    )
+fastapi.exceptions.HTTPException: 401: Not authenticated
+
+2026-03-17 16:44:49,950 ERROR app.error request_id=7a1d7cd1-51b0-426d-997f-3e37d3e84102 path=/api/bookings/ method=GET http_error=The user doesn't have enough privileges stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 81, in get_current_admin_user
+    raise HTTPException(
+    ...<2 lines>...
+    )
+fastapi.exceptions.HTTPException: 403: The user doesn't have enough privileges
+
+2026-03-17 16:44:56,018 ERROR app.error request_id=33c8b63a-042b-4f02-814e-53457d31d5a7 path=/api/auth/wechat/login method=POST http_error=WeChat session verification failed: 400: WeChat Error: Invalid code (Mock) stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 29, in wechat_login
+    session_info = await wechat_client.code_2_session(request.code)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\wechat.py", line 70, in code_2_session
+    raise HTTPException(status_code=400, detail="WeChat Error: Invalid code (Mock)")
+fastapi.exceptions.HTTPException: 400: WeChat Error: Invalid code (Mock)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 213, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 33, in wechat_login
+    raise HTTPException(status_code=400, detail=f"WeChat session verification failed: {str(e)}")
+fastapi.exceptions.HTTPException: 400: WeChat session verification failed: 400: WeChat Error: Invalid code (Mock)
+
+2026-03-17 16:48:30,813 ERROR app.error request_id=10ebc6cd-9123-43dc-bf92-a9022c4cf871 path=/api/bookings/ method=GET http_error=Not authenticated stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\security\oauth2.py", line 493, in __call__
+    raise HTTPException(
+    ...<3 lines>...
+    )
+fastapi.exceptions.HTTPException: 401: Not authenticated
+
+2026-03-17 16:48:31,023 ERROR app.error request_id=75e88df0-0838-4f08-be5c-406a33a7609d path=/api/bookings/ method=GET http_error=The user doesn't have enough privileges stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 81, in get_current_admin_user
+    raise HTTPException(
+    ...<2 lines>...
+    )
+fastapi.exceptions.HTTPException: 403: The user doesn't have enough privileges
+
+2026-03-17 16:48:37,642 ERROR app.error request_id=eec0716e-6d03-4308-87f4-cd92dbf1441d path=/api/auth/wechat/login method=POST http_error=WeChat session verification failed: 400: WeChat Error: Invalid code (Mock) stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 29, in wechat_login
+    session_info = await wechat_client.code_2_session(request.code)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\wechat.py", line 70, in code_2_session
+    raise HTTPException(status_code=400, detail="WeChat Error: Invalid code (Mock)")
+fastapi.exceptions.HTTPException: 400: WeChat Error: Invalid code (Mock)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 213, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 33, in wechat_login
+    raise HTTPException(status_code=400, detail=f"WeChat session verification failed: {str(e)}")
+fastapi.exceptions.HTTPException: 400: WeChat session verification failed: 400: WeChat Error: Invalid code (Mock)
+
+2026-03-17 16:51:59,982 ERROR app.error request_id=36dc1ce5-c24e-45fb-9550-04f3a7755120 path=/api/bookings/ method=GET http_error=Not authenticated stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\security\oauth2.py", line 493, in __call__
+    raise HTTPException(
+    ...<3 lines>...
+    )
+fastapi.exceptions.HTTPException: 401: Not authenticated
+
+2026-03-17 16:52:00,192 ERROR app.error request_id=cd8c2f57-4abb-49eb-99db-acef8fe7c582 path=/api/bookings/ method=GET http_error=The user doesn't have enough privileges stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 81, in get_current_admin_user
+    raise HTTPException(
+    ...<2 lines>...
+    )
+fastapi.exceptions.HTTPException: 403: The user doesn't have enough privileges
+
+2026-03-17 16:52:07,299 ERROR app.error request_id=66c417ff-ed7a-4459-b289-c2b73b860cfc path=/api/auth/wechat/login method=POST http_error=WeChat session verification failed: 400: WeChat Error: Invalid code (Mock) stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 29, in wechat_login
+    session_info = await wechat_client.code_2_session(request.code)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\wechat.py", line 70, in code_2_session
+    raise HTTPException(status_code=400, detail="WeChat Error: Invalid code (Mock)")
+fastapi.exceptions.HTTPException: 400: WeChat Error: Invalid code (Mock)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 213, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 33, in wechat_login
+    raise HTTPException(status_code=400, detail=f"WeChat session verification failed: {str(e)}")
+fastapi.exceptions.HTTPException: 400: WeChat session verification failed: 400: WeChat Error: Invalid code (Mock)
+
+2026-03-17 16:58:16,300 ERROR app.error request_id=e2393a8c-7f40-4e3a-b90e-51f0e12339f3 path=/api/volunteers method=GET http_error=Could not validate credentials stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 62, in get_current_user
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 174, in decode
+    _validate_claims(
+    ~~~~~~~~~~~~~~~~^
+        claims,
+        ^^^^^^^
+    ...<5 lines>...
+        options=defaults,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 497, in _validate_claims
+    _validate_exp(claims, leeway=leeway)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 331, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired.")
+jose.exceptions.ExpiredSignatureError: Signature has expired.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 107, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 620, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 620, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 649, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 67, in get_current_user
+    raise credentials_exception
+fastapi.exceptions.HTTPException: 401: Could not validate credentials
+
+2026-03-17 16:58:51,453 ERROR app.error request_id=e94f52b1-36c7-4aae-90d1-ab47f087b70a path=/api/bookings/ method=GET http_error=Not authenticated stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 615, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\security\oauth2.py", line 493, in __call__
+    raise HTTPException(
+    ...<3 lines>...
+    )
+fastapi.exceptions.HTTPException: 401: Not authenticated
+
+2026-03-17 16:58:51,659 ERROR app.error request_id=c0a57684-d3da-4ef8-8e0d-c9c7b37e261b path=/api/bookings/ method=GET http_error=The user doesn't have enough privileges stack=Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 292, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\dependencies\utils.py", line 638, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 81, in get_current_admin_user
+    raise HTTPException(
+    ...<2 lines>...
+    )
+fastapi.exceptions.HTTPException: 403: The user doesn't have enough privileges
+
+2026-03-17 16:59:00,281 ERROR app.error request_id=b3e64f3a-f05b-45c9-ad79-772b6fd40076 path=/api/auth/wechat/login method=POST http_error=WeChat session verification failed: 400: WeChat Error: Invalid code (Mock) stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 29, in wechat_login
+    session_info = await wechat_client.code_2_session(request.code)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\wechat.py", line 70, in code_2_session
+    raise HTTPException(status_code=400, detail="WeChat Error: Invalid code (Mock)")
+fastapi.exceptions.HTTPException: 400: WeChat Error: Invalid code (Mock)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "E:\program_file\miniconda\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "E:\program_file\miniconda\Lib\site-packages\fastapi\routing.py", line 213, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\routers\auth_wechat.py", line 33, in wechat_login
+    raise HTTPException(status_code=400, detail=f"WeChat session verification failed: {str(e)}")
+fastapi.exceptions.HTTPException: 400: WeChat session verification failed: 400: WeChat Error: Invalid code (Mock)
+

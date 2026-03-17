@@ -2,43 +2,58 @@ import pytest
 from fastapi.testclient import TestClient
 from app.main import app
 from app import models, database
+from app.wechat import wechat_client
 
 client = TestClient(app)
 
 def test_wechat_login_mock():
+    old_app_id = wechat_client.app_id
+    old_app_secret = wechat_client.app_secret
+    wechat_client.app_id = "wx_your_app_id"
+    wechat_client.app_secret = "wx_your_app_secret"
     # Use mock codes defined in app/wechat.py
-    response = client.post(
-        "/api/auth/wechat/login",
-        json={
-            "code": "mock_login_code",
-            "phone_code": "mock_phone_code"
-        }
-    )
-    
-    assert response.status_code == 200
-    data = response.json()
-    assert "access_token" in data
-    assert data["token_type"] == "bearer"
+    try:
+        response = client.post(
+            "/api/auth/wechat/login",
+            json={
+                "code": "mock_login_code",
+                "phone_code": "mock_phone_code"
+            }
+        )
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert "access_token" in data
+        assert data["token_type"] == "bearer"
 
-    # Verify user created in DB
-    db = database.SessionLocal()
-    user = db.query(models.User).filter(models.User.phone_number == "13800138000").first()
-    assert user is not None
-    assert user.openid == "mock_openid_123456"
-    assert user.username.startswith("wx_13800138000")
-    db.close()
+        db = database.SessionLocal()
+        user = db.query(models.User).filter(models.User.phone_number == "13800138000").first()
+        assert user is not None
+        assert user.openid == "mock_openid_123456"
+        assert user.username.startswith("wx_13800138000")
+        db.close()
+    finally:
+        wechat_client.app_id = old_app_id
+        wechat_client.app_secret = old_app_secret
 
 def test_wechat_login_fail():
+    old_app_id = wechat_client.app_id
+    old_app_secret = wechat_client.app_secret
+    wechat_client.app_id = "wx_your_app_id"
+    wechat_client.app_secret = "wx_your_app_secret"
     # Invalid code
-    response = client.post(
-        "/api/auth/wechat/login",
-        json={
-            "code": "invalid_code",
-            "phone_code": "invalid_code"
-        }
-    )
-    # The real WeChat API will return error, our code catches it and raises 400
-    assert response.status_code == 400
+    try:
+        response = client.post(
+            "/api/auth/wechat/login",
+            json={
+                "code": "invalid_code",
+                "phone_code": "invalid_code"
+            }
+        )
+        assert response.status_code == 400
+    finally:
+        wechat_client.app_id = old_app_id
+        wechat_client.app_secret = old_app_secret
 
 if __name__ == "__main__":
     try:

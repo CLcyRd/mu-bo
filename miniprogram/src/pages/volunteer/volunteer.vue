@@ -37,10 +37,14 @@
           <input v-model="form.phone" class="form-control input-control" type="number" placeholder="请输入手机号码" />
         </view>
         <view class="form-group">
+          <view class="form-label">邮箱（选填）</view>
+          <input v-model="form.email" class="form-control input-control" type="text" placeholder="请输入邮箱地址" />
+        </view>
+        <view class="form-group">
           <view class="form-label">最喜欢的谢晋导演作品 / 报名初衷</view>
           <textarea v-model="form.reason" class="form-control textarea-control" maxlength="300" placeholder="聊聊您为什么想来这里，或者您与电影的故事..."></textarea>
         </view>
-        <button class="submit-btn" type="button" @click="submitForm">提交报名</button>
+        <button class="submit-btn" type="button" :loading="submitting" :disabled="submitting" @click="submitForm">提交报名</button>
       </view>
 
       <view class="footer-decor">🎬</view>
@@ -49,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 const dailyInfo = [
   {
@@ -69,12 +73,52 @@ const dailyInfo = [
 const form = reactive({
   name: '',
   phone: '',
+  email: '',
   reason: ''
 })
+const submitting = ref(false)
+const apiHost = 'http://localhost:8000'
+
+type ApiResponse<T> = {
+  code: number
+  message: string
+  data: T
+}
+
+type CurrentUser = {
+  user_id: number
+}
 
 const isValidPhone = (value: string) => /^1\d{10}$/.test(value)
+const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 
-const submitForm = () => {
+const requestWithToken = <T>(url: string, method: 'GET' | 'POST', data?: Record<string, unknown>) => {
+  const token = uni.getStorageSync('token')
+  if (!token) {
+    uni.navigateTo({ url: '/pages/login/login' })
+    return Promise.reject(new Error('未登录'))
+  }
+  return new Promise<T>((resolve, reject) => {
+    uni.request({
+      url: `${apiHost}${url}`,
+      method,
+      data,
+      header: {
+        Authorization: `Bearer ${token}`
+      },
+      success: (res: any) => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          resolve(res.data as T)
+          return
+        }
+        reject(res.data || res)
+      },
+      fail: reject
+    })
+  })
+}
+
+const submitForm = async () => {
   if (!form.name.trim()) {
     uni.showToast({ title: '请输入姓名', icon: 'none' })
     return
@@ -83,10 +127,50 @@ const submitForm = () => {
     uni.showToast({ title: '请输入正确手机号', icon: 'none' })
     return
   }
-  uni.showToast({ title: '报名信息已提交', icon: 'success' })
-  form.name = ''
-  form.phone = ''
-  form.reason = ''
+  if (form.email.trim() && !isValidEmail(form.email.trim())) {
+    uni.showToast({ title: '请输入正确邮箱', icon: 'none' })
+    return
+  }
+
+  if (submitting.value) {
+    return
+  }
+
+  submitting.value = true
+  try {
+    const me = await requestWithToken<CurrentUser>('/api/users/me', 'GET')
+    const payload = {
+      user_id: me.user_id,
+      name: form.name.trim(),
+      phone: form.phone.trim(),
+      email: form.email.trim() || null,
+      note: form.reason.trim() || null,
+      reason: form.reason.trim() || null
+    }
+    const response = await requestWithToken<ApiResponse<{ volunteer_id: number; existed: boolean }>>(
+      '/api/volunteers/register',
+      'POST',
+      payload
+    )
+    if (response.code !== 0) {
+      throw new Error(response.message || '提交失败')
+    }
+    uni.showToast({
+      title: response.data?.existed ? '您已报名过' : '报名成功',
+      icon: 'success'
+    })
+    if (!response.data?.existed) {
+      form.name = ''
+      form.phone = ''
+      form.email = ''
+      form.reason = ''
+    }
+  } catch (error: any) {
+    const message = error?.message || error?.detail || error?.data?.message || '提交失败，请稍后重试'
+    uni.showToast({ title: message, icon: 'none' })
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 

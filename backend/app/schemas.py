@@ -47,6 +47,66 @@ class Booking(BookingBase):
         from_attributes = True
 
 
+class VolunteerRegisterRequest(BaseModel):
+    user_id: int = Field(gt=0)
+    name: constr(strip_whitespace=True, min_length=1, max_length=30)
+    phone: constr(strip_whitespace=True, min_length=11, max_length=11)
+    email: Optional[constr(strip_whitespace=True, max_length=100)] = None
+    note: Optional[constr(strip_whitespace=True, max_length=2000)] = None
+
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, value: str):
+        if not value.isdigit():
+            raise ValueError("手机号必须为数字")
+        return value
+
+    @field_validator("email")
+    @classmethod
+    def validate_email(cls, value: Optional[str]):
+        if value is None or value == "":
+            return None
+        import re
+        if not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", value):
+            raise ValueError("邮箱格式不正确")
+        return value
+
+
+class VolunteerRegisterResponse(BaseModel):
+    volunteer_id: int
+    existed: bool
+
+
+class VolunteerStatusUpdateRequest(BaseModel):
+    status: str
+
+    @field_validator("status")
+    @classmethod
+    def validate_status(cls, value: str):
+        if value not in {"已审核", "未审核"}:
+            raise ValueError("status 仅支持 已审核/未审核")
+        return value
+
+
+class VolunteerNoteUpdateRequest(BaseModel):
+    note: Optional[constr(strip_whitespace=True, max_length=2000)] = None
+
+
+class VolunteerOut(BaseModel):
+    volunteer_id: int
+    user_id: int
+    name: str
+    phone: str
+    email: Optional[str] = None
+    status: str
+    note: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
 class ApiResponse(BaseModel):
     code: int = 0
     message: str = "success"

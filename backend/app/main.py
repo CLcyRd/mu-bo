@@ -3,11 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 import os
+import uuid
 load_dotenv()
 
 from . import models, database
 from .database import engine
-from .routers import bookings, auth, auth_wechat, users, consultations
+from .routers import bookings, auth, auth_wechat, users, consultations, volunteers
 from .api_utils import api_success, register_exception_handlers
 
 models.Base.metadata.create_all(bind=engine)
@@ -31,11 +32,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.middleware("http")
+async def add_request_id(request, call_next):
+    rid = request.headers.get("X-Request-ID", str(uuid.uuid4()))
+    request.state.request_id = rid
+    response = await call_next(request)
+    response.headers["X-Request-ID"] = rid
+    return response
+
 app.include_router(bookings.router)
 app.include_router(auth.router)
 app.include_router(auth_wechat.router)
 app.include_router(users.router)
 app.include_router(consultations.router)
+app.include_router(volunteers.router)
+app.include_router(volunteers.router, prefix="/api")
 uploads_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads")
 os.makedirs(uploads_dir, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")

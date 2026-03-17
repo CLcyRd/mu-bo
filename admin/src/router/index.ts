@@ -5,6 +5,7 @@ import Bookings from '../views/Bookings.vue'
 import CreateBlog from '../views/CreateBlog.vue'
 import ConsultationManage from '../views/ConsultationManage.vue'
 import ConsultationEdit from '../views/ConsultationEdit.vue'
+import VolunteersManage from '../views/VolunteersManage.vue'
 
 const routes: RouteRecordRaw[] = [
   { path: '/login', component: Login },
@@ -15,7 +16,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'bookings', component: Bookings },
       { path: 'blog/create', component: CreateBlog },
       { path: 'blog/manage', component: ConsultationManage },
-      { path: 'blog/edit/:id', component: ConsultationEdit }
+      { path: 'blog/edit/:id', component: ConsultationEdit },
+      { path: 'volunteers', component: VolunteersManage }
     ]
   }
 ]
