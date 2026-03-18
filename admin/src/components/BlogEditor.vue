@@ -97,6 +97,7 @@ import { ElMessage, type FormInstance, type FormRules, type UploadFile } from 'e
 import type { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor'
 import api from '../api'
 import defaultCover from '../assets/default_cover.png'
+import { normalizeAssetUrl, normalizeHtmlAssetUrls } from '../utils/assetUrl'
 
 // 定义组件 Props
 interface Props {
@@ -189,7 +190,8 @@ const editorConfig: Partial<IEditorConfig> = {
         if (response.data?.code !== 0 || !response.data?.data?.url) {
           throw new Error(response.data?.message || '图片上传失败')
         }
-        insertFn(response.data.data.url, file.name, response.data.data.url)
+        const uploadedUrl = normalizeAssetUrl(response.data.data.url)
+        insertFn(uploadedUrl, file.name, uploadedUrl)
         ElMessage.success('图片上传成功')
       }
     }
@@ -200,12 +202,12 @@ const editorConfig: Partial<IEditorConfig> = {
 watch(() => props.initialData, (newVal) => {
   if (newVal) {
     formData.title = newVal.title
-    formData.content = newVal.content
+    formData.content = normalizeHtmlAssetUrls(newVal.content)
     if (!newVal.cover || newVal.cover.startsWith('blob:') || newVal.cover.startsWith('file:')) {
       formData.cover = defaultCover
       return
     }
-    formData.cover = newVal.cover
+    formData.cover = normalizeAssetUrl(newVal.cover)
   }
 }, { immediate: true, deep: true })
 
@@ -246,7 +248,7 @@ const handleCoverChange = async (file: UploadFile) => {
     if (response.data?.code !== 0 || !response.data?.data?.url) {
       throw new Error(response.data?.message || '封面上传失败')
     }
-    formData.cover = response.data.data.url
+    formData.cover = normalizeAssetUrl(response.data.data.url)
     ElMessage.success('封面上传成功')
   } catch (error) {
     const message = error instanceof Error ? error.message : '封面上传失败'
@@ -269,7 +271,11 @@ const handleSave = async () => {
   if (!formRef.value) return
   try {
     await formRef.value.validate()
-    emit('save', { ...formData })
+    emit('save', {
+      ...formData,
+      cover: normalizeAssetUrl(formData.cover),
+      content: normalizeHtmlAssetUrls(formData.content)
+    })
   } catch (error) {
     ElMessage.warning('请完善表单信息')
   }
@@ -283,7 +289,11 @@ const handlePublish = async () => {
       ElMessage.warning('正文内容不能为空')
       return
     }
-    emit('publish', { ...formData })
+    emit('publish', {
+      ...formData,
+      cover: normalizeAssetUrl(formData.cover),
+      content: normalizeHtmlAssetUrls(formData.content)
+    })
   } catch (error) {
     ElMessage.warning('请完善表单信息')
   }

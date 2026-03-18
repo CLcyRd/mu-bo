@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime
 from typing import Optional
 import bleach
-from fastapi import APIRouter, Depends, Header, UploadFile, File, Request
+from fastapi import APIRouter, Depends, Header, UploadFile, File
 from sqlalchemy import and_, or_, func
 from sqlalchemy.orm import Session
 from starlette import status
@@ -109,7 +109,6 @@ def assert_edit_permission(current_user: models.User, news: models.Consultation)
 
 @router.post("/upload-image", response_model=schemas.ApiResponse)
 async def upload_consultation_image(
-    request: Request,
     file: UploadFile = File(...),
     _: models.User = Depends(auth.get_current_active_user),
 ):
@@ -128,7 +127,7 @@ async def upload_consultation_image(
     file_path = os.path.join(UPLOAD_DIR, filename)
     with open(file_path, "wb") as f:
         f.write(content)
-    image_url = str(request.base_url).rstrip("/") + f"/uploads/consultations/{filename}"
+    image_url = f"/uploads/consultations/{filename}"
     return api_success({"url": image_url}, message="上传成功")
 
 
