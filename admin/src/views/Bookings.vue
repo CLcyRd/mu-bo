@@ -7,11 +7,7 @@
       <el-table-column prop="visit_date" label="预定日期" />
       <el-table-column prop="visit_time" label="预定时间" />
       <el-table-column prop="visitor_count" label="访客人数" />
-      <el-table-column prop="status" label="状态">
-        <template #default="scope">
-          <el-tag>{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
+      <el-table-column prop="visitor_phone" label="手机号" />
       <el-table-column label="操作" width="120">
         <template #default="scope">
           <el-button type="danger" link @click="handleDelete(scope.row.booking_id)">删除</el-button>
@@ -29,10 +25,10 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 type BookingItem = {
   booking_id: string
   visitor_name: string
+  visitor_phone: string
   visit_date: string
   visit_time: string
   visitor_count: number
-  status: string
 }
 
 const bookings = ref<BookingItem[]>([])
