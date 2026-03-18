@@ -47,6 +47,7 @@
 import { ref, reactive, computed } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { ensureLoginOrRedirect } from '../../utils/auth'
+import { buildApiUrl } from '../../utils/api'
 
 const form = reactive({
   visitor_name: '',
@@ -123,7 +124,7 @@ const submitBooking = async () => {
   
   uni.showLoading({ title: '提交中...' })
   uni.request({
-    url: 'http://localhost:8000/api/bookings/',
+    url: buildApiUrl('/api/bookings/'),
     method: 'POST',
     data: form,
     header: token ? {

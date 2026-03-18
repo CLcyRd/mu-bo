@@ -23,6 +23,7 @@
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { consumePendingRedirect, setTokenAndRefresh } from '../../utils/auth'
+import { buildApiUrl } from '../../utils/api'
 
 const loading = ref(false)
 const redirectUrl = ref('/pages/index/index')
@@ -63,7 +64,7 @@ const showRetryModal = (content: string) => {
 const requestWeChatLogin = (code: string) =>
   new Promise<WechatLoginResponse>((resolve, reject) => {
     uni.request({
-      url: 'http://localhost:8000/api/auth/wechat/login',
+      url: buildApiUrl('/api/auth/wechat/login'),
       method: 'POST',
       timeout: 10000,
       data: { code },

@@ -117,6 +117,7 @@
 import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { getAuthState, refreshAuthState, goLoginWithRedirect, syncTabBar } from '../../utils/auth'
+import { buildApiUrl } from '../../utils/api'
 
 interface Booking {
   id: number
@@ -149,7 +150,6 @@ interface ApiResponse<T> {
 const bookings = ref<Booking[]>([])
 const myVolunteer = ref<Volunteer | null>(null)
 const showHistory = ref(false)
-const apiHost = 'http://localhost:8000'
 
 const upcomingBookings = computed(() => {
   const now = new Date()
@@ -210,7 +210,7 @@ const requestWithToken = <T>(url: string, method: 'GET' | 'DELETE') => {
   }
   return new Promise<T>((resolve, reject) => {
     uni.request({
-      url: `${apiHost}${url}`,
+      url: buildApiUrl(url),
       method,
       header: {
         Authorization: `Bearer ${token}`

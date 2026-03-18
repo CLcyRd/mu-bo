@@ -1,4 +1,5 @@
 import { reactive } from 'vue'
+import { buildApiUrl } from './api'
 
 type UserInfo = {
   user_id: number
@@ -15,7 +16,6 @@ type AuthState = {
 
 type AuthChangeListener = (state: AuthState) => void
 
-const apiHost = 'http://localhost:8000'
 const pendingRedirectKey = 'pending_redirect_url'
 const listeners = new Set<AuthChangeListener>()
 
@@ -87,7 +87,7 @@ const fetchMe = () =>
       return
     }
     uni.request({
-      url: `${apiHost}/api/users/me`,
+      url: buildApiUrl('/api/users/me'),
       method: 'GET',
       timeout: 5000,
       header: {

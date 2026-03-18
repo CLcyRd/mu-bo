@@ -56,6 +56,7 @@
 import { reactive, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { ensureLoginOrRedirect } from '../../utils/auth'
+import { buildApiUrl } from '../../utils/api'
 
 const dailyInfo = [
   {
@@ -79,7 +80,6 @@ const form = reactive({
   reason: ''
 })
 const submitting = ref(false)
-const apiHost = 'http://localhost:8000'
 
 type ApiResponse<T> = {
   code: number
@@ -101,7 +101,7 @@ const requestWithToken = <T>(url: string, method: 'GET' | 'POST', data?: Record<
   }
   return new Promise<T>((resolve, reject) => {
     uni.request({
-      url: `${apiHost}${url}`,
+      url: buildApiUrl(url),
       method,
       data,
       header: {

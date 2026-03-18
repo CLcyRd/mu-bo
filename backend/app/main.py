@@ -16,13 +16,18 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Museum Booking API")
 register_exception_handlers(app)
 
-origins = [
+default_origins = [
     "http://localhost",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:5174",
     "http://127.0.0.1:5174",
+    "https://shxiejinf.cn",
+    "https://www.shxiejinf.cn",
+    "https://api.shxiejinf.cn",
 ]
+env_origins = os.getenv("ALLOW_ORIGINS", "")
+origins = [item.strip() for item in env_origins.split(",") if item.strip()] or default_origins
 
 app.add_middleware(
     CORSMiddleware,

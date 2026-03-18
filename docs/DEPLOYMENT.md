@@ -43,7 +43,7 @@ pip install gunicorn  # 生产环境推荐使用 Gunicorn
 
 ```env
 DATABASE_URL=sqlite:///./museum.db  # 或 postgresql://user:pass@localhost/db
-ALLOW_ORIGINS=https://your-admin-domain.com
+ALLOW_ORIGINS=https://shxiejinf.cn,https://www.shxiejinf.cn,https://api.shxiejinf.cn
 ```
 
 ### 2.4 使用 Systemd 管理进程
@@ -82,7 +82,7 @@ sudo systemctl enable museum_backend
 ```bash
 cd admin
 # 修改 .env.production 中的 API 地址为线上地址
-# VITE_API_URL=https://api.your-domain.com
+# VITE_API_URL=https://api.shxiejinf.cn
 npm run build
 ```
 
@@ -94,28 +94,57 @@ npm run build
 
 ## 4. Nginx 配置 (核心步骤)
 
-配置 Nginx 以同时服务前端静态文件和反向代理后端 API。
+推荐使用 Docker 启动后端和管理端容器，再由宿主机 Nginx 做 HTTPS 入口转发。
+
+先在项目根目录启动容器：
+
+```bash
+docker compose up -d --build
+```
+
+当前端口映射为：
+
+- `127.0.0.1:8080` -> 管理端容器
+- `127.0.0.1:8000` -> 后端容器
 
 编辑 `/etc/nginx/sites-available/museum`：
 
 ```nginx
 server {
     listen 80;
-    server_name your-domain.com;  # 替换为你的域名
+    server_name shxiejinf.cn www.shxiejinf.cn api.shxiejinf.cn;
+    return 301 https://$host$request_uri;
+}
 
-    # 强制跳转 HTTPS (建议配置 SSL 后开启)
-    # return 301 https://$host$request_uri;
-    
-    # 管理后台前端
+server {
+    listen 443 ssl http2;
+    server_name shxiejinf.cn www.shxiejinf.cn;
+
+    ssl_certificate /etc/letsencrypt/live/shxiejinf.cn/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/shxiejinf.cn/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
     location / {
-        root /var/www/museum_booking/admin_dist;
-        index index.html;
-        try_files $uri $uri/ /index.html;  # 解决 Vue Router History 模式刷新 404
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
+}
 
-    # 后端 API 反向代理
-    location /api/ {
-        proxy_pass http://127.0.0.1:8000;  # 转发给 Gunicorn
+server {
+    listen 443 ssl http2;
+    server_name api.shxiejinf.cn;
+
+    ssl_certificate /etc/letsencrypt/live/shxiejinf.cn/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/shxiejinf.cn/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -132,19 +161,21 @@ sudo nginx -t
 sudo systemctl restart nginx
 ```
 
+也可直接使用仓库模板文件 [nginx.shxiejinf.cn.conf](file:///g:/museum_booking/mu-bo/docs/nginx.shxiejinf.cn.conf)。
+
 ## 5. 微信小程序发布
 
 ### 5.1 修改服务器地址
 
 1.  打开 `miniprogram` 项目。
 2.  找到 API 请求的基础路径配置（通常在 `utils/request.js` 或 `main.js` 中）。
-3.  将 `http://localhost:8000` 修改为线上 HTTPS 地址：`https://your-domain.com`。
+3.  将 `http://localhost:8000` 修改为线上 HTTPS 地址：`https://api.shxiejinf.cn`。
 
 ### 5.2 微信后台配置
 
 1.  登录 [微信公众平台](https://mp.weixin.qq.com/)。
 2.  进入 **开发 -> 开发管理 -> 开发设置**。
-3.  在 **服务器域名** 中配置 `request合法域名`，填入 `https://your-domain.com`。
+3.  在 **服务器域名** 中配置 `request合法域名`，填入 `https://api.shxiejinf.cn`。
 
 ### 5.3 上传与审核
 
@@ -159,7 +190,7 @@ sudo systemctl restart nginx
 
 ```bash
 sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d your-domain.com
+sudo certbot --nginx -d shxiejinf.cn -d www.shxiejinf.cn -d api.shxiejinf.cn
 ```
 
 按照提示操作即可开启 HTTPS。

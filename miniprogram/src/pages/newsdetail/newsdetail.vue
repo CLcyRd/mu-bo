@@ -36,6 +36,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { onLoad, onShareAppMessage } from '@dcloudio/uni-app'
+import { buildApiUrl, normalizeApiAssetUrl } from '../../utils/api'
 
 type ConsultationDetail = {
   id: string
@@ -52,7 +53,6 @@ type ApiResponse<T> = {
   data: T
 }
 
-const apiHost = 'http://localhost:8000'
 const fallbackCover = '/static/museum_img/default_cover.png'
 const loading = ref(false)
 const failedCover = ref(false)
@@ -84,23 +84,15 @@ const formatDisplayTime = (value: string) => {
 }
 
 const withApiHost = (url: string) => {
-  if (!url) return ''
-  if (/^https?:\/\//.test(url)) return url
-  if (url.startsWith('//')) return `https:${url}`
-  if (url.startsWith('/')) return `${apiHost}${url}`
-  return `${apiHost}/${url}`
+  return normalizeApiAssetUrl(url)
 }
 
 const resolveCoverUrl = (url: string) => {
   const value = (url || '').trim()
   if (!value) return ''
-  if (/^https?:\/\//.test(value)) return value
-  if (value.startsWith('//')) return `https:${value}`
   if (value.startsWith('/static/')) return value
-  if (value.startsWith('/uploads/')) return `${apiHost}${value}`
   if (value.startsWith('/src/') || value.includes('/src/assets/')) return ''
-  if (value.startsWith('/')) return ''
-  return `${apiHost}/${value.replace(/^\/+/, '')}`
+  return normalizeApiAssetUrl(value)
 }
 
 const decorateRichText = (html: string) => {
@@ -142,7 +134,7 @@ const fetchDetail = async (id: string) => {
         requestHeaders.Authorization = `Bearer ${token}`
       }
       uni.request({
-        url: `${apiHost}/api/consultations/${id}`,
+        url: buildApiUrl(`/api/consultations/${id}`),
         method: 'GET',
         header: requestHeaders,
         success: (res: any) => {

@@ -40,6 +40,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
+import { buildApiUrl, normalizeApiAssetUrl } from '../../utils/api'
 
 type ConsultationItem = {
   id: string
@@ -66,7 +67,7 @@ const getCoverSrc = (item: ConsultationItem) => {
   if (failedCoverMap.value[item.id]) {
     return fallbackCover
   }
-  return item.cover || fallbackCover
+  return normalizeApiAssetUrl(item.cover) || fallbackCover
 }
 
 const handleCoverError = (event: any) => {
@@ -100,7 +101,7 @@ const fetchNewsList = async () => {
         requestHeaders.Authorization = `Bearer ${token}`
       }
       uni.request({
-        url: 'http://localhost:8000/api/consultations',
+        url: buildApiUrl('/api/consultations'),
         method: 'GET',
         data: {
           keyword: keyword.value.trim(),
