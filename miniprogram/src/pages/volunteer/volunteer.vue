@@ -54,6 +54,8 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { ensureLoginOrRedirect } from '../../utils/auth'
 
 const dailyInfo = [
   {
@@ -95,7 +97,6 @@ const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 const requestWithToken = <T>(url: string, method: 'GET' | 'POST', data?: Record<string, unknown>) => {
   const token = uni.getStorageSync('token')
   if (!token) {
-    uni.navigateTo({ url: '/pages/login/login' })
     return Promise.reject(new Error('未登录'))
   }
   return new Promise<T>((resolve, reject) => {
@@ -118,7 +119,33 @@ const requestWithToken = <T>(url: string, method: 'GET' | 'POST', data?: Record<
   })
 }
 
+const createVolunteerRedirectUrl = () => {
+  const query: string[] = []
+  if (form.name) query.push(`name=${encodeURIComponent(form.name)}`)
+  if (form.phone) query.push(`phone=${encodeURIComponent(form.phone)}`)
+  if (form.email) query.push(`email=${encodeURIComponent(form.email)}`)
+  if (form.reason) query.push(`reason=${encodeURIComponent(form.reason)}`)
+  if (query.length === 0) {
+    return '/pages/volunteer/volunteer'
+  }
+  return `/pages/volunteer/volunteer?${query.join('&')}`
+}
+
+onLoad((options) => {
+  if (!options) {
+    return
+  }
+  form.name = typeof options.name === 'string' ? decodeURIComponent(options.name) : ''
+  form.phone = typeof options.phone === 'string' ? decodeURIComponent(options.phone) : ''
+  form.email = typeof options.email === 'string' ? decodeURIComponent(options.email) : ''
+  form.reason = typeof options.reason === 'string' ? decodeURIComponent(options.reason) : ''
+})
+
 const submitForm = async () => {
+  const loggedIn = await ensureLoginOrRedirect(createVolunteerRedirectUrl())
+  if (!loggedIn) {
+    return
+  }
   if (!form.name.trim()) {
     uni.showToast({ title: '请输入姓名', icon: 'none' })
     return

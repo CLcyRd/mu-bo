@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
+import { refreshAuthState } from "./utils/auth";
 onLaunch(() => {
-  console.log("App Launch");
+  refreshAuthState();
 });
 onShow(() => {
-  console.log("App Show");
+  refreshAuthState();
 });
 onHide(() => {
   console.log("App Hide");

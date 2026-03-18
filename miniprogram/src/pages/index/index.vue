@@ -31,6 +31,9 @@
 </template>
 
 <script setup lang="ts">
+import { onShow } from '@dcloudio/uni-app'
+import { ensureLoginOrRedirect, syncTabBar } from '../../utils/auth'
+
 type NavAction = 'guide' | 'booking' | 'news' | 'volunteer'
 
 const bannerImages = [
@@ -75,32 +78,36 @@ const navItems: { action: NavAction; cn: string; en: string; icon: string }[] = 
   }
 ]
 
-const goToBooking = () => {
+const navigateToPage = (url: string) => {
   uni.navigateTo({
-    url: '/pages/booking/booking'
+    url,
+    animationType: 'none',
+    animationDuration: 0
   })
+}
+
+const goToBooking = () => {
+  navigateToPage('/pages/booking/booking')
 }
 
 const goToGuide = () => {
-  uni.navigateTo({
-    url: '/pages/guide/guide'
-  })
+  navigateToPage('/pages/guide/guide')
 }
 
 const goToNews = () => {
-  uni.navigateTo({
-    url: '/pages/news/news'
-  })
+  navigateToPage('/pages/news/news')
 }
 
 const goToVolunteer = () => {
-  uni.navigateTo({
-    url: '/pages/volunteer/volunteer'
-  })
+  navigateToPage('/pages/volunteer/volunteer')
 }
 
-const handleNavClick = (action: NavAction) => {
+const handleNavClick = async (action: NavAction) => {
   if (action === 'booking') {
+    const ok = await ensureLoginOrRedirect('/pages/booking/booking')
+    if (!ok) {
+      return
+    }
     goToBooking()
     return
   }
@@ -112,8 +119,16 @@ const handleNavClick = (action: NavAction) => {
     goToNews()
     return
   }
+  const ok = await ensureLoginOrRedirect('/pages/volunteer/volunteer')
+  if (!ok) {
+    return
+  }
   goToVolunteer()
 }
+
+onShow(() => {
+  syncTabBar()
+})
 </script>
 
 <style lang="scss">

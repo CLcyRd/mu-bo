@@ -45,6 +45,8 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { ensureLoginOrRedirect } from '../../utils/auth'
 
 const form = reactive({
   visitor_name: '',
@@ -80,8 +82,38 @@ const onCountChange = (e: any) => {
   form.visitor_count = e.detail.value
 }
 
+const createBookingRedirectUrl = () => {
+  const query: string[] = []
+  if (form.visitor_name) query.push(`visitor_name=${encodeURIComponent(form.visitor_name)}`)
+  if (form.visitor_phone) query.push(`visitor_phone=${encodeURIComponent(form.visitor_phone)}`)
+  if (form.visit_date) query.push(`visit_date=${encodeURIComponent(form.visit_date)}`)
+  if (form.visit_time) query.push(`visit_time=${encodeURIComponent(form.visit_time)}`)
+  query.push(`visitor_count=${encodeURIComponent(String(form.visitor_count))}`)
+  return `/pages/booking/booking?${query.join('&')}`
+}
 
-const submitBooking = () => {
+const toNumber = (value: unknown, defaultValue: number) => {
+  const parsed = Number(value)
+  return Number.isFinite(parsed) ? parsed : defaultValue
+}
+
+onLoad((options) => {
+  if (!options) {
+    return
+  }
+  form.visitor_name = typeof options.visitor_name === 'string' ? decodeURIComponent(options.visitor_name) : ''
+  form.visitor_phone = typeof options.visitor_phone === 'string' ? decodeURIComponent(options.visitor_phone) : ''
+  form.visit_date = typeof options.visit_date === 'string' ? decodeURIComponent(options.visit_date) : ''
+  form.visit_time = typeof options.visit_time === 'string' ? decodeURIComponent(options.visit_time) : ''
+  form.visitor_count = toNumber(options.visitor_count, 1)
+})
+
+
+const submitBooking = async () => {
+  const loggedIn = await ensureLoginOrRedirect(createBookingRedirectUrl())
+  if (!loggedIn) {
+    return
+  }
   if (!form.visitor_name || !form.visitor_phone || !form.visit_date || !form.visit_time) {
     uni.showToast({ title: '请完善预约信息', icon: 'none' })
     return

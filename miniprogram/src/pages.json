@@ -1,17 +1,17 @@
 {
   "pages": [
     {
-      "path": "pages/login/login",
+      "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "登录",
+        "navigationBarTitleText": "博物馆介绍",
         "navigationBarTextStyle": "white",
         "navigationBarBackgroundColor": "#2B3A6B"
       }
     },
     {
-      "path": "pages/index/index",
+      "path": "pages/login/login",
       "style": {
-        "navigationBarTitleText": "博物馆介绍",
+        "navigationBarTitleText": "登录",
         "navigationBarTextStyle": "white",
         "navigationBarBackgroundColor": "#2B3A6B"
       }
@@ -29,7 +29,7 @@
       "style": {
         "navigationBarTitleText": "参观导览",
         "navigationBarTextStyle": "white",
-        "navigationBarBackgroundColor": "#0B1528"
+        "navigationBarBackgroundColor": "#2B3A6B"
       }
     },
     {
@@ -37,7 +37,7 @@
       "style": {
         "navigationBarTitleText": "加入志愿者",
         "navigationBarTextStyle": "white",
-        "navigationBarBackgroundColor": "#0B1528"
+        "navigationBarBackgroundColor": "#2B3A6B"
       }
     },
     {
@@ -74,10 +74,10 @@
     }
   },
   "tabBar": {
-    "color": "#7A7E83",
-    "selectedColor": "#3cc51f",
-    "borderStyle": "black",
-    "backgroundColor": "#ffffff",
+    "color": "#A9B7D8",
+    "selectedColor": "#E3D90F",
+    "borderStyle": "white",
+    "backgroundColor": "#2B3A6B",
     "list": [
       {
         "pagePath": "pages/index/index",
@@ -85,7 +85,7 @@
       },
       {
         "pagePath": "pages/my-bookings/my-bookings",
-        "text": "我的"
+        "text": "登录"
       }
     ]
   }

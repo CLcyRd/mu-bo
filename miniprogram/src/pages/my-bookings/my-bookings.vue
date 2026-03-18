@@ -116,6 +116,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
+import { getAuthState, refreshAuthState, goLoginWithRedirect, syncTabBar } from '../../utils/auth'
 
 interface Booking {
   id: number
@@ -204,7 +205,7 @@ const formatVolunteerTime = (value?: string) => {
 const requestWithToken = <T>(url: string, method: 'GET' | 'DELETE') => {
   const token = uni.getStorageSync('token')
   if (!token) {
-    uni.navigateTo({ url: '/pages/login/login' })
+    goLoginWithRedirect('/pages/my-bookings/my-bookings')
     return Promise.reject(new Error('未登录'))
   }
   return new Promise<T>((resolve, reject) => {
@@ -301,6 +302,18 @@ const handleVolunteerCancel = () => {
 }
 
 onShow(() => {
+  syncTabBar()
+  const auth = getAuthState()
+  if (!auth.loggedIn) {
+    refreshAuthState().then((ok) => {
+      if (!ok) {
+        bookings.value = []
+        myVolunteer.value = null
+        goLoginWithRedirect('/pages/my-bookings/my-bookings')
+      }
+    })
+    return
+  }
   fetchBookings()
   fetchMyVolunteer()
 })

@@ -792,3 +792,144 @@ Traceback (most recent call last):
     raise HTTPException(status_code=400, detail=f"WeChat session verification failed: {str(e)}")
 fastapi.exceptions.HTTPException: 400: WeChat session verification failed: 400: WeChat Error: Invalid code (Mock)
 
+2026-03-18 12:01:37,347 ERROR app.error request_id=8b17e7d2-d238-45b6-b0da-406c6f44a596 path=/api/users/me method=GET http_error=Could not validate credentials stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 62, in get_current_user
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 174, in decode
+    _validate_claims(
+    ~~~~~~~~~~~~~~~~^
+        claims,
+        ^^^^^^^
+    ...<5 lines>...
+        options=defaults,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 497, in _validate_claims
+    _validate_exp(claims, leeway=leeway)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 331, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired.")
+jose.exceptions.ExpiredSignatureError: Signature has expired.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 107, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 620, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 649, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 67, in get_current_user
+    raise credentials_exception
+fastapi.exceptions.HTTPException: 401: Could not validate credentials
+
+2026-03-18 12:01:37,353 ERROR app.error request_id=0d98363a-21e9-4e73-aa61-3f5c590400a1 path=/api/users/me method=GET http_error=Could not validate credentials stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 62, in get_current_user
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 174, in decode
+    _validate_claims(
+    ~~~~~~~~~~~~~~~~^
+        claims,
+        ^^^^^^^
+    ...<5 lines>...
+        options=defaults,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 497, in _validate_claims
+    _validate_exp(claims, leeway=leeway)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 331, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired.")
+jose.exceptions.ExpiredSignatureError: Signature has expired.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 107, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 620, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 649, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 67, in get_current_user
+    raise credentials_exception
+fastapi.exceptions.HTTPException: 401: Could not validate credentials
+
+2026-03-18 12:01:48,028 ERROR app.error request_id=a7c8d92c-93d2-49bd-952a-6ecfa64ee33f path=/api/users/me method=GET http_error=Could not validate credentials stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 62, in get_current_user
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 174, in decode
+    _validate_claims(
+    ~~~~~~~~~~~~~~~~^
+        claims,
+        ^^^^^^^
+    ...<5 lines>...
+        options=defaults,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 497, in _validate_claims
+    _validate_exp(claims, leeway=leeway)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 331, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired.")
+jose.exceptions.ExpiredSignatureError: Signature has expired.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 107, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 620, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 649, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 67, in get_current_user
+    raise credentials_exception
+fastapi.exceptions.HTTPException: 401: Could not validate credentials
+
