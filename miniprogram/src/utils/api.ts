@@ -35,15 +35,28 @@ export const normalizeApiAssetUrl = (url: string) => {
   if (!value) {
     return ''
   }
+  if (value.startsWith('data:') || value.startsWith('blob:') || value.startsWith('file:')) {
+    return value
+  }
   if (value.startsWith('//')) {
     return `https:${value}`
   }
   if (value.startsWith('/')) {
     return `${API_BASE_URL}${value}`
   }
-  const localhostMatch = value.match(/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/.*)?$/i)
-  if (localhostMatch) {
-    return `${API_BASE_URL}${localhostMatch[3] || ''}`
+  if (value.startsWith('uploads/')) {
+    return `${API_BASE_URL}/${value}`
+  }
+  if (/^https?:\/\//i.test(value)) {
+    try {
+      const parsed = new URL(value)
+      if (parsed.pathname.startsWith('/uploads/')) {
+        return `${API_BASE_URL}${parsed.pathname}${parsed.search}${parsed.hash}`
+      }
+      return value
+    } catch {
+      return value
+    }
   }
   return value
 }

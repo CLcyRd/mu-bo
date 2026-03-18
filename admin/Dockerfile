@@ -7,7 +7,7 @@ ENV NODE_OPTIONS=--max-old-space-size=4096
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build  # 如果你用的是 pnpm/yarn，请替换对应命令
+RUN npm run build  
 
 # 生产环境阶段
 FROM nginx:alpine as production-stage
