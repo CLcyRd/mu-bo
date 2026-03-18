@@ -108,7 +108,14 @@ def list_volunteers(
             "volunteer_id": row.volunteer_id,
             "user_id": row.user_id,
             "name": row.name,
+            "gender": row.gender,
+            "id_card": row.id_card,
+            "age": row.age,
+            "ethnicity": row.ethnicity,
             "phone": row.phone,
+            "service_time": row.service_time,
+            "organization": row.organization,
+            "position": row.position,
             "email": row.email,
             "status": row.status,
             "note": row.note,
@@ -134,6 +141,8 @@ def register_volunteer(
     raw_payload = dict(payload or {})
     if not raw_payload.get("note") and raw_payload.get("reason"):
         raw_payload["note"] = raw_payload.get("reason")
+    if not raw_payload.get("note") and raw_payload.get("personal_intro"):
+        raw_payload["note"] = raw_payload.get("personal_intro")
 
     try:
         data = schemas.VolunteerRegisterRequest.model_validate(raw_payload)
@@ -176,7 +185,14 @@ def register_volunteer(
             volunteer = models.Volunteer(
                 user_id=data.user_id,
                 name=data.name,
+                gender=data.gender,
+                id_card=data.id_card,
+                age=data.age,
+                ethnicity=data.ethnicity,
                 phone=data.phone,
+                service_time=data.service_time,
+                organization=data.organization,
+                position=data.position,
                 email=data.email,
                 note=data.note,
                 status="未审核",
@@ -300,7 +316,14 @@ def get_my_volunteer(
                 "volunteer_id": volunteer.volunteer_id,
                 "user_id": volunteer.user_id,
                 "name": volunteer.name,
+                "gender": volunteer.gender,
+                "id_card": volunteer.id_card,
+                "age": volunteer.age,
+                "ethnicity": volunteer.ethnicity,
                 "phone": volunteer.phone,
+                "service_time": volunteer.service_time,
+                "organization": volunteer.organization,
+                "position": volunteer.position,
                 "email": volunteer.email,
                 "status": volunteer.status,
                 "note": volunteer.note,

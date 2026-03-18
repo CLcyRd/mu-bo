@@ -50,7 +50,14 @@ class Booking(BookingBase):
 class VolunteerRegisterRequest(BaseModel):
     user_id: int = Field(gt=0)
     name: constr(strip_whitespace=True, min_length=1, max_length=30)
+    gender: constr(strip_whitespace=True, min_length=1, max_length=10)
+    id_card: constr(strip_whitespace=True, min_length=15, max_length=18)
+    age: int = Field(ge=1, le=120)
+    ethnicity: constr(strip_whitespace=True, min_length=1, max_length=30)
     phone: constr(strip_whitespace=True, min_length=11, max_length=11)
+    service_time: constr(strip_whitespace=True, min_length=1, max_length=100)
+    organization: constr(strip_whitespace=True, min_length=1, max_length=120)
+    position: constr(strip_whitespace=True, min_length=1, max_length=120)
     email: Optional[constr(strip_whitespace=True, max_length=100)] = None
     note: Optional[constr(strip_whitespace=True, max_length=2000)] = None
 
@@ -60,6 +67,15 @@ class VolunteerRegisterRequest(BaseModel):
         if not value.isdigit():
             raise ValueError("手机号必须为数字")
         return value
+
+    @field_validator("id_card")
+    @classmethod
+    def validate_id_card(cls, value: str):
+        import re
+        normalized = value.upper()
+        if not re.match(r"^\d{15}$|^\d{17}[\dX]$", normalized):
+            raise ValueError("身份证格式不正确")
+        return normalized
 
     @field_validator("email")
     @classmethod
@@ -96,7 +112,14 @@ class VolunteerOut(BaseModel):
     volunteer_id: int
     user_id: int
     name: str
+    gender: Optional[str] = None
+    id_card: Optional[str] = None
+    age: Optional[int] = None
+    ethnicity: Optional[str] = None
     phone: str
+    service_time: Optional[str] = None
+    organization: Optional[str] = None
+    position: Optional[str] = None
     email: Optional[str] = None
     status: str
     note: Optional[str] = None

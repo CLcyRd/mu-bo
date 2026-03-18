@@ -56,7 +56,7 @@ type ApiResponse<T> = {
   data: T
 }
 
-const fallbackCover = '/static/museum_img/default_cover.png'
+const fallbackCover = '/static/museum_img/default_cover.jpg'
 const keyword = ref('')
 const loading = ref(false)
 const newsList = ref<ConsultationItem[]>([])

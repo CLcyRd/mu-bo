@@ -60,7 +60,14 @@ def upgrade_db():
             volunteer_id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL UNIQUE,
             name VARCHAR(30) NOT NULL,
+            gender VARCHAR(10),
+            id_card VARCHAR(18),
+            age INTEGER,
+            ethnicity VARCHAR(30),
             phone VARCHAR(11) NOT NULL,
+            service_time VARCHAR(100),
+            organization VARCHAR(120),
+            position VARCHAR(120),
             email VARCHAR(100),
             status VARCHAR(20) NOT NULL DEFAULT '未审核',
             note TEXT,
@@ -87,6 +94,55 @@ def upgrade_db():
             print("Added updated_at column to volunteers")
         except Exception as e:
             print(f"updated_at error: {e}")
+
+    if "gender" not in volunteer_columns:
+        try:
+            cursor.execute("ALTER TABLE volunteers ADD COLUMN gender VARCHAR(10)")
+            print("Added gender column to volunteers")
+        except Exception as e:
+            print(f"gender error: {e}")
+
+    if "id_card" not in volunteer_columns:
+        try:
+            cursor.execute("ALTER TABLE volunteers ADD COLUMN id_card VARCHAR(18)")
+            print("Added id_card column to volunteers")
+        except Exception as e:
+            print(f"id_card error: {e}")
+
+    if "age" not in volunteer_columns:
+        try:
+            cursor.execute("ALTER TABLE volunteers ADD COLUMN age INTEGER")
+            print("Added age column to volunteers")
+        except Exception as e:
+            print(f"age error: {e}")
+
+    if "ethnicity" not in volunteer_columns:
+        try:
+            cursor.execute("ALTER TABLE volunteers ADD COLUMN ethnicity VARCHAR(30)")
+            print("Added ethnicity column to volunteers")
+        except Exception as e:
+            print(f"ethnicity error: {e}")
+
+    if "service_time" not in volunteer_columns:
+        try:
+            cursor.execute("ALTER TABLE volunteers ADD COLUMN service_time VARCHAR(100)")
+            print("Added service_time column to volunteers")
+        except Exception as e:
+            print(f"service_time error: {e}")
+
+    if "organization" not in volunteer_columns:
+        try:
+            cursor.execute("ALTER TABLE volunteers ADD COLUMN organization VARCHAR(120)")
+            print("Added organization column to volunteers")
+        except Exception as e:
+            print(f"organization error: {e}")
+
+    if "position" not in volunteer_columns:
+        try:
+            cursor.execute("ALTER TABLE volunteers ADD COLUMN position VARCHAR(120)")
+            print("Added position column to volunteers")
+        except Exception as e:
+            print(f"position error: {e}")
     
     conn.commit()
     conn.close()

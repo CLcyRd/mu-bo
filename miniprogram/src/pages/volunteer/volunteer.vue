@@ -33,16 +33,56 @@
           <input v-model="form.name" class="form-control input-control" type="text" placeholder="请输入真实姓名" />
         </view>
         <view class="form-group">
+          <view class="form-label">性别</view>
+          <picker class="picker-control" mode="selector" :range="genderOptions" :value="genderIndex" @change="onGenderChange">
+            <view class="picker-value">{{ form.gender || '请选择性别' }}</view>
+          </picker>
+        </view>
+        <view class="form-group">
+          <view class="form-label">身份证</view>
+          <input v-model="form.id_card" class="form-control input-control" type="text" maxlength="18" placeholder="请输入身份证号" />
+        </view>
+        <view class="form-group">
+          <view class="form-label">年龄</view>
+          <input v-model="form.age" class="form-control input-control" type="number" placeholder="请输入年龄" />
+        </view>
+        <view class="form-group">
+          <view class="form-label">民族</view>
+          <input v-model="form.ethnicity" class="form-control input-control" type="text" placeholder="请输入民族" />
+        </view>
+        <view class="form-group">
           <view class="form-label">联系电话</view>
           <input v-model="form.phone" class="form-control input-control" type="number" placeholder="请输入手机号码" />
+        </view>
+        <view class="form-group">
+          <view class="form-label">服务时段</view>
+          <view class="service-time-group">
+            <view
+              v-for="slot in serviceTimeOptions"
+              :key="slot"
+              class="service-time-chip"
+              :class="{ active: form.service_times.includes(slot) }"
+              @click="toggleServiceTime(slot)"
+            >
+              {{ slot }}
+            </view>
+          </view>
+        </view>
+        <view class="form-group">
+          <view class="form-label">学校 / 单位</view>
+          <input v-model="form.organization" class="form-control input-control" type="text" placeholder="请输入学校或单位" />
+        </view>
+        <view class="form-group">
+          <view class="form-label">专业 / 职务</view>
+          <input v-model="form.position" class="form-control input-control" type="text" placeholder="请输入专业或职务" />
         </view>
         <view class="form-group">
           <view class="form-label">邮箱（选填）</view>
           <input v-model="form.email" class="form-control input-control" type="text" placeholder="请输入邮箱地址" />
         </view>
         <view class="form-group">
-          <view class="form-label">最喜欢的谢晋导演作品 / 报名初衷</view>
-          <textarea v-model="form.reason" class="form-control textarea-control" maxlength="300" placeholder="聊聊您为什么想来这里，或者您与电影的故事..."></textarea>
+          <view class="form-label">个人简介</view>
+          <textarea v-model="form.note" class="form-control textarea-control" maxlength="500" placeholder="请简要介绍个人经历、志愿服务经验或报名初衷"></textarea>
         </view>
         <button class="submit-btn" type="button" :loading="submitting" :disabled="submitting" @click="submitForm">提交报名</button>
       </view>
@@ -53,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { ensureLoginOrRedirect } from '../../utils/auth'
 import { buildApiUrl } from '../../utils/api'
@@ -75,11 +115,20 @@ const dailyInfo = [
 
 const form = reactive({
   name: '',
+  gender: '',
+  id_card: '',
+  age: '',
+  ethnicity: '',
   phone: '',
+  service_times: [] as string[],
+  organization: '',
+  position: '',
   email: '',
-  reason: ''
+  note: ''
 })
 const submitting = ref(false)
+const genderOptions = ['女', '男']
+const serviceTimeOptions = ['周三', '周六']
 
 type ApiResponse<T> = {
   code: number
@@ -93,6 +142,32 @@ type CurrentUser = {
 
 const isValidPhone = (value: string) => /^1\d{10}$/.test(value)
 const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+const isValidIdCard = (value: string) => /^(\d{15}|\d{17}[\dXx])$/.test(value)
+
+const getGenderIndex = () => {
+  const index = genderOptions.indexOf(form.gender)
+  return index >= 0 ? index : 0
+}
+
+const onGenderChange = (event: any) => {
+  const selected = genderOptions[event?.detail?.value || 0]
+  form.gender = selected || ''
+}
+
+const toggleServiceTime = (slot: string) => {
+  const index = form.service_times.indexOf(slot)
+  if (index >= 0) {
+    form.service_times.splice(index, 1)
+    return
+  }
+  form.service_times.push(slot)
+}
+
+const normalizeServiceTime = () => {
+  const unique = Array.from(new Set(form.service_times))
+  const ordered = serviceTimeOptions.filter((item) => unique.includes(item))
+  form.service_times = ordered
+}
 
 const requestWithToken = <T>(url: string, method: 'GET' | 'POST', data?: Record<string, unknown>) => {
   const token = uni.getStorageSync('token')
@@ -122,9 +197,16 @@ const requestWithToken = <T>(url: string, method: 'GET' | 'POST', data?: Record<
 const createVolunteerRedirectUrl = () => {
   const query: string[] = []
   if (form.name) query.push(`name=${encodeURIComponent(form.name)}`)
+  if (form.gender) query.push(`gender=${encodeURIComponent(form.gender)}`)
+  if (form.id_card) query.push(`id_card=${encodeURIComponent(form.id_card)}`)
+  if (form.age) query.push(`age=${encodeURIComponent(form.age)}`)
+  if (form.ethnicity) query.push(`ethnicity=${encodeURIComponent(form.ethnicity)}`)
   if (form.phone) query.push(`phone=${encodeURIComponent(form.phone)}`)
+  if (form.service_times.length) query.push(`service_times=${encodeURIComponent(form.service_times.join(','))}`)
+  if (form.organization) query.push(`organization=${encodeURIComponent(form.organization)}`)
+  if (form.position) query.push(`position=${encodeURIComponent(form.position)}`)
   if (form.email) query.push(`email=${encodeURIComponent(form.email)}`)
-  if (form.reason) query.push(`reason=${encodeURIComponent(form.reason)}`)
+  if (form.note) query.push(`note=${encodeURIComponent(form.note)}`)
   if (query.length === 0) {
     return '/pages/volunteer/volunteer'
   }
@@ -136,9 +218,19 @@ onLoad((options) => {
     return
   }
   form.name = typeof options.name === 'string' ? decodeURIComponent(options.name) : ''
+  form.gender = typeof options.gender === 'string' ? decodeURIComponent(options.gender) : ''
+  form.id_card = typeof options.id_card === 'string' ? decodeURIComponent(options.id_card) : ''
+  form.age = typeof options.age === 'string' ? decodeURIComponent(options.age) : ''
+  form.ethnicity = typeof options.ethnicity === 'string' ? decodeURIComponent(options.ethnicity) : ''
   form.phone = typeof options.phone === 'string' ? decodeURIComponent(options.phone) : ''
+  form.service_times = typeof options.service_times === 'string' && options.service_times
+    ? decodeURIComponent(options.service_times).split(',').map((item) => item.trim()).filter(Boolean)
+    : []
+  normalizeServiceTime()
+  form.organization = typeof options.organization === 'string' ? decodeURIComponent(options.organization) : ''
+  form.position = typeof options.position === 'string' ? decodeURIComponent(options.position) : ''
   form.email = typeof options.email === 'string' ? decodeURIComponent(options.email) : ''
-  form.reason = typeof options.reason === 'string' ? decodeURIComponent(options.reason) : ''
+  form.note = typeof options.note === 'string' ? decodeURIComponent(options.note) : ''
 })
 
 const submitForm = async () => {
@@ -150,8 +242,38 @@ const submitForm = async () => {
     uni.showToast({ title: '请输入姓名', icon: 'none' })
     return
   }
+  if (!form.gender.trim()) {
+    uni.showToast({ title: '请选择性别', icon: 'none' })
+    return
+  }
+  if (!isValidIdCard(form.id_card.trim())) {
+    uni.showToast({ title: '请输入正确身份证号', icon: 'none' })
+    return
+  }
+  const ageValue = Number(form.age)
+  if (!Number.isInteger(ageValue) || ageValue < 1 || ageValue > 120) {
+    uni.showToast({ title: '请输入正确年龄', icon: 'none' })
+    return
+  }
+  if (!form.ethnicity.trim()) {
+    uni.showToast({ title: '请输入民族', icon: 'none' })
+    return
+  }
   if (!isValidPhone(form.phone.trim())) {
     uni.showToast({ title: '请输入正确手机号', icon: 'none' })
+    return
+  }
+  normalizeServiceTime()
+  if (!form.service_times.length) {
+    uni.showToast({ title: '请选择服务时段', icon: 'none' })
+    return
+  }
+  if (!form.organization.trim()) {
+    uni.showToast({ title: '请输入学校或单位', icon: 'none' })
+    return
+  }
+  if (!form.position.trim()) {
+    uni.showToast({ title: '请输入专业或职务', icon: 'none' })
     return
   }
   if (form.email.trim() && !isValidEmail(form.email.trim())) {
@@ -169,10 +291,17 @@ const submitForm = async () => {
     const payload = {
       user_id: me.user_id,
       name: form.name.trim(),
+      gender: form.gender.trim(),
+      id_card: form.id_card.trim().toUpperCase(),
+      age: ageValue,
+      ethnicity: form.ethnicity.trim(),
       phone: form.phone.trim(),
+      service_time: form.service_times.join('、'),
+      organization: form.organization.trim(),
+      position: form.position.trim(),
       email: form.email.trim() || null,
-      note: form.reason.trim() || null,
-      reason: form.reason.trim() || null
+      note: form.note.trim() || null,
+      personal_intro: form.note.trim() || null
     }
     const response = await requestWithToken<ApiResponse<{ volunteer_id: number; existed: boolean }>>(
       '/api/volunteers/register',
@@ -188,9 +317,16 @@ const submitForm = async () => {
     })
     if (!response.data?.existed) {
       form.name = ''
+      form.gender = ''
+      form.id_card = ''
+      form.age = ''
+      form.ethnicity = ''
       form.phone = ''
+      form.service_times = []
+      form.organization = ''
+      form.position = ''
       form.email = ''
-      form.reason = ''
+      form.note = ''
     }
   } catch (error: any) {
     const message = error?.message || error?.detail || error?.data?.message || '提交失败，请稍后重试'
@@ -199,6 +335,8 @@ const submitForm = async () => {
     submitting.value = false
   }
 }
+
+const genderIndex = computed(() => getGenderIndex())
 </script>
 
 <style lang="scss">
@@ -357,6 +495,46 @@ const submitForm = async () => {
   height: 220rpx;
   padding: 20rpx 24rpx;
   line-height: 1.6;
+}
+
+.picker-control {
+  width: 100%;
+}
+
+.picker-value {
+  height: 80rpx;
+  line-height: 80rpx;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1rpx solid rgba(255, 255, 255, 0.15);
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  color: #fff;
+  font-size: 30rpx;
+  box-sizing: border-box;
+}
+
+.service-time-group {
+  display: flex;
+  gap: 16rpx;
+}
+
+.service-time-chip {
+  flex: 1;
+  height: 72rpx;
+  border-radius: 36rpx;
+  border: 1rpx solid rgba(212, 175, 55, 0.45);
+  color: #d4af37;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+}
+
+.service-time-chip.active {
+  background: rgba(212, 175, 55, 0.18);
+  border-color: #d4af37;
+  color: #f0f4f8;
 }
 
 .submit-btn {

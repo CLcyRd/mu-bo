@@ -13,6 +13,25 @@ from app.database import Base
 from app.routers import volunteers as volunteers_router
 
 
+def build_payload(user_id: int, **overrides):
+    data = {
+        "user_id": user_id,
+        "name": "测试用户",
+        "gender": "女",
+        "id_card": "310101199001011234",
+        "age": 28,
+        "ethnicity": "汉族",
+        "phone": "13800138000",
+        "service_time": "周三、周六",
+        "organization": "上海电影学院",
+        "position": "学生",
+        "email": "test@example.com",
+        "note": "测试备注",
+    }
+    data.update(overrides)
+    return data
+
+
 def build_test_client():
     engine = create_engine("sqlite:///./test_volunteers_unit.db", connect_args={"check_same_thread": False})
     TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -53,7 +72,7 @@ def test_register_validation_error():
     seed_user(session_local, 101)
     response = client.post(
         "/volunteers/register",
-        json={"user_id": 101, "name": "张三", "phone": "13x00000000", "email": "badmail", "note": "n"},
+        json=build_payload(101, name="张三", phone="13x00000000", email="badmail", note="n"),
     )
     assert response.status_code == 400
     payload = response.json()
@@ -64,7 +83,7 @@ def test_register_validation_error():
 def test_register_idempotent():
     client, session_local = build_test_client()
     seed_user(session_local, 102)
-    body = {"user_id": 102, "name": "李四", "phone": "13800138000", "email": "li@example.com", "note": "hello"}
+    body = build_payload(102, name="李四", email="li@example.com", note="hello")
     first = client.post("/volunteers/register", json=body)
     second = client.post("/volunteers/register", json=body)
 
@@ -94,7 +113,7 @@ def test_register_rollback_on_exception():
     try:
         response = client.post(
             "/volunteers/register",
-            json={"user_id": 103, "name": "王五", "phone": "13900139000", "email": "w@example.com", "note": "ROLLBACK"},
+            json=build_payload(103, name="王五", phone="13900139000", email="w@example.com", note="ROLLBACK"),
         )
         assert response.status_code == 500
     finally:
@@ -113,7 +132,7 @@ def test_patch_status_admin_only_route_logic():
     seed_user(session_local, 104)
     create = client.post(
         "/volunteers/register",
-        json={"user_id": 104, "name": "赵六", "phone": "13700137000", "email": "zhao@example.com", "note": "note"},
+        json=build_payload(104, name="赵六", phone="13700137000", email="zhao@example.com", note="note"),
     )
     volunteer_id = create.json()["data"]["volunteer_id"]
     update = client.patch(f"/volunteers/{volunteer_id}/status", json={"status": "已审核"})
@@ -126,7 +145,7 @@ def test_update_note_route_logic():
     seed_user(session_local, 107)
     create = client.post(
         "/volunteers/register",
-        json={"user_id": 107, "name": "周八", "phone": "13400134000", "email": "zhou@example.com", "note": "old"},
+        json=build_payload(107, name="周八", phone="13400134000", email="zhou@example.com", note="old"),
     )
     volunteer_id = create.json()["data"]["volunteer_id"]
     update = client.patch(f"/volunteers/{volunteer_id}/note", json={"note": "new note"})
@@ -147,7 +166,7 @@ def test_delete_volunteer_route_logic():
     seed_user(session_local, 106)
     create = client.post(
         "/volunteers/register",
-        json={"user_id": 106, "name": "孙七", "phone": "13500135000", "email": "sun@example.com", "note": "note"},
+        json=build_payload(106, name="孙七", phone="13500135000", email="sun@example.com", note="note"),
     )
     volunteer_id = create.json()["data"]["volunteer_id"]
     remove = client.delete(f"/volunteers/{volunteer_id}")
@@ -166,7 +185,7 @@ def test_register_concurrent_idempotent():
     client, session_local = build_test_client()
     volunteers_router._RATE_LIMIT_COUNT = 1000
     seed_user(session_local, 105)
-    payload = {"user_id": 105, "name": "并发用户", "phone": "13600136000", "email": "cc@example.com", "note": "n"}
+    payload = build_payload(105, name="并发用户", phone="13600136000", email="cc@example.com", note="n")
 
     def submit():
         return client.post("/volunteers/register", json=payload)

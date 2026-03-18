@@ -55,7 +55,14 @@ def test_mysql_testcontainer_concurrent_register_100_threads():
         payload = {
             "user_id": 3001,
             "name": "集成用户",
+            "gender": "男",
+            "id_card": "31010119920101123X",
+            "age": 33,
+            "ethnicity": "汉族",
             "phone": "13500135000",
+            "service_time": "周三、周六",
+            "organization": "谢晋故居纪念馆",
+            "position": "志愿者",
             "email": "integration@example.com",
             "note": "integration",
         }

@@ -1,15 +1,5 @@
 <template>
   <view class="page">
-    <view class="detail-header">
-      <view class="header-btn" @click="goBack">
-        <text class="header-icon">←</text>
-      </view>
-      <view class="header-title"></view>
-      <button class="header-share" open-type="share">
-        <text class="header-icon">⤴</text>
-      </button>
-    </view>
-
     <scroll-view class="detail-scroll" scroll-y>
       <view v-if="loading" class="status-text">加载中...</view>
       <view v-else-if="!article.id" class="status-text">资讯不存在</view>
@@ -53,7 +43,7 @@ type ApiResponse<T> = {
   data: T
 }
 
-const fallbackCover = '/static/museum_img/default_cover.png'
+const fallbackCover = '/static/museum_img/default_cover.jpg'
 const loading = ref(false)
 const failedCover = ref(false)
 const article = ref<ConsultationDetail>({
@@ -189,41 +179,6 @@ onShareAppMessage(() => {
   background: #001b35;
   display: flex;
   flex-direction: column;
-}
-
-.detail-header {
-  height: 92rpx;
-  padding: 18rpx 28rpx;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #001b35;
-}
-
-.header-btn,
-.header-share {
-  width: 56rpx;
-  height: 56rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  background: transparent;
-  border: none;
-  padding: 0;
-}
-
-.header-title {
-  flex: 1;
-}
-
-.header-share::after {
-  border: none;
-}
-
-.header-icon {
-  font-size: 42rpx;
-  line-height: 1;
 }
 
 .detail-scroll {
