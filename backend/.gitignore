@@ -1,1 +1,7 @@
 museum.db
+museum.db-journal
+museum.db-shm
+museum.db-wal
+*.db
+__pycache__/
+*.pyc
