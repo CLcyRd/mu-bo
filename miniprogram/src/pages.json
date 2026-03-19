@@ -33,6 +33,22 @@
       }
     },
     {
+      "path": "pages/guide/exhibition_intro",
+      "style": {
+        "navigationBarTitleText": "展厅介绍",
+        "navigationBarTextStyle": "white",
+        "navigationBarBackgroundColor": "#2B3A6B"
+      }
+    },
+    {
+      "path": "pages/guide/visitor_notice",
+      "style": {
+        "navigationBarTitleText": "参观须知",
+        "navigationBarTextStyle": "white",
+        "navigationBarBackgroundColor": "#2B3A6B"
+      }
+    },
+    {
       "path": "pages/volunteer/volunteer",
       "style": {
         "navigationBarTitleText": "加入志愿者",
