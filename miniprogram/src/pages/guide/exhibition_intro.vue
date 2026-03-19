@@ -34,10 +34,7 @@
           </view>
 
           <view class="image-placeholder">
-            <view class="placeholder-content">
-              <text class="icon-camera">📷</text>
-              <text class="placeholder-text">{{ zone.title }} - 现场照片预留位</text>
-            </view>
+            <image class="zone-image" :src="zone.imageUrl" mode="aspectFill" />
           </view>
 
           <view class="zone-points">
@@ -61,7 +58,7 @@
 const formattedZones = [
   {
     title: '家庭 | 朋友',
-    imageUrl: '', // 预留字段，未来填入真实图片URL
+    imageUrl: '/static/museum_img/f9c3cb52f1859ff33b569b6024773334.jpg',
     points: [
       {
         name: '点位 · 家庭',
@@ -75,7 +72,7 @@ const formattedZones = [
   },
   {
     title: '场景 | 创作',
-    imageUrl: '',
+    imageUrl: '/static/museum_img/a794f1ec2977772d115f3bfceee23717.jpg',
     points: [
       {
         name: '点位 · 创作现场',
@@ -89,7 +86,7 @@ const formattedZones = [
   },
   {
     title: '作品与荣誉',
-    imageUrl: '',
+    imageUrl: '/static/museum_img/20260303215335_541_22.jpg',
     points: [
       {
         name: '点位 · 作品',

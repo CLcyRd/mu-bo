@@ -10,8 +10,10 @@ from . import models, database
 from .database import engine
 from .routers import bookings, auth, auth_wechat, users, consultations, volunteers
 from .api_utils import api_success, register_exception_handlers
+from .db_migration import run_schema_migrations
 
 models.Base.metadata.create_all(bind=engine)
+run_schema_migrations(engine)
 
 app = FastAPI(title="Museum Booking API")
 register_exception_handlers(app)

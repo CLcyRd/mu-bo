@@ -933,3 +933,1130 @@ Traceback (most recent call last):
     raise credentials_exception
 fastapi.exceptions.HTTPException: 401: Could not validate credentials
 
+2026-03-19 14:25:17,663 ERROR app.error request_id=ec18ac96-b8bc-4b47-b44c-bef821519634 path=/api/volunteers method=GET http_error=Could not validate credentials stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 62, in get_current_user
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 174, in decode
+    _validate_claims(
+    ~~~~~~~~~~~~~~~~^
+        claims,
+        ^^^^^^^
+    ...<5 lines>...
+        options=defaults,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 497, in _validate_claims
+    _validate_exp(claims, leeway=leeway)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 331, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired.")
+jose.exceptions.ExpiredSignatureError: Signature has expired.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 107, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 620, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 620, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 649, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 67, in get_current_user
+    raise credentials_exception
+fastapi.exceptions.HTTPException: 401: Could not validate credentials
+
+2026-03-19 14:25:29,027 ERROR app.error request_id=a1226a96-e865-46e2-b992-a80f32c2f220 path=/api/volunteers method=GET unexpected_error=(sqlite3.OperationalError) no such column: volunteers.gender
+[SQL: SELECT volunteers.volunteer_id AS volunteers_volunteer_id, volunteers.user_id AS volunteers_user_id, volunteers.name AS volunteers_name, volunteers.gender AS volunteers_gender, volunteers.id_card AS volunteers_id_card, volunteers.age AS volunteers_age, volunteers.ethnicity AS volunteers_ethnicity, volunteers.phone AS volunteers_phone, volunteers.service_time AS volunteers_service_time, volunteers.organization AS volunteers_organization, volunteers.position AS volunteers_position, volunteers.email AS volunteers_email, volunteers.status AS volunteers_status, volunteers.note AS volunteers_note, volunteers.created_at AS volunteers_created_at, volunteers.updated_at AS volunteers_updated_at 
+FROM volunteers ORDER BY volunteers.created_at DESC, volunteers.volunteer_id DESC]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: volunteers.gender
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 191, in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+                                   ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_utils.py", line 87, in collapse_excgroups
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\main.py", line 44, in add_request_id
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\cors.py", line 87, in __call__
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 107, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 316, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "G:\museum_booking\mu-bo\backend\app\routers\volunteers.py", line 104, in list_volunteers
+    .all()
+     ~~~^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ~~~~~~~~~~^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: volunteers.gender
+[SQL: SELECT volunteers.volunteer_id AS volunteers_volunteer_id, volunteers.user_id AS volunteers_user_id, volunteers.name AS volunteers_name, volunteers.gender AS volunteers_gender, volunteers.id_card AS volunteers_id_card, volunteers.age AS volunteers_age, volunteers.ethnicity AS volunteers_ethnicity, volunteers.phone AS volunteers_phone, volunteers.service_time AS volunteers_service_time, volunteers.organization AS volunteers_organization, volunteers.position AS volunteers_position, volunteers.email AS volunteers_email, volunteers.status AS volunteers_status, volunteers.note AS volunteers_note, volunteers.created_at AS volunteers_created_at, volunteers.updated_at AS volunteers_updated_at 
+FROM volunteers ORDER BY volunteers.created_at DESC, volunteers.volunteer_id DESC]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+2026-03-19 14:25:34,057 ERROR app.error request_id=db5e567b-6e91-4e73-bc05-0bed87c25a5e path=/api/volunteers method=GET unexpected_error=(sqlite3.OperationalError) no such column: volunteers.gender
+[SQL: SELECT volunteers.volunteer_id AS volunteers_volunteer_id, volunteers.user_id AS volunteers_user_id, volunteers.name AS volunteers_name, volunteers.gender AS volunteers_gender, volunteers.id_card AS volunteers_id_card, volunteers.age AS volunteers_age, volunteers.ethnicity AS volunteers_ethnicity, volunteers.phone AS volunteers_phone, volunteers.service_time AS volunteers_service_time, volunteers.organization AS volunteers_organization, volunteers.position AS volunteers_position, volunteers.email AS volunteers_email, volunteers.status AS volunteers_status, volunteers.note AS volunteers_note, volunteers.created_at AS volunteers_created_at, volunteers.updated_at AS volunteers_updated_at 
+FROM volunteers ORDER BY volunteers.created_at DESC, volunteers.volunteer_id DESC]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: volunteers.gender
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 191, in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+                                   ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_utils.py", line 87, in collapse_excgroups
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\main.py", line 44, in add_request_id
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\cors.py", line 87, in __call__
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 107, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 316, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "G:\museum_booking\mu-bo\backend\app\routers\volunteers.py", line 104, in list_volunteers
+    .all()
+     ~~~^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ~~~~~~~~~~^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: volunteers.gender
+[SQL: SELECT volunteers.volunteer_id AS volunteers_volunteer_id, volunteers.user_id AS volunteers_user_id, volunteers.name AS volunteers_name, volunteers.gender AS volunteers_gender, volunteers.id_card AS volunteers_id_card, volunteers.age AS volunteers_age, volunteers.ethnicity AS volunteers_ethnicity, volunteers.phone AS volunteers_phone, volunteers.service_time AS volunteers_service_time, volunteers.organization AS volunteers_organization, volunteers.position AS volunteers_position, volunteers.email AS volunteers_email, volunteers.status AS volunteers_status, volunteers.note AS volunteers_note, volunteers.created_at AS volunteers_created_at, volunteers.updated_at AS volunteers_updated_at 
+FROM volunteers ORDER BY volunteers.created_at DESC, volunteers.volunteer_id DESC]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+2026-03-19 14:25:39,856 ERROR app.error request_id=fd8a3dbf-da3b-43c7-9fe9-10668ed18440 path=/api/volunteers method=GET unexpected_error=(sqlite3.OperationalError) no such column: volunteers.gender
+[SQL: SELECT volunteers.volunteer_id AS volunteers_volunteer_id, volunteers.user_id AS volunteers_user_id, volunteers.name AS volunteers_name, volunteers.gender AS volunteers_gender, volunteers.id_card AS volunteers_id_card, volunteers.age AS volunteers_age, volunteers.ethnicity AS volunteers_ethnicity, volunteers.phone AS volunteers_phone, volunteers.service_time AS volunteers_service_time, volunteers.organization AS volunteers_organization, volunteers.position AS volunteers_position, volunteers.email AS volunteers_email, volunteers.status AS volunteers_status, volunteers.note AS volunteers_note, volunteers.created_at AS volunteers_created_at, volunteers.updated_at AS volunteers_updated_at 
+FROM volunteers ORDER BY volunteers.created_at DESC, volunteers.volunteer_id DESC]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: volunteers.gender
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 191, in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+                                   ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_utils.py", line 87, in collapse_excgroups
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\main.py", line 44, in add_request_id
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\cors.py", line 87, in __call__
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 107, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 316, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "G:\museum_booking\mu-bo\backend\app\routers\volunteers.py", line 104, in list_volunteers
+    .all()
+     ~~~^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ~~~~~~~~~~^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: volunteers.gender
+[SQL: SELECT volunteers.volunteer_id AS volunteers_volunteer_id, volunteers.user_id AS volunteers_user_id, volunteers.name AS volunteers_name, volunteers.gender AS volunteers_gender, volunteers.id_card AS volunteers_id_card, volunteers.age AS volunteers_age, volunteers.ethnicity AS volunteers_ethnicity, volunteers.phone AS volunteers_phone, volunteers.service_time AS volunteers_service_time, volunteers.organization AS volunteers_organization, volunteers.position AS volunteers_position, volunteers.email AS volunteers_email, volunteers.status AS volunteers_status, volunteers.note AS volunteers_note, volunteers.created_at AS volunteers_created_at, volunteers.updated_at AS volunteers_updated_at 
+FROM volunteers ORDER BY volunteers.created_at DESC, volunteers.volunteer_id DESC]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+2026-03-19 14:27:10,041 ERROR app.error request_id=b3329007-17bc-45ae-9632-f293894ec25b path=/api/volunteers method=GET unexpected_error=(sqlite3.OperationalError) no such column: volunteers.gender
+[SQL: SELECT volunteers.volunteer_id AS volunteers_volunteer_id, volunteers.user_id AS volunteers_user_id, volunteers.name AS volunteers_name, volunteers.gender AS volunteers_gender, volunteers.id_card AS volunteers_id_card, volunteers.age AS volunteers_age, volunteers.ethnicity AS volunteers_ethnicity, volunteers.phone AS volunteers_phone, volunteers.service_time AS volunteers_service_time, volunteers.organization AS volunteers_organization, volunteers.position AS volunteers_position, volunteers.email AS volunteers_email, volunteers.status AS volunteers_status, volunteers.note AS volunteers_note, volunteers.created_at AS volunteers_created_at, volunteers.updated_at AS volunteers_updated_at 
+FROM volunteers ORDER BY volunteers.created_at DESC, volunteers.volunteer_id DESC]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: volunteers.gender
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 191, in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+                                   ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_utils.py", line 87, in collapse_excgroups
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\main.py", line 44, in add_request_id
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\cors.py", line 87, in __call__
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 107, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 316, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "G:\museum_booking\mu-bo\backend\app\routers\volunteers.py", line 104, in list_volunteers
+    .all()
+     ~~~^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ~~~~~~~~~~^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: volunteers.gender
+[SQL: SELECT volunteers.volunteer_id AS volunteers_volunteer_id, volunteers.user_id AS volunteers_user_id, volunteers.name AS volunteers_name, volunteers.gender AS volunteers_gender, volunteers.id_card AS volunteers_id_card, volunteers.age AS volunteers_age, volunteers.ethnicity AS volunteers_ethnicity, volunteers.phone AS volunteers_phone, volunteers.service_time AS volunteers_service_time, volunteers.organization AS volunteers_organization, volunteers.position AS volunteers_position, volunteers.email AS volunteers_email, volunteers.status AS volunteers_status, volunteers.note AS volunteers_note, volunteers.created_at AS volunteers_created_at, volunteers.updated_at AS volunteers_updated_at 
+FROM volunteers ORDER BY volunteers.created_at DESC, volunteers.volunteer_id DESC]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+2026-03-19 14:27:19,421 ERROR app.error request_id=533c8f05-dc61-4a3c-ac53-2cf8fdf10c11 path=/api/volunteers method=GET unexpected_error=(sqlite3.OperationalError) no such column: volunteers.gender
+[SQL: SELECT volunteers.volunteer_id AS volunteers_volunteer_id, volunteers.user_id AS volunteers_user_id, volunteers.name AS volunteers_name, volunteers.gender AS volunteers_gender, volunteers.id_card AS volunteers_id_card, volunteers.age AS volunteers_age, volunteers.ethnicity AS volunteers_ethnicity, volunteers.phone AS volunteers_phone, volunteers.service_time AS volunteers_service_time, volunteers.organization AS volunteers_organization, volunteers.position AS volunteers_position, volunteers.email AS volunteers_email, volunteers.status AS volunteers_status, volunteers.note AS volunteers_note, volunteers.created_at AS volunteers_created_at, volunteers.updated_at AS volunteers_updated_at 
+FROM volunteers ORDER BY volunteers.created_at DESC, volunteers.volunteer_id DESC]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: volunteers.gender
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 191, in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+                                   ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_utils.py", line 87, in collapse_excgroups
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\main.py", line 44, in add_request_id
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\cors.py", line 87, in __call__
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 107, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 316, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "G:\museum_booking\mu-bo\backend\app\routers\volunteers.py", line 104, in list_volunteers
+    .all()
+     ~~~^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ~~~~~~~~~~^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: volunteers.gender
+[SQL: SELECT volunteers.volunteer_id AS volunteers_volunteer_id, volunteers.user_id AS volunteers_user_id, volunteers.name AS volunteers_name, volunteers.gender AS volunteers_gender, volunteers.id_card AS volunteers_id_card, volunteers.age AS volunteers_age, volunteers.ethnicity AS volunteers_ethnicity, volunteers.phone AS volunteers_phone, volunteers.service_time AS volunteers_service_time, volunteers.organization AS volunteers_organization, volunteers.position AS volunteers_position, volunteers.email AS volunteers_email, volunteers.status AS volunteers_status, volunteers.note AS volunteers_note, volunteers.created_at AS volunteers_created_at, volunteers.updated_at AS volunteers_updated_at 
+FROM volunteers ORDER BY volunteers.created_at DESC, volunteers.volunteer_id DESC]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+2026-03-19 14:27:44,857 ERROR app.error request_id=8bc83bc0-1597-4cee-922d-29c593f84763 path=/api/volunteers method=GET unexpected_error=(sqlite3.OperationalError) no such column: volunteers.gender
+[SQL: SELECT volunteers.volunteer_id AS volunteers_volunteer_id, volunteers.user_id AS volunteers_user_id, volunteers.name AS volunteers_name, volunteers.gender AS volunteers_gender, volunteers.id_card AS volunteers_id_card, volunteers.age AS volunteers_age, volunteers.ethnicity AS volunteers_ethnicity, volunteers.phone AS volunteers_phone, volunteers.service_time AS volunteers_service_time, volunteers.organization AS volunteers_organization, volunteers.position AS volunteers_position, volunteers.email AS volunteers_email, volunteers.status AS volunteers_status, volunteers.note AS volunteers_note, volunteers.created_at AS volunteers_created_at, volunteers.updated_at AS volunteers_updated_at 
+FROM volunteers ORDER BY volunteers.created_at DESC, volunteers.volunteer_id DESC]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: volunteers.gender
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 191, in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+                                   ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_utils.py", line 87, in collapse_excgroups
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\main.py", line 44, in add_request_id
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\cors.py", line 87, in __call__
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 107, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 316, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "G:\museum_booking\mu-bo\backend\app\routers\volunteers.py", line 104, in list_volunteers
+    .all()
+     ~~~^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2704, in all
+    return self._iter().all()  # type: ignore
+           ~~~~~~~~~~^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: volunteers.gender
+[SQL: SELECT volunteers.volunteer_id AS volunteers_volunteer_id, volunteers.user_id AS volunteers_user_id, volunteers.name AS volunteers_name, volunteers.gender AS volunteers_gender, volunteers.id_card AS volunteers_id_card, volunteers.age AS volunteers_age, volunteers.ethnicity AS volunteers_ethnicity, volunteers.phone AS volunteers_phone, volunteers.service_time AS volunteers_service_time, volunteers.organization AS volunteers_organization, volunteers.position AS volunteers_position, volunteers.email AS volunteers_email, volunteers.status AS volunteers_status, volunteers.note AS volunteers_note, volunteers.created_at AS volunteers_created_at, volunteers.updated_at AS volunteers_updated_at 
+FROM volunteers ORDER BY volunteers.created_at DESC, volunteers.volunteer_id DESC]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+

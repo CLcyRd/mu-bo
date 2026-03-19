@@ -25,10 +25,13 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="360" fixed="right">
+      <el-table-column label="操作" width="430" fixed="right">
         <template #default="{ row }">
           <el-button type="primary" link :loading="row.updating" @click="toggleStatus(row)">
             切换为{{ row.status === '已审核' ? '未审核' : '已审核' }}
+          </el-button>
+          <el-button type="success" link :loading="row.exporting" @click="handleExportWord(row)">
+            导出Word
           </el-button>
           <el-button type="info" link @click="handleViewNote(row)">
             查看备注
@@ -68,7 +71,14 @@ type VolunteerItem = {
   volunteer_id: number
   user_id: number
   name: string
+  gender: string | null
+  id_card: string | null
+  age: number | null
+  ethnicity: string | null
   phone: string
+  service_time: string | null
+  organization: string | null
+  position: string | null
   email: string | null
   status: VolunteerStatus
   note: string | null
@@ -76,6 +86,7 @@ type VolunteerItem = {
   updated_at: string
   updating?: boolean
   deleting?: boolean
+  exporting?: boolean
 }
 
 type ApiResponse<T> = {
@@ -109,6 +120,7 @@ const loadVolunteers = async () => {
       ...item,
       updating: false,
       deleting: false,
+      exporting: false,
     }))
   } catch (error) {
     const message = error instanceof Error ? error.message : '加载志愿者失败'
@@ -194,6 +206,109 @@ const handleSaveNote = async () => {
     ElMessage.error(message)
   } finally {
     noteSaving.value = false
+  }
+}
+
+const escapeHtml = (value: string) =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+
+const normalizeText = (value: string | number | null | undefined) => {
+  if (value === null || value === undefined) {
+    return ''
+  }
+  return String(value).trim()
+}
+
+const isChecked = (serviceTime: string, key: string) => {
+  return serviceTime.includes(key) ? '☑' : '☐'
+}
+
+const buildWordHtml = (row: VolunteerItem) => {
+  const serviceTime = normalizeText(row.service_time)
+  const note = normalizeText(row.note) || '无'
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>志愿者申请表</title>
+  <style>
+    body { font-family: "Microsoft YaHei", "SimSun", sans-serif; margin: 24px; color: #000; }
+    .title { text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 18px; }
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    td { border: 1px solid #000; padding: 8px 10px; font-size: 14px; vertical-align: middle; word-break: break-all; }
+    .label { width: 18%; font-weight: 600; background: #fafafa; }
+    .value { width: 32%; }
+    .intro-label { width: 18%; font-weight: 600; background: #fafafa; vertical-align: top; }
+    .intro { height: 180px; vertical-align: top; line-height: 1.8; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <div class="title">上海谢晋电影艺术基金会<br/>谢晋故居纪念馆志愿者申请表</div>
+  <table>
+    <tr>
+      <td class="label">姓名</td>
+      <td class="value">${escapeHtml(normalizeText(row.name))}</td>
+      <td class="label">性别</td>
+      <td class="value">${escapeHtml(normalizeText(row.gender))}</td>
+    </tr>
+    <tr>
+      <td class="label">身份证</td>
+      <td class="value">${escapeHtml(normalizeText(row.id_card))}</td>
+      <td class="label">年龄</td>
+      <td class="value">${escapeHtml(normalizeText(row.age))}</td>
+    </tr>
+    <tr>
+      <td class="label">民族</td>
+      <td class="value">${escapeHtml(normalizeText(row.ethnicity))}</td>
+      <td class="label">联系电话</td>
+      <td class="value">${escapeHtml(normalizeText(row.phone))}</td>
+    </tr>
+    <tr>
+      <td class="label">邮箱</td>
+      <td class="value">${escapeHtml(normalizeText(row.email))}</td>
+      <td class="label">服务时段</td>
+      <td class="value">${isChecked(serviceTime, '周三')} 周三　${isChecked(serviceTime, '周六')} 周六</td>
+    </tr>
+    <tr>
+      <td class="label">学校 / 单位</td>
+      <td class="value">${escapeHtml(normalizeText(row.organization))}</td>
+      <td class="label">专业 / 职务</td>
+      <td class="value">${escapeHtml(normalizeText(row.position))}</td>
+    </tr>
+    <tr>
+      <td class="intro-label">个人简介</td>
+      <td class="intro" colspan="3">${escapeHtml(note)}</td>
+    </tr>
+  </table>
+</body>
+</html>`
+}
+
+const handleExportWord = (row: VolunteerItem) => {
+  row.exporting = true
+  try {
+    const html = buildWordHtml(row)
+    const blob = new Blob(['\ufeff', html], {
+      type: 'application/msword;charset=utf-8',
+    })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `志愿者申请表-${row.name}-${row.volunteer_id}.doc`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+    ElMessage.success('导出成功')
+  } catch (error) {
+    ElMessage.error('导出失败')
+  } finally {
+    row.exporting = false
   }
 }
 

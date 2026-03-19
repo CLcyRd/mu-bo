@@ -57,6 +57,14 @@
       }
     },
     {
+      "path": "pages/volunteer/volunteer_form",
+      "style": {
+        "navigationBarTitleText": "志愿者报名",
+        "navigationBarTextStyle": "white",
+        "navigationBarBackgroundColor": "#2B3A6B"
+      }
+    },
+    {
       "path": "pages/news/news",
       "style": {
         "navigationBarTitleText": "最新资讯",
