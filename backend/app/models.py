@@ -128,3 +128,18 @@ class Volunteer(Base):
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
 
     user = relationship("User", backref="volunteer_profile")
+
+
+class AudioExplanation(Base):
+    __tablename__ = "audio_explanation"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    title = Column(String(255), nullable=False)
+    audio_url = Column(String(1024), nullable=False)
+    description = Column(Text, nullable=True)
+    status = Column(Enum("draft", "published", name="audio_explanation_status", native_enum=False), nullable=False, default="draft")
+    qr_code_url = Column(String(1024), nullable=True)
+    created_by = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+    creator = relationship("User", backref="audio_explanations")

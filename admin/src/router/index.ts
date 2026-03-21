@@ -6,6 +6,8 @@ import CreateBlog from '../views/CreateBlog.vue'
 import ConsultationManage from '../views/ConsultationManage.vue'
 import ConsultationEdit from '../views/ConsultationEdit.vue'
 import VolunteersManage from '../views/VolunteersManage.vue'
+import AudioExplanationCreate from '../views/AudioExplanationCreate.vue'
+import AudioExplanationManage from '../views/AudioExplanationManage.vue'
 
 const routes: RouteRecordRaw[] = [
   { path: '/login', component: Login },
@@ -17,7 +19,9 @@ const routes: RouteRecordRaw[] = [
       { path: 'blog/create', component: CreateBlog },
       { path: 'blog/manage', component: ConsultationManage },
       { path: 'blog/edit/:id', component: ConsultationEdit },
-      { path: 'volunteers', component: VolunteersManage }
+      { path: 'volunteers', component: VolunteersManage },
+      { path: 'audio-explanations/create', component: AudioExplanationCreate },
+      { path: 'audio-explanations/manage', component: AudioExplanationManage }
     ]
   }
 ]

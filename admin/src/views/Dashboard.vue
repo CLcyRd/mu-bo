@@ -18,6 +18,14 @@
           <el-icon><user /></el-icon>
           <span>志愿者管理</span>
         </el-menu-item>
+        <el-menu-item index="/audio-explanations/create">
+          <el-icon><mic /></el-icon>
+          <span>上传讲解音频</span>
+        </el-menu-item>
+        <el-menu-item index="/audio-explanations/manage">
+          <el-icon><headset /></el-icon>
+          <span>讲解音频管理</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>
@@ -36,7 +44,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { Calendar, EditPen, Management, User } from '@element-plus/icons-vue'
+import { Calendar, EditPen, Management, User, Mic, Headset } from '@element-plus/icons-vue'
 
 const router = useRouter()
 

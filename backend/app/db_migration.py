@@ -18,6 +18,10 @@ def _add_column_if_missing(engine: Engine, table_name: str, column_name: str, dd
 
 
 def run_schema_migrations(engine: Engine):
+    from . import models
+
+    models.AudioExplanation.__table__.create(bind=engine, checkfirst=True)
+
     _add_column_if_missing(engine, "volunteers", "gender", "VARCHAR(10)")
     _add_column_if_missing(engine, "volunteers", "id_card", "VARCHAR(18)")
     _add_column_if_missing(engine, "volunteers", "age", "INTEGER")

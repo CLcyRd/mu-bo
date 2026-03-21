@@ -1,6 +1,7 @@
 import httpx
 import logging
 import os
+import base64
 from fastapi import HTTPException
 
 logger = logging.getLogger(__name__)
@@ -83,5 +84,27 @@ class WeChatClient:
                 logger.error(f"WeChat code_2_session error: {data}")
                 raise HTTPException(status_code=400, detail=f"WeChat Error: {data.get('errmsg')}")
             return data
+
+    async def get_wxacode_unlimit(self, scene: str, page: str):
+        if self.app_id == "wx_your_app_id":
+            pixel = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO7W5xQAAAAASUVORK5CYII="
+            return base64.b64decode(pixel)
+
+        access_token = await self.get_access_token()
+        url = f"https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={access_token}"
+        payload = {
+            "scene": scene,
+            "page": page,
+            "check_path": False,
+            "env_version": "release",
+        }
+        async with httpx.AsyncClient() as client:
+            response = await client.post(url, json=payload)
+            content_type = response.headers.get("Content-Type", "")
+            if "application/json" in content_type:
+                data = response.json()
+                logger.error(f"WeChat get_wxacode_unlimit error: {data}")
+                raise HTTPException(status_code=400, detail=f"WeChat Error: {data.get('errmsg', 'unknown error')}")
+            return response.content
 
 wechat_client = WeChatClient()

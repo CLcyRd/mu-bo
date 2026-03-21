@@ -2060,3 +2060,56 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: volu
 FROM volunteers ORDER BY volunteers.created_at DESC, volunteers.volunteer_id DESC]
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
 
+2026-03-21 19:28:30,606 ERROR app.error request_id=f4151932-c24c-4cb0-bc9a-5e97c8922f5a path=/api/volunteers method=GET http_error=Could not validate credentials stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 62, in get_current_user
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 174, in decode
+    _validate_claims(
+    ~~~~~~~~~~~~~~~~^
+        claims,
+        ^^^^^^^
+    ...<5 lines>...
+        options=defaults,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 497, in _validate_claims
+    _validate_exp(claims, leeway=leeway)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\jose\jwt.py", line 331, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired.")
+jose.exceptions.ExpiredSignatureError: Signature has expired.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 107, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 620, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 620, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "G:\museum_booking\mu-bo\backend\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 649, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 67, in get_current_user
+    raise credentials_exception
+fastapi.exceptions.HTTPException: 401: Could not validate credentials
+

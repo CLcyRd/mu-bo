@@ -130,6 +130,35 @@ class VolunteerOut(BaseModel):
         from_attributes = True
 
 
+class AudioExplanationCreateRequest(BaseModel):
+    title: constr(strip_whitespace=True, min_length=1, max_length=255)
+    audio_url: constr(strip_whitespace=True, min_length=1, max_length=1024)
+    description: Optional[constr(strip_whitespace=True, max_length=2000)] = None
+    status: constr(strip_whitespace=True, min_length=1, max_length=20) = "draft"
+    qr_code_url: Optional[constr(strip_whitespace=True, max_length=1024)] = None
+
+    @field_validator("status")
+    @classmethod
+    def validate_status(cls, value: str):
+        if value not in {"draft", "published"}:
+            raise ValueError("status 仅支持 draft/published")
+        return value
+
+
+class AudioExplanationOut(BaseModel):
+    id: int
+    title: str
+    audio_url: str
+    description: Optional[str] = None
+    status: str
+    qr_code_url: Optional[str] = None
+    created_by: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
 class ApiResponse(BaseModel):
     code: int = 0
     message: str = "success"
