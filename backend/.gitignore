@@ -5,3 +5,4 @@ museum.db-wal
 *.db
 __pycache__/
 *.pyc
+uploads/

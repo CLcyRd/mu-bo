@@ -73,6 +73,21 @@ npm install
 npm run dev:mp-weixin
 ```
 
+### 4. 部署命令
+
+```bash
+# 把新代码拉到服务器上
+git pull origin main  # 如果你使用的是 Git
+```
+```bash
+# 重新构建并平滑重启容器（Docker 会自动停止旧容器，启动新容器）：
+sudo docker compose up --build -d
+```
+```bash
+# 清理废弃的无用镜像（每次重新构建都会产生一些旧的、不再使用的镜像占用磁盘空间）：
+sudo docker image prune -f
+```
+
 **导入微信开发者工具**:
 1. 打开微信开发者工具。
 2. 点击“导入项目”或“打开项目”。
