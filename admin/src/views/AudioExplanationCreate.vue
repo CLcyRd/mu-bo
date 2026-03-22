@@ -84,7 +84,8 @@ const handleUploadAudio = async (options: UploadRequestOptions) => {
   uploading.value = true
   try {
     const response = await api.post<ApiResponse<{ url: string }>>('/audio-explanations/upload-audio', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 60000
     })
     if (response.data.code !== 0) {
       throw new Error(response.data.message || '上传失败')
@@ -162,6 +163,7 @@ const handleCreate = async () => {
 
 .form-card {
   max-width: 900px;
+  margin: 0 auto;
 }
 
 .audio-upload {

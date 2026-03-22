@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>录音播放小程序原型 - 底部半屏弹窗</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; background-color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        
+        /* 手机外壳模拟 */
+        .device {
+            width: 375px; height: 812px;
+            background: linear-gradient(160deg, #0A192F 0%, #112240 100%);
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 0 10px #1a1a1a;
+            position: relative; overflow: hidden;
+            display: flex; flex-direction: column; color: #ffffff;
+        }
+
+        /* 顶部刘海屏模拟 (提高层级，盖住弹窗) */
+        .device::after {
+            content: ''; position: absolute; top: 0; left: 50%;
+            transform: translateX(-50%); width: 140px; height: 30px;
+            background-color: #1a1a1a;
+            border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
+            z-index: 200;
+        }
+
+        /* 顶部导航栏 */
+        .nav-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 50px 20px 20px; font-size: 16px; font-weight: 500;
+        }
+        .icon-btn {
+            background: none; border: none; color: white; cursor: pointer;
+            width: 32px; height: 32px; display: flex; justify-content: center; align-items: center;
+            border-radius: 50%; transition: background 0.2s;
+        }
+        .icon-btn:hover { background: rgba(255,255,255,0.1); }
+        .icon-btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+        /* 动态视觉区 */
+        .visualizer-container {
+            flex: 1; display: flex; justify-content: center; align-items: center;
+            position: relative;
+        }
+        .circle-pulse {
+            width: 160px; height: 160px; border-radius: 50%;
+            background: linear-gradient(135deg, #FFD700 0%, #FF9800 100%);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+            display: flex; justify-content: center; align-items: center;
+            animation: pulse 3s infinite ease-in-out;
+        }
+        .circle-inner {
+            width: 140px; height: 140px; border-radius: 50%;
+            background-color: #0A192F; display: flex; justify-content: center; align-items: center;
+        }
+        .circle-inner svg { width: 60px; height: 60px; fill: #FFD700; }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+            70% { transform: scale(1); box-shadow: 0 0 0 30px rgba(255, 215, 0, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+
+        /* 标题信息 */
+        .info-section { padding: 0 24px; text-align: center; margin-bottom: 20px; }
+        .title { font-size: 22px; font-weight: 600; margin-bottom: 8px; letter-spacing: 1px; }
+        .subtitle { font-size: 14px; color: #8892b0; }
+
+        /* 播放器组件 */
+        .player-section { padding: 0 24px; margin-bottom: 25px; }
+        .progress-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .time { font-size: 12px; color: #8892b0; font-variant-numeric: tabular-nums; }
+        
+        input[type=range] {
+            flex: 1; -webkit-appearance: none; background: transparent; height: 4px; border-radius: 2px;
+            background: rgba(255, 255, 255, 0.2); outline: none; cursor: pointer; position: relative;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+            background: #FFD700; cursor: pointer; box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:active { transform: scale(1.3); }
+
+        .controls { display: flex; justify-content: center; align-items: center; gap: 30px; }
+        .play-btn {
+            width: 64px; height: 64px; border-radius: 50%; border: none;
+            background: #FFD700; color: #0A192F; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2); transition: all 0.2s;
+        }
+        .play-btn:active { transform: scale(0.95); }
+        .play-btn svg { width: 28px; height: 28px; fill: currentColor; }
+        
+        .side-btn { background: none; border: none; color: #ccd6f6; cursor: pointer; transition: color 0.2s; }
+        .side-btn:hover { color: #FFD700; }
+        .side-btn svg { width: 28px; height: 28px; fill: currentColor; }
+
+        /* 简介卡片：摘要版 */
+        .desc-section {
+            margin: 0 20px 30px; padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .desc-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+        }
+        .desc-title { font-size: 16px; font-weight: 600; color: #ccd6f6; }
+        /* 文字截断，只显示2行 */
+        .desc-preview { 
+            font-size: 13px; color: #8892b0; line-height: 1.6;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .read-more-btn {
+            display: block; width: 100%; text-align: center;
+            background: none; border: none; color: #FFD700; font-size: 13px;
+            margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer; font-weight: 500;
+        }
+
+        /* ========== 底部半屏弹窗样式 ========== */
+        /* 背景遮罩 */
+        .modal-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+            z-index: 100; opacity: 0; visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        /* 弹窗面板 */
+        .bottom-sheet {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 65%;
+            background: #112240; border-top-left-radius: 30px; border-top-right-radius: 30px;
+            z-index: 101; transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.1, 0.88, 0.3, 1);
+            display: flex; flex-direction: column;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+        }
+        .bottom-sheet.active { transform: translateY(0); }
+
+        /* 顶部拖拽指示条 */
+        .sheet-handle {
+            width: 40px; height: 5px; background: rgba(255,255,255,0.2);
+            border-radius: 3px; margin: 15px auto;
+        }
+
+        /* 弹窗头部 */
+        .sheet-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 24px 15px; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .sheet-title { font-size: 18px; font-weight: 600; color: #ffffff; }
+        .close-btn {
+            background: rgba(255,255,255,0.1); border: none; color: white; cursor: pointer;
+            width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+        }
+        .close-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+        /* 弹窗内容滚动区 */
+        .sheet-content {
+            padding: 24px; overflow-y: auto; flex: 1;
+            font-size: 14px; color: #8892b0; line-height: 1.8; text-align: justify;
+        }
+        /* 美化弹窗内滚动条 */
+        .sheet-content::-webkit-scrollbar { width: 4px; }
+        .sheet-content::-webkit-scrollbar-thumb { background: rgba(255, 215, 0, 0.3); border-radius: 4px; }
+
+        .highlight-text { color: #FFD700; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div class="device">
+    <header class="nav-bar">
+        <button class="icon-btn"><svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg></button>
+        <span>讲解ID</span>
+        <span class="icon-btn"></span>    
+    </header>
+
+    <div class="visualizer-container">
+        <div class="circle-pulse" id="pulseEffect" style="animation-play-state: paused;">
+            <div class="circle-inner">
+                <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h1 class="title">2026年度业务规划研讨会</h1>
+    </div>
+
+    <div class="player-section">
+        <div class="progress-bar">
+            <span class="time" id="currentTime">00:00</span>
+            <input type="range" id="slider" value="0" max="100">
+            <span class="time">45:30</span>
+        </div>
+        <div class="controls">
+            <button class="side-btn"><svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg></button>
+            <button class="play-btn" id="playBtn">
+                <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <svg id="icon-pause" viewBox="0 0 24 24" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button class="side-btn"><svg viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg></button>
+        </div>
+    </div>
+
+    <div class="desc-section">
+        <div class="desc-header">
+            <h3 class="desc-title">简介</h3>
+        </div>
+        <div class="desc-preview">
+            本次会议重点讨论了下半年核心产品的UI改版方向，以及如何优化小程序端的用户播放体验。内容包含竞品分析、技术实现难点排期及资源对齐...
+        </div>
+        <button class="read-more-btn" id="openSheetBtn">查看全部详情 ></button>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="bottom-sheet" id="bottomSheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <h2 class="sheet-title">录音完整简介</h2>
+            <button class="close-btn" id="closeSheetBtn">
+                <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </button>
+        </div>
+        <div class="sheet-content">
+            本次会议重点讨论了下半年核心产品的UI改版方向，以及如何优化小程序端的用户播放体验。内容包含竞品分析、技术实现难点排期及资源对齐。<br><br>
+            <span class="highlight-text">会议详细时间轴：</span><br>
+            • 00:00 - 15:00：市场调研报告解读与竞品交互拆解。主要对比了市面上主流音频APP的播放页设计。<br>
+            • 15:00 - 30:00：产品核心路径重构讨论。针对用户反馈的“查找录音难”和“长文阅读不便”进行痛点分析。<br>
+            • 30:00 - 45:30：前端研发与UI设计资源排期确认。<br><br>
+            <span class="highlight-text">会议结论与待办(To-Do)：</span><br>
+            1. 设计组在下周三前输出高保真交互原型（包含深浅色模式）。<br>
+            2. 研发组本周五前完成“底部半屏弹窗”技术预研。<br>
+            3. 运营组梳理一份典型的长文录音素材用于测试。
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- 播放器逻辑 ---
+    const playBtn = document.getElementById('playBtn');
+    const iconPlay = document.getElementById('icon-play');
+    const iconPause = document.getElementById('icon-pause');
+    const slider = document.getElementById('slider');
+    const pulseEffect = document.getElementById('pulseEffect');
+    const timeDisplay = document.getElementById('currentTime');
+    let isPlaying = false; let progressInterval;
+
+    playBtn.addEventListener('click', () => {
+        isPlaying = !isPlaying;
+        if (isPlaying) {
+            iconPlay.style.display = 'none'; iconPause.style.display = 'block';
+            pulseEffect.style.animationPlayState = 'running';
+            progressInterval = setInterval(() => {
+                let val = parseInt(slider.value);
+                if(val < 100) {
+                    slider.value = val + 1;
+                    slider.style.background = `linear-gradient(to right, #FFD700 ${slider.value}%, rgba(255,255,255,0.2) ${slider.value}%)`;
+                    let mins = Math.floor((val * 27.3) / 60).toString().padStart(2, '0');
+                    let secs = Math.floor((val * 27.3) % 60).toString().padStart(2, '0');
+                    timeDisplay.innerText = `${mins}:${secs}`;
+                } else clearInterval(progressInterval);
+            }, 500);
+        } else {
+            iconPlay.style.display = 'block'; iconPause.style.display = 'none';
+            pulseEffect.style.animationPlayState = 'paused';
+            clearInterval(progressInterval);
+        }
+    });
+
+    slider.addEventListener('input', function() {
+        this.style.background = `linear-gradient(to right, #FFD700 ${this.value}%, rgba(255,255,255,0.2) ${this.value}%)`;
+    });
+
+    // --- 底部弹窗(Bottom Sheet)逻辑 ---
+    const openBtn = document.getElementById('openSheetBtn');
+    const closeBtn = document.getElementById('closeSheetBtn');
+    const overlay = document.getElementById('modalOverlay');
+    const bottomSheet = document.getElementById('bottomSheet');
+
+    // 打开弹窗
+    openBtn.addEventListener('click', () => {
+        overlay.classList.add('active');
+        bottomSheet.classList.add('active');
+    });
+
+    // 关闭弹窗 (点击关闭按钮)
+    closeBtn.addEventListener('click', () => {
+        overlay.classList.remove('active');
+        bottomSheet.classList.remove('active');
+    });
+
+    // 关闭弹窗 (点击遮罩层外部区域)
+    overlay.addEventListener('click', () => {
+        overlay.classList.remove('active');
+        bottomSheet.classList.remove('active');
+    });
+</script>
+
+</body>
+</html>

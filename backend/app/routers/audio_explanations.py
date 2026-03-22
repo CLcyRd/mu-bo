@@ -111,6 +111,31 @@ def list_audio_explanations(
     return api_success({"items": items}, message="加载成功")
 
 
+@router.get("/public/{audio_id}", response_model=schemas.ApiResponse)
+def get_audio_explanation_public(
+    audio_id: int,
+    db: Session = Depends(database.get_db),
+):
+    row = db.query(models.AudioExplanation).filter(models.AudioExplanation.id == audio_id).first()
+    if not row:
+        raise ApiError(code=3040, message="讲解记录不存在", http_status=status.HTTP_404_NOT_FOUND)
+    if row.status != "published":
+        raise ApiError(code=3041, message="该讲解暂未发布", http_status=status.HTTP_403_FORBIDDEN)
+    
+    return api_success(
+        {
+            "item": {
+                "id": row.id,
+                "title": row.title,
+                "audio_url": row.audio_url,
+                "description": row.description,
+                "status": row.status,
+            }
+        },
+        message="查询成功",
+    )
+
+
 @router.delete("/{audio_id}", response_model=schemas.ApiResponse)
 def delete_audio_explanation(
     audio_id: int,

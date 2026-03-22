@@ -87,6 +87,13 @@
         "navigationBarTextStyle": "white",
         "navigationBarBackgroundColor": "#2B3A6B"
       }
+    },
+    {
+      "path": "pages/audio-guide/player",
+      "style": {
+        "navigationBarTitleText": "语音讲解",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {
