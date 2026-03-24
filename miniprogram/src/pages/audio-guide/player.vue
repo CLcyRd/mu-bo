@@ -3,9 +3,9 @@
     <!-- 顶部导航栏 -->
     <view class="nav-bar" :style="{ paddingTop: statusBarHeight + 'px' }">
       <view class="icon-btn" @click="goBack">
-        <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+        <text class="back-icon">‹</text>
       </view>
-      <text class="nav-title">讲解</text>
+      <text class="nav-title">讲解ID: {{ audioId ? audioId : '' }}</text>
       <view class="icon-btn"></view>    
     </view>
 
@@ -13,7 +13,7 @@
     <view class="visualizer-container">
       <view class="circle-pulse" :class="{ 'is-playing': isPlaying }">
         <view class="circle-inner">
-          <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+          <image src="data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M12%203v10.55c-.59-.34-1.27-.55-2-.55-2.21%200-4%201.79-4%204s1.79%204%204%204%204-1.79%204-4V7h4V3h-6z%22%20fill%3D%22%23FFD700%22%2F%3E%3C%2Fsvg%3E" class="note-svg" mode="aspectFit" />
         </view>
       </view>
     </view>
@@ -42,17 +42,19 @@
       </view>
       <view class="controls">
         <view class="side-btn" @click="seekBy(-15)">
-          <svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
+          <image src="data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M11%2018V6l-8.5%206%208.5%206zm.5-6l8.5%206V6l-8.5%206z%22%20fill%3D%22%23ccd6f6%22%2F%3E%3C%2Fsvg%3E" class="side-svg" mode="aspectFit" />
         </view>
         <view class="play-btn" @click="togglePlay">
-          <svg v-if="!isPlaying" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          <svg v-else viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          <image v-if="!isPlaying" src="data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M8%205v14l11-7z%22%20fill%3D%22%230A192F%22%2F%3E%3C%2Fsvg%3E" class="play-svg" mode="aspectFit" />
+          <image v-else src="data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M6%2019h4V5H6v14zm8-14v14h4V5h-4z%22%20fill%3D%22%230A192F%22%2F%3E%3C%2Fsvg%3E" class="pause-svg" mode="aspectFit" />
         </view>
         <view class="side-btn" @click="seekBy(15)">
-          <svg viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
+          <image src="data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M4%2018l8.5-6L4%206v12zm9-12v12l8.5-6L13%206z%22%20fill%3D%22%23ccd6f6%22%2F%3E%3C%2Fsvg%3E" class="side-svg" mode="aspectFit" />
         </view>
       </view>
     </view>
+
+    <view v-if="!audioInfo.description" class="bottom-spacer"></view>
 
     <!-- 简介卡片：如果有简介则显示 -->
     <view v-if="audioInfo.description" class="desc-section">
@@ -60,7 +62,7 @@
         <text class="desc-title">简介</text>
       </view>
       <text class="desc-preview">{{ audioInfo.description }}</text>
-      <view class="read-more-btn" @click="openSheet">查看全部详情 ></view>
+      <view class="read-more-btn" @click="openSheet">查看全部详情</view>
     </view>
 
     <!-- 底部半屏弹窗(Bottom Sheet) -->
@@ -69,9 +71,9 @@
       <view class="bottom-sheet" :class="{ 'active': bottomSheetVisible }">
         <view class="sheet-handle"></view>
         <view class="sheet-header">
-          <text class="sheet-title">录音完整简介</text>
+          <text class="sheet-title">完整简介</text>
           <view class="close-btn" @click="closeSheet">
-            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            <text class="close-icon">×</text>
           </view>
         </view>
         <scroll-view scroll-y class="sheet-content">
@@ -301,7 +303,7 @@ onUnmounted(() => {
 .icon-btn {
   background: none;
   border: none;
-  color: white;
+  color: #ffffff;
   width: 32px;
   height: 32px;
   display: flex;
@@ -310,15 +312,15 @@ onUnmounted(() => {
   border-radius: 50%;
   transition: background 0.2s;
   
-  svg {
-    width: 20px;
-    height: 20px;
-    fill: currentColor;
-  }
-  
   &:active {
     background: rgba(255, 255, 255, 0.1);
   }
+}
+
+.back-icon {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1;
 }
 
 /* 动态视觉区 */
@@ -328,12 +330,12 @@ onUnmounted(() => {
   justify-content: center;
   align-items: center;
   position: relative;
-  min-height: 250px;
+  min-height: 160px;
 }
 
 .circle-pulse {
-  width: 160px;
-  height: 160px;
+  width: 184px;
+  height: 184px;
   border-radius: 50%;
   background: linear-gradient(135deg, #FFD700 0%, #FF9800 100%);
   box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
@@ -349,19 +351,19 @@ onUnmounted(() => {
 }
 
 .circle-inner {
-  width: 140px;
-  height: 140px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   background-color: #0A192F;
   display: flex;
   justify-content: center;
   align-items: center;
-  
-  svg {
-    width: 60px;
-    height: 60px;
-    fill: #FFD700;
-  }
+}
+
+.note-svg {
+  width: 80px;
+  height: 80px;
+  fill: #FFD700;
 }
 
 @keyframes pulse {
@@ -392,6 +394,11 @@ onUnmounted(() => {
   margin-bottom: 25px;
 }
 
+.bottom-spacer {
+  height: 16vh;
+  width: 100%;
+}
+
 .progress-bar {
   display: flex;
   align-items: center;
@@ -399,7 +406,7 @@ onUnmounted(() => {
   margin-bottom: 20px;
   
   .time {
-    font-size: 12px;
+    font-size: 14px;
     color: #8892b0;
     font-variant-numeric: tabular-nums;
     width: 40px;
@@ -420,8 +427,8 @@ onUnmounted(() => {
 }
 
 .play-btn {
-  width: 64px;
-  height: 64px;
+  width: 66px;
+  height: 66px;
   border-radius: 50%;
   background: #FFD700;
   color: #0A192F;
@@ -434,12 +441,16 @@ onUnmounted(() => {
   &:active {
     transform: scale(0.95);
   }
-  
-  svg {
-    width: 28px;
-    height: 28px;
-    fill: currentColor;
-  }
+}
+
+.play-svg {
+  width: 32px;
+  height: 32px;
+}
+
+.pause-svg {
+  width: 32px;
+  height: 32px;
 }
 
 .side-btn {
@@ -456,11 +467,10 @@ onUnmounted(() => {
     color: #FFD700;
   }
   
-  svg {
-    width: 28px;
-    height: 28px;
-    fill: currentColor;
-  }
+.side-svg {
+  width: 28px;
+  height: 28px;
+}
 }
 
 /* 简介卡片：摘要版 */
@@ -583,11 +593,12 @@ onUnmounted(() => {
   justify-content: center;
   align-items: center;
   
-  svg {
-    width: 16px;
-    height: 16px;
-    fill: currentColor;
-  }
+}
+
+.close-icon {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1;
 }
 
 .sheet-content {
@@ -603,5 +614,6 @@ onUnmounted(() => {
     text-align: justify;
     white-space: pre-wrap;
   }
+
 }
 </style>
