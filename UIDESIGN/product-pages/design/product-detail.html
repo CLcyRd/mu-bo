@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品详情</title>
+    <style>
+        :root {
+            --bg-body: #eef1f4;
+            --device-shell: #26365f;
+            --screen-bg: #f7f8ee;
+            --surface: #ffffff;
+            --text-primary: #1f242d;
+            --text-secondary: #637083;
+            --border: #dde3ea;
+            --accent: #2d65b3;
+            --accent-soft: #e8f0fb;
+            --shadow-sm: 0 6px 18px rgba(25, 36, 58, 0.08);
+            --shadow-md: 0 12px 30px rgba(25, 36, 58, 0.16);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .device-simulator {
+            width: 375px;
+            height: 812px;
+            background: var(--device-shell);
+            border-radius: 40px;
+            box-shadow: var(--shadow-md), inset 0 0 0 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notch {
+            width: 120px;
+            height: 25px;
+            background: #000;
+            border-radius: 0 0 15px 15px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .status-bar {
+            height: 30px;
+            flex: 0 0 auto;
+        }
+
+        .content-area {
+            flex: 1;
+            background: var(--screen-bg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-header {
+            height: 72px;
+            background: var(--device-shell);
+            color: #fff;
+            padding: 30px 16px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 0 0 auto;
+        }
+
+        .back-button {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            color: #fff;
+            background: rgba(255, 255, 255, 0.12);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 22px;
+            line-height: 1;
+            flex: 0 0 auto;
+        }
+
+        .header-title {
+            min-width: 0;
+        }
+
+        .header-title span {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 11px;
+            line-height: 1.2;
+            margin-bottom: 3px;
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            line-height: 1.2;
+            font-weight: 760;
+            letter-spacing: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .detail-main {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: none;
+            padding-bottom: 30px;
+        }
+
+        .detail-main::-webkit-scrollbar {
+            display: none;
+        }
+
+        .image-stage {
+            background: #eef2f5;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .gallery {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+
+        .gallery::-webkit-scrollbar {
+            display: none;
+        }
+
+        .gallery-item {
+            flex: 0 0 100%;
+            height: 300px;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f4f6;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .color-panel {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 16px 16px;
+        }
+
+        .panel-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .color-button {
+            min-height: 34px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--text-primary);
+            padding: 7px 10px;
+            font-size: 13px;
+            font-weight: 650;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            cursor: pointer;
+        }
+
+        .color-button.is-active {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .swatch {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1px rgba(31, 36, 45, 0.18);
+            flex: 0 0 auto;
+        }
+
+        .info-section {
+            padding: 18px 16px 8px;
+        }
+
+        .product-name {
+            font-size: 25px;
+            line-height: 1.2;
+            font-weight: 780;
+            letter-spacing: 0;
+            margin-bottom: 8px;
+        }
+
+        .product-summary {
+            font-size: 14px;
+            line-height: 1.55;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .spec-list {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .spec-row {
+            display: grid;
+            grid-template-columns: 72px minmax(0, 1fr);
+            gap: 10px;
+            padding: 13px 14px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            line-height: 1.45;
+        }
+
+        .spec-row:last-child {
+            border-bottom: 0;
+        }
+
+        .spec-label {
+            color: var(--text-secondary);
+            font-weight: 650;
+        }
+
+        .spec-value {
+            color: var(--text-primary);
+            min-width: 0;
+        }
+
+        .home-indicator {
+            width: 130px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.34);
+            border-radius: 3px;
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="device-simulator">
+        <div class="notch"></div>
+        <div class="status-bar"></div>
+
+        <div class="content-area">
+            <header class="detail-header">
+                <a class="back-button" href="product-list.html" aria-label="返回产品展示页">‹</a>
+                <div class="header-title">
+                    <span>PRODUCT DETAIL</span>
+                    <h1 id="headerName">产品详情</h1>
+                </div>
+            </header>
+
+            <main class="detail-main">
+                <section class="image-stage" aria-label="产品图片">
+                    <div class="gallery" id="gallery"></div>
+                </section>
+
+                <section class="color-panel">
+                    <div class="panel-label">颜色选择</div>
+                    <div class="color-options" id="colorOptions"></div>
+                </section>
+
+                <section class="info-section">
+                    <h2 class="product-name" id="productName"></h2>
+                    <p class="product-summary" id="productSummary"></p>
+                    <div class="spec-list" id="specList"></div>
+                </section>
+            </main>
+        </div>
+
+        <div class="home-indicator"></div>
+    </div>
+
+    <script>
+        const products = {
+            tshirt: {
+                name: "T恤",
+                summary: "纯棉宽松版型，适合日常穿着与文创展示。",
+                images: [
+                    { label: "黑色", src: "img/tshirt_black.jpg", color: "#1d1d1f" },
+                    { label: "深灰", src: "img/tshirt_charcoal.jpg", color: "#4f5357" },
+                    { label: "浅灰", src: "img/tshirt_lightgray.jpg", color: "#c8c9c7" }
+                ],
+                specs: [
+                    ["材质", "300g纯棉双纱紧密赛络纺"],
+                    ["颜色", "深灰、浅灰、黑色"],
+                    ["版型", "OVERSIZE宽松版型"],
+                    ["尺码", "M、L、XL、XXL"]
+                ]
+            },
+            vest: {
+                name: "马甲",
+                summary: "多功能穿搭单品，后背可脱卸，适合户外和日常场景。",
+                images: [
+                    { label: "黑色", src: "img/vest_black.jpg", color: "#111214" },
+                    { label: "灰色", src: "img/vest_gray.jpg", color: "#8c8f91" }
+                ],
+                specs: [
+                    ["材质", "100%锦纶面料 + 100%聚酯纤维网布"],
+                    ["特点", "多功能马甲，后背可脱卸，速干透气"],
+                    ["颜色", "黑色、灰色"],
+                    ["尺码", "S、M、L、XL"]
+                ]
+            },
+            cap: {
+                name: "帽子",
+                summary: "速干材质帽款，适合晴天出行与户外活动。",
+                images: [
+                    { label: "米紫", src: "img/cap_beige_purple.jpg", color: "linear-gradient(135deg,#d7c9af 50%,#6d5aa7 50%)" },
+                    { label: "米黄", src: "img/cap_beige_yellow.jpg", color: "linear-gradient(135deg,#d7c9af 50%,#e6c94b 50%)" },
+                    { label: "黑绿", src: "img/cap_black_green.jpg", color: "linear-gradient(135deg,#1b1d1e 50%,#4b8a54 50%)" },
+                    { label: "灰白", src: "img/cap_gray_white.jpg", color: "linear-gradient(135deg,#9c9fa3 50%,#f0f1ef 50%)" }
+                ],
+                specs: [
+                    ["材质", "速干材质"],
+                    ["特点", "吸湿快干、透气防晒"],
+                    ["颜色", "米紫、米黄、黑绿、灰白"],
+                    ["尺码", "头围56-58cm，帽深12cm"]
+                ]
+            },
+            cup: {
+                name: "水杯",
+                summary: "双层不锈钢杯身，防烫隔冷，适合随身携带。",
+                images: [
+                    { label: "黑色", src: "img/cup_black.jpg", color: "#171819" },
+                    { label: "蓝色", src: "img/cup_blue.jpg", color: "#2e6bb7" },
+                    { label: "绿色", src: "img/cup_green.jpg", color: "#49875a" },
+                    { label: "橙色", src: "img/cup_orange.jpg", color: "#de7c2d" },
+                    { label: "紫色", src: "img/cup_purple.jpg", color: "#7753a6" },
+                    { label: "红色", src: "img/cup_red.jpg", color: "#ba3931" },
+                    { label: "黄色", src: "img/cup_yellow.jpg", color: "#e6c542" }
+                ],
+                specs: [
+                    ["材质", "不锈钢原色内壁，双层不锈钢防烫隔冷"],
+                    ["颜色", "红色、蓝色、黄色、黑色、紫色、绿色、橙色"],
+                    ["容量", "255ML"],
+                    ["尺寸", "杯高8.5cm，杯宽7.5cm"]
+                ]
+            }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const productKey = products[params.get("product")] ? params.get("product") : "tshirt";
+        const product = products[productKey];
+        const gallery = document.getElementById("gallery");
+        const colorOptions = document.getElementById("colorOptions");
+        const specList = document.getElementById("specList");
+
+        document.title = product.name + "详情";
+        document.getElementById("headerName").textContent = product.name;
+        document.getElementById("productName").textContent = product.name;
+        document.getElementById("productSummary").textContent = product.summary;
+
+        product.images.forEach((item, index) => {
+            const slide = document.createElement("div");
+            slide.className = "gallery-item";
+            slide.id = "slide-" + index;
+            slide.innerHTML = '<img src="' + item.src + '" alt="' + item.label + product.name + '">';
+            gallery.appendChild(slide);
+
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "color-button" + (index === 0 ? " is-active" : "");
+            button.setAttribute("aria-label", "选择" + item.label);
+            button.innerHTML = '<span class="swatch" style="background:' + item.color + '"></span><span>' + item.label + '</span>';
+            button.addEventListener("click", () => {
+                document.querySelectorAll(".color-button").forEach(option => option.classList.remove("is-active"));
+                button.classList.add("is-active");
+                document.getElementById("slide-" + index).scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+            });
+            colorOptions.appendChild(button);
+        });
+
+        product.specs.forEach(([label, value]) => {
+            const row = document.createElement("div");
+            row.className = "spec-row";
+            row.innerHTML = '<div class="spec-label">' + label + '</div><div class="spec-value">' + value + '</div>';
+            specList.appendChild(row);
+        });
+    </script>
+</body>
+</html>

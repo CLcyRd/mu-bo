@@ -2166,3 +2166,135 @@ Traceback (most recent call last):
     raise credentials_exception
 fastapi.exceptions.HTTPException: 401: Could not validate credentials
 
+2026-05-30 15:00:23,751 ERROR app.error request_id=85f0758a-2ac0-4e7f-94e2-cb19b85abac3 path=/api/volunteers/my method=GET http_error=Could not validate credentials stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 62, in get_current_user
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\jose\jwt.py", line 174, in decode
+    _validate_claims(
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\jose\jwt.py", line 497, in _validate_claims
+    _validate_exp(claims, leeway=leeway)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\jose\jwt.py", line 331, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired.")
+jose.exceptions.ExpiredSignatureError: Signature has expired.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 457, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\dependencies\utils.py", line 649, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\dependencies\utils.py", line 678, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 67, in get_current_user
+    raise credentials_exception
+fastapi.exceptions.HTTPException: 401: Could not validate credentials
+
+2026-05-30 15:00:23,759 ERROR app.error request_id=62acf562-0a74-497f-85d2-4d3835fe52d3 path=/api/bookings/my method=GET http_error=Could not validate credentials stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 62, in get_current_user
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\jose\jwt.py", line 174, in decode
+    _validate_claims(
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\jose\jwt.py", line 497, in _validate_claims
+    _validate_exp(claims, leeway=leeway)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\jose\jwt.py", line 331, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired.")
+jose.exceptions.ExpiredSignatureError: Signature has expired.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 457, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\dependencies\utils.py", line 649, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\dependencies\utils.py", line 678, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 67, in get_current_user
+    raise credentials_exception
+fastapi.exceptions.HTTPException: 401: Could not validate credentials
+
+2026-05-30 15:00:25,090 ERROR app.error request_id=8a1cfcc5-e068-41bc-9eeb-78126b59ffd7 path=/api/users/me method=GET http_error=Could not validate credentials stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 62, in get_current_user
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\jose\jwt.py", line 174, in decode
+    _validate_claims(
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\jose\jwt.py", line 497, in _validate_claims
+    _validate_exp(claims, leeway=leeway)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\jose\jwt.py", line 331, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired.")
+jose.exceptions.ExpiredSignatureError: Signature has expired.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 457, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\dependencies\utils.py", line 649, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\dependencies\utils.py", line 678, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 67, in get_current_user
+    raise credentials_exception
+fastapi.exceptions.HTTPException: 401: Could not validate credentials
+
+2026-05-30 15:00:27,577 ERROR app.error request_id=dc74e818-bab5-4d4f-8f1e-0f0515c9a364 path=/api/users/me method=GET http_error=Could not validate credentials stack=Traceback (most recent call last):
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 62, in get_current_user
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\jose\jwt.py", line 174, in decode
+    _validate_claims(
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\jose\jwt.py", line 497, in _validate_claims
+    _validate_exp(claims, leeway=leeway)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\jose\jwt.py", line 331, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired.")
+jose.exceptions.ExpiredSignatureError: Signature has expired.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 457, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\dependencies\utils.py", line 649, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\dependencies\utils.py", line 678, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\museum_booking\mu-bo\backend\app\auth.py", line 67, in get_current_user
+    raise credentials_exception
+fastapi.exceptions.HTTPException: 401: Could not validate credentials
+

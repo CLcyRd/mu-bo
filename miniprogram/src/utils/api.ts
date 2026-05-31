@@ -11,7 +11,8 @@ const normalizeBaseUrl = (value: string) => {
 const env = (import.meta as { env?: EnvRecord }).env || {}
 const configuredApiBaseUrl = normalizeBaseUrl(env.VITE_API_BASE_URL || '')
 
-export const API_BASE_URL = configuredApiBaseUrl || 'https://api.shxiejinf.cn'
+//export const API_BASE_URL = configuredApiBaseUrl || 'https://api.shxiejinf.cn'
+export const API_BASE_URL = 'http://127.0.0.1:8000'
 
 export const buildApiUrl = (path: string) => {
   const value = (path || '').trim()

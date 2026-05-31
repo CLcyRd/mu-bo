@@ -8,7 +8,7 @@ load_dotenv()
 
 from . import models, database
 from .database import engine
-from .routers import bookings, auth, auth_wechat, users, consultations, volunteers, audio_explanations
+from .routers import bookings, auth, auth_wechat, users, consultations, volunteers, audio_explanations, product
 from .api_utils import api_success, register_exception_handlers
 from .db_migration import run_schema_migrations
 
@@ -55,6 +55,7 @@ app.include_router(consultations.router)
 app.include_router(volunteers.router)
 app.include_router(volunteers.router, prefix="/api")
 app.include_router(audio_explanations.router)
+app.include_router(product.router)
 uploads_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads")
 os.makedirs(uploads_dir, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")

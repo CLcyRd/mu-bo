@@ -17,6 +17,22 @@
       }
     },
     {
+      "path": "pages/cultural/cultural",
+      "style": {
+        "navigationBarTitleText": "文创",
+        "navigationBarTextStyle": "white",
+        "navigationBarBackgroundColor": "#2B3A6B"
+      }
+    },
+    {
+      "path": "pages/cultural/detail",
+      "style": {
+        "navigationBarTitleText": "产品详情",
+        "navigationBarTextStyle": "white",
+        "navigationBarBackgroundColor": "#2B3A6B"
+      }
+    },
+    {
       "path": "pages/booking/booking",
       "style": {
         "navigationBarTitleText": "参观预约",
@@ -115,6 +131,10 @@
       {
         "pagePath": "pages/index/index",
         "text": "首页"
+      },
+      {
+        "pagePath": "pages/cultural/cultural",
+        "text": "文创"
       },
       {
         "pagePath": "pages/my-bookings/my-bookings",

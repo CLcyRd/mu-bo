@@ -2,7 +2,7 @@
   <view class="page">
     <view class="container">
       <view class="header-section">
-        <view class="title-cn">谢晋故居纪念馆</view>
+        <view class="title-cn">谢晋故居</view>
         <view class="title-en">XIE JIN FORMER RESIDENCE</view>
         <view class="header-line"></view>
       </view>
@@ -11,16 +11,16 @@
         <view class="quote-box">
           <text class="quote-mark left">“</text>
           <text class="welcome-text">
-            这里是他创作的大本营，也是他生活最久的家。从《女篮五号》到《芙蓉镇》，从《红色娘子军》到《鸦片战争》——60 年导演生涯，36 部电影作品。在这方天地里，谢晋完成了从青年导演到一代宗师的蜕变，用镜头记录了一个民族的奋进与沉思。推开这扇门，不只是走进一位导演，更是走进一个时代。
+            这里是他创作的大本营，\n也是他生活最久的家。\n从《女篮五号》到《芙蓉镇》，\n从《红色娘子军》到《鸦片战争》，\n60 年导演生涯，36 部电影作品。\n在这方天地里，谢晋完成了\n从青年导演到一代宗师的蜕变，\n用镜头记录了一个民族的奋进与沉思。推开这扇门，\n不只是走进一位导演，\n更是走进一个时代。
           </text>
           <text class="quote-mark right">”</text>
         </view>
         
         <view class="divider"></view>
         
-        <view class="desc-text">
-          谢晋故居位于上海市静安区江宁路 83 号江宁大楼 501 室，是谢晋导演在上海定居期间生活与工作的重要场所。在这里，他与无数创作者彻夜长谈，酝酿出一部部撼动时代的经典；在这里，他接待过海内外电影人，见证了中国电影的起承转合。这里，不仅是谢晋的家，更是中国电影的一个舞台。
-        </view>
+        <text class="desc-text">
+          谢晋故居位于上海市\n静安区江宁路 83 号江宁大楼 501 室，\n是谢晋晚年生活与工作的重要场所。\n在这里，\n他与无数创作者彻夜长谈，\n创作出一部部撼动时代的经典；\n在这里，\n他接待过海内外电影人，\n见证了中国电影的起承转合。\n这里，\n不仅是谢晋的家，\n更是中国电影的一个舞台。
+        </text>
       </view>
 
       <view class="nav-section">
@@ -163,7 +163,7 @@ const goToNotice = () => {
 }
 
 .desc-text {
-  font-size: 30rpx;
+  font-size: 34rpx;
   line-height: 1.8;
   color: #a0aec0;
   text-align: justify;

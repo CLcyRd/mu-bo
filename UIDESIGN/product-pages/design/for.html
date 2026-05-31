@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资讯展示中心</title>
+    <style>
+        /* 
+         * ==========================================
+         *  Color Palette & Design System (V3.2 - Lavender)
+         *  Adopted from index_lavender.html
+         * ==========================================
+         */
+        :root {
+            /* Light Theme (Default - Bright) */
+            --bg-body: #F0F2F5;       /* High Brightness Background */
+            --bg-surface: #f6f8e1;    /* Pure White Surface */
+            --bg-simulator: #2b3a6b;  /* Device Background */
+            --text-primary: #1A1A1A;  /* Dark Grey for high contrast */
+            --text-secondary: #5F6368;/* Medium Grey */
+            --border-color: #E0E0E0;
+            
+            /* Accent: Emerald Green (#00C853) */
+            --accent-color: #3a60a7;  /* Pantone 347C approx */
+            --accent-light: rgba(143, 192, 9, 0.1);
+            --accent-hover: rgba(0, 200, 83, 0.15);
+            --accent-fg: #ffffff;     /* Text on accent bg (large text/icons) */
+            
+            /* Status */
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Dark Theme */
+                --bg-body: #000000;
+                --bg-surface: #1E1E1E;
+                --bg-simulator: #121212;
+                --text-primary: #E0E0E0;
+                --text-secondary: #A0A0A0;
+                --border-color: #333333;
+                
+                --shadow-sm: 0 4px 12px rgba(0,0,0,0.3);
+                --shadow-md: 0 8px 24px rgba(0,0,0,0.5);
+            }
+        }
+
+        /* Base Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-primary);
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; padding: 20px; 
+            transition: background-color 0.3s ease;
+        }
+
+        /* Device Simulator */
+        .device-simulator {
+            width: 375px;        
+            height: 812px;       
+            background: var(--bg-simulator);
+            border-radius: 40px;
+            box-shadow: var(--shadow-md), inset 0 0 0 8px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Status Bar */
+        .status-bar { height: 30px; }
+        .notch { 
+            width: 120px; height: 25px; 
+            background: #000; 
+            border-radius: 0 0 15px 15px; 
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%); 
+            z-index: 100;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-simulator);
+        }
+
+        /* 3. 输入框检索部分 */
+        .search-header {
+            padding: 40px 16px 20px;
+            background: var(--bg-simulator);
+            z-index: 10;
+        }
+
+        .search-bar {
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            margin-left: 10px;
+            width: 100%;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-bar input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        /* 4. 滚动浏览列表区域 */
+        .news-list {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            scrollbar-width: none; /* Hide scrollbar for Firefox */
+        }
+        .news-list::-webkit-scrollbar { display: none; } /* Hide scrollbar for Chrome/Safari */
+
+        /* 2. 咨询条目展示 (标题，封面，时间) */
+        .news-card {
+            background: var(--bg-surface);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .news-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-color);
+        }
+
+        .news-card:active {
+            transform: scale(0.98);
+        }
+
+        .news-cover {
+            width: 100%;
+            height: 180px;
+            background: var(--accent-light);
+            object-fit: cover;
+        }
+
+        .news-info {
+            padding: 16px;
+        }
+
+        .news-title {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.5;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .news-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .news-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Home Indicator */
+        .home-indicator { 
+            width: 130px; height: 5px; 
+            background: var(--text-secondary); 
+            opacity: 0.3;
+            border-radius: 3px; 
+            position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); 
+        }
+    </style>
+</head>
+<body>
+
+<div class="device-simulator">
+    <div class="notch"></div>
+    <div class="status-bar"></div>
+    
+    <div class="content-area">
+        <header class="search-header">
+            <div class="search-bar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-color);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" placeholder="输入关键词搜索资讯...">
+            </div>
+        </header>
+
+        <main class="news-list">
+            <article class="news-card">
+                <img class="news-cover" src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=600" alt="封面">
+                <div class="news-info">
+                    <h3 class="news-title">Web 3.0 时代的数字化咨询服务：机遇与挑战并存</h3>
+                    <div class="news-footer">
+                        <span class="news-time">2026-03-07 14:30</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="news-card">
+                <img class="news-cover" src="https://images.unsplash.com/photo-1551288049-bbbda5366392?auto=format&fit=crop&q=80&w=600" alt="封面">
+                <div class="news-info">
+                    <h3 class="news-title">如何利用人工智能优化企业内部流程，提升30%的工作效率？</h3>
+                    <div class="news-footer">
+                        <span class="news-time">2026-03-06 09:15</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="news-card">
+                <div style="height: 180px; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--accent-color); font-weight: 500;">暂无封面图示例</div>
+                <div class="news-info">
+                    <h3 class="news-title">深度解析：2026年全球移动互联网小程序市场发展趋势白皮书</h3>
+                    <div class="news-footer">
+                        <span class="news-time">2026-03-05 18:00</span>
+                    </div>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <div class="home-indicator"></div>
+</div>
+
+</body>
+</html>

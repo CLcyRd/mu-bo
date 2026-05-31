@@ -36,7 +36,7 @@ const emitChange = () => {
   listeners.forEach((listener) => listener(snapshot))
 }
 
-const tabBarRoutes = new Set(['pages/index/index', 'pages/my-bookings/my-bookings'])
+const tabBarRoutes = new Set(['pages/index/index', 'pages/cultural/cultural', 'pages/my-bookings/my-bookings'])
 
 const isTabBarRoute = () => {
   const pages = getCurrentPages()
@@ -56,8 +56,12 @@ const applyTabBar = () => {
     borderStyle: 'white'
   })
   uni.setTabBarItem({
-    index: 1,
+    index: 2,
     text: state.loggedIn ? '我的' : '登录'
+  })
+  uni.setTabBarItem({
+    index: 1,
+    text: '文创'
   })
   uni.setTabBarItem({
     index: 0,
