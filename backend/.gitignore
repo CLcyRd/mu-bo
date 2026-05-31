@@ -5,4 +5,6 @@ museum.db-wal
 *.db
 __pycache__/
 *.pyc
-uploads/
+uploads/consultations/
+uploads/audio_qrcodes/
+uploads/audio_explanations/
