@@ -31,18 +31,37 @@
 </template>
 
 <script setup lang="ts">
-import { onShow } from '@dcloudio/uni-app'
+import { ref } from 'vue'
+import { onLoad, onShow } from '@dcloudio/uni-app'
 import { ensureLoginOrRedirect, syncTabBar } from '../../utils/auth'
+import { buildApiUrl, normalizeApiAssetUrl } from '../../utils/api'
 
 type NavAction = 'guide' | 'booking' | 'news' | 'volunteer'
 
-const bannerImages = [
-  '/static/museum_img/f9c3cb52f1859ff33b569b6024773334.jpg',
-  '/static/museum_img/7f28e5732e1916bc8d48645ae3b33299.jpg',
-  '/static/museum_img/eb9d69490f1ea168c46078c50544e1de.jpg',
-  '/static/museum_img/b880576a8e57193e054f4abf4c94e7d8.jpg',
-  '/static/museum_img/62ff29be24a9748931d6e4f1854338c8.jpg'
-]
+type BannerItem = { filename: string; url: string }
+type ApiResponse<T> = { code: number; message: string; data: T | null }
+
+const bannerImages = ref<string[]>([])
+
+const fetchBanners = () => {
+  uni.request({
+    url: buildApiUrl('/api/museum-info/banners'),
+    method: 'GET',
+    success: (res: any) => {
+      if (res.statusCode >= 200 && res.statusCode < 300 && res.data?.code === 0) {
+        const payload = res.data as ApiResponse<{ items: BannerItem[] }>
+        bannerImages.value = (payload.data?.items || [])
+          .map((item) => normalizeApiAssetUrl(item.url))
+          .filter(Boolean)
+        return
+      }
+      uni.showToast({ title: res.data?.message || '轮播图加载失败', icon: 'none' })
+    },
+    fail: () => {
+      uni.showToast({ title: '轮播图加载失败', icon: 'none' })
+    }
+  })
+}
 
 const toSvgDataUri = (svg: string) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
 
@@ -125,6 +144,10 @@ const handleNavClick = async (action: NavAction) => {
   }
   goToVolunteer()
 }
+
+onLoad(() => {
+  fetchBanners()
+})
 
 onShow(() => {
   syncTabBar()
