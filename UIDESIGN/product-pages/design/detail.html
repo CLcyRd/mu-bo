@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品详情</title>
+    <style>
+        :root {
+            --bg-body: #F0F2F5;
+            --bg-surface: #f6f8e1;
+            --bg-simulator: #2b3a6b;
+            --text-primary: #1A1A1A;
+            --text-secondary: #5F6368;
+            --border-color: #E0E0E0;
+            --accent-color: #3a60a7;
+            --accent-light: rgba(143, 192, 9, 0.1);
+            --accent-fg: #ffffff;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-body: #000000;
+                --bg-surface: #1E1E1E;
+                --bg-simulator: #121212;
+                --text-primary: #E0E0E0;
+                --text-secondary: #A0A0A0;
+                --border-color: #333333;
+                --shadow-sm: 0 4px 12px rgba(0,0,0,0.3);
+                --shadow-md: 0 8px 24px rgba(0,0,0,0.5);
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .device-simulator {
+            width: 375px;
+            height: 812px;
+            background: var(--bg-simulator);
+            border-radius: 40px;
+            box-shadow: var(--shadow-md), inset 0 0 0 8px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-bar { height: 30px; }
+        .notch {
+            width: 120px; height: 25px;
+            background: #000;
+            border-radius: 0 0 15px 15px;
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-simulator);
+        }
+
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            padding: 38px 16px 12px;
+            background: var(--bg-simulator);
+            z-index: 10;
+        }
+        .back-btn {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            display: flex; align-items: center; justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.2); }
+        .back-btn:active { transform: scale(0.92); }
+        .nav-title {
+            flex: 1;
+            text-align: center;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-right: 32px;
+        }
+
+        .scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+        .scroll-area::-webkit-scrollbar { display: none; }
+
+        .carousel {
+            position: relative;
+            background: #fff;
+        }
+        .carousel-track {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+        .carousel-track::-webkit-scrollbar { display: none; }
+        .carousel-slide {
+            flex: 0 0 100%;
+            scroll-snap-align: start;
+            aspect-ratio: 1 / 1;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .carousel-dots {
+            position: absolute;
+            bottom: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            background: rgba(0,0,0,0.35);
+            padding: 6px 10px;
+            border-radius: 12px;
+        }
+        .carousel-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            transition: all 0.3s;
+        }
+        .carousel-dot.active {
+            background: #fff;
+            width: 18px;
+            border-radius: 3px;
+        }
+
+        .detail-body {
+            background: var(--bg-simulator);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .info-card {
+            background: var(--bg-surface);
+            border-radius: 18px;
+            padding: 18px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .product-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        .product-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .section-label {
+            font-size: 12px;
+            color: var(--accent-color);
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .color-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .color-swatch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .color-swatch:active { transform: scale(0.92); }
+        .color-dot {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        .color-swatch.active .color-dot {
+            border-color: var(--accent-color);
+            transform: scale(1.1);
+            box-shadow: 0 0 0 2px rgba(58,96,167,0.2);
+        }
+        .color-name {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .color-swatch.active .color-name {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .spec-list {
+            display: flex;
+            flex-direction: column;
+        }
+        .spec-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .spec-row:last-child { border-bottom: none; }
+        .spec-key {
+            flex: 0 0 70px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .spec-val {
+            flex: 1;
+            font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .home-indicator {
+            width: 130px; height: 5px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 3px;
+            position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+
+<div class="device-simulator">
+    <div class="notch"></div>
+    <div class="status-bar"></div>
+
+    <div class="content-area">
+        <nav class="nav-bar">
+            <a class="back-btn" href="list.html" aria-label="返回">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </a>
+            <div class="nav-title" id="navTitle">产品详情</div>
+        </nav>
+
+        <div class="scroll-area">
+            <section class="carousel">
+                <div class="carousel-track" id="carouselTrack"></div>
+                <div class="carousel-dots" id="carouselDots"></div>
+            </section>
+
+            <div class="detail-body">
+                <div class="info-card">
+                    <div class="product-title" id="productTitle"></div>
+                    <div class="product-desc" id="productDesc"></div>
+                </div>
+
+                <div class="info-card">
+                    <div class="section-label">颜色选择</div>
+                    <div class="color-row" id="colorRow"></div>
+                </div>
+
+                <div class="info-card">
+                    <div class="section-label">产品参数</div>
+                    <div class="spec-list" id="specList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-indicator"></div>
+</div>
+
+<script>
+    const PRODUCTS = {
+        tshirt: {
+            name: 'T 恤',
+            desc: '300g 纯棉双纱紧密赛络纺，OVERSIZE 宽松版型，舒适亲肤、日常百搭。',
+            colors: [
+                { name: '黑色',  hex: '#222222', img: 'img/tshirt_black.jpg' },
+                { name: '深灰',  hex: '#4a4a4a', img: 'img/tshirt_charcoal.jpg' },
+                { name: '浅灰',  hex: '#c8c8c8', img: 'img/tshirt_lightgray.jpg' }
+            ],
+            specs: {
+                '材质': '300g 纯棉双纱紧密赛络纺',
+                '版型': 'OVERSIZE 宽松版型',
+                '颜色': '深灰、浅灰、黑色',
+                '尺码': 'M / L / XL / XXL'
+            }
+        },
+        vest: {
+            name: '马 甲',
+            desc: '100% 锦纶面料 + 100% 聚酯纤维网布，多功能马甲，后背可脱卸，速干透气。',
+            colors: [
+                { name: '黑色', hex: '#222222', img: 'img/vest_black.jpg' },
+                { name: '灰色', hex: '#9e9e9e', img: 'img/vest_gray.jpg' }
+            ],
+            specs: {
+                '材质': '100% 锦纶面料 + 100% 聚酯纤维网布',
+                '特点': '多功能、后背可脱卸、速干透气',
+                '颜色': '黑色、灰色',
+                '尺码': 'S / M / L / XL'
+            }
+        },
+        cap: {
+            name: '帽 子',
+            desc: '速干材质，吸湿快干、透气防晒，适合出行、运动、日常户外。',
+            colors: [
+                { name: '米色',   hex: '#e6d6b8', img: 'img/cap_beige_purple.jpg' },
+                { name: '卡其',   hex: '#c8a96a', img: 'img/cap_beige_yellow.jpg' },
+                { name: '黑色',   hex: '#222222', img: 'img/cap_black_green.jpg' },
+                { name: '灰色',   hex: '#a8a8a8', img: 'img/cap_gray_white.jpg' }
+            ],
+            specs: {
+                '材质': '速干材质',
+                '特点': '吸湿快干、透气防晒',
+                '颜色': '米色、黑色、灰色、卡其',
+                '尺码': '头围 56-58cm，帽深 12cm'
+            }
+        },
+        cup: {
+            name: '水 杯',
+            desc: '双层不锈钢防烫隔冷，原色内壁，便携手握，冷热饮皆宜。',
+            colors: [
+                { name: '红色',   hex: '#d9534f', img: 'img/cup_red.jpg' },
+                { name: '蓝色',   hex: '#3a60a7', img: 'img/cup_blue.jpg' },
+                { name: '黄色',   hex: '#f4c542', img: 'img/cup_yellow.jpg' },
+                { name: '黑色',   hex: '#222222', img: 'img/cup_black.jpg' },
+                { name: '紫色',   hex: '#8e74c4', img: 'img/cup_purple.jpg' },
+                { name: '绿色',   hex: '#6aaf6a', img: 'img/cup_green.jpg' },
+                { name: '橙色',   hex: '#ec8a3a', img: 'img/cup_orange.jpg' }
+            ],
+            specs: {
+                '材质': '不锈钢原色内壁，双层不锈钢防烫隔冷',
+                '容量': '255 ML',
+                '尺寸': '杯高 8.5cm，杯宽 7.5cm',
+                '颜色': '红、蓝、黄、黑、紫、绿、橙'
+            }
+        }
+    };
+
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id') || 'tshirt';
+    const product = PRODUCTS[id] || PRODUCTS.tshirt;
+
+    document.getElementById('navTitle').textContent = product.name;
+    document.getElementById('productTitle').textContent = product.name;
+    document.getElementById('productDesc').textContent = product.desc;
+
+    const track = document.getElementById('carouselTrack');
+    const dots = document.getElementById('carouselDots');
+    const colorRow = document.getElementById('colorRow');
+
+    product.colors.forEach((c, idx) => {
+        const slide = document.createElement('div');
+        slide.className = 'carousel-slide';
+        slide.innerHTML = `<img src="${c.img}" alt="${c.name}">`;
+        track.appendChild(slide);
+
+        const dot = document.createElement('div');
+        dot.className = 'carousel-dot' + (idx === 0 ? ' active' : '');
+        dots.appendChild(dot);
+
+        const swatch = document.createElement('div');
+        swatch.className = 'color-swatch' + (idx === 0 ? ' active' : '');
+        swatch.innerHTML = `
+            <div class="color-dot" style="background:${c.hex};"></div>
+            <div class="color-name">${c.name}</div>
+        `;
+        swatch.addEventListener('click', () => goTo(idx));
+        colorRow.appendChild(swatch);
+    });
+
+    const specList = document.getElementById('specList');
+    Object.entries(product.specs).forEach(([k, v]) => {
+        const row = document.createElement('div');
+        row.className = 'spec-row';
+        row.innerHTML = `<div class="spec-key">${k}</div><div class="spec-val">${v}</div>`;
+        specList.appendChild(row);
+    });
+
+    function setActive(idx) {
+        dots.querySelectorAll('.carousel-dot').forEach((d, i) =>
+            d.classList.toggle('active', i === idx));
+        colorRow.querySelectorAll('.color-swatch').forEach((s, i) =>
+            s.classList.toggle('active', i === idx));
+    }
+
+    function goTo(idx) {
+        const slideW = track.clientWidth;
+        track.scrollTo({ left: slideW * idx, behavior: 'smooth' });
+        setActive(idx);
+    }
+
+    track.addEventListener('scroll', () => {
+        const idx = Math.round(track.scrollLeft / track.clientWidth);
+        setActive(idx);
+    });
+</script>
+
+</body>
+</html>

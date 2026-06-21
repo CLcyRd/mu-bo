@@ -110,6 +110,13 @@
         "navigationBarTitleText": "语音讲解",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/video-player/video-player",
+      "style": {
+        "navigationBarTitleText": "视频播放",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {

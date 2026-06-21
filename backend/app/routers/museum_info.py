@@ -11,6 +11,10 @@ router = APIRouter(prefix="/api/museum-info", tags=["museum_info"])
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 BANNER_DIR = os.path.join(BASE_DIR, "uploads", "museum_img")
 BANNER_URL_PREFIX = "/uploads/museum_img"
+PROMO_VIDEO_DIR = os.path.join(BASE_DIR, "uploads", "promo_video")
+PROMO_VIDEO_FILENAME = "4df64ebb9bb9147b5424899f4caaba92_h264.mp4"
+PROMO_VIDEO_COVER_FILENAME = "4df64ebb9bb9147b5424899f4caaba92_cover.jpg"
+PROMO_VIDEO_URL_PREFIX = "/uploads/promo_video"
 ALLOWED_IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 
 
@@ -38,4 +42,27 @@ def list_banners():
         {"filename": name, "url": f"{BANNER_URL_PREFIX}/{name}"}
         for name in _list_banner_files()
     ]
+    return api_success({"items": items}, message="加载成功")
+
+
+@router.get("/homepage-media", response_model=schemas.ApiResponse)
+def list_homepage_media():
+    items = []
+    video_path = os.path.join(PROMO_VIDEO_DIR, PROMO_VIDEO_FILENAME)
+    cover_path = os.path.join(PROMO_VIDEO_DIR, PROMO_VIDEO_COVER_FILENAME)
+    if os.path.isfile(video_path) and os.path.isfile(cover_path):
+        items.append(
+            {
+                "type": "video",
+                "title": "走进谢晋故居",
+                "subtitle": "宣传视频 · 点击全屏播放",
+                "cover_url": f"{PROMO_VIDEO_URL_PREFIX}/{PROMO_VIDEO_COVER_FILENAME}",
+                "video_url": f"{PROMO_VIDEO_URL_PREFIX}/{PROMO_VIDEO_FILENAME}",
+            }
+        )
+
+    items.extend(
+        {"type": "image", "filename": name, "url": f"{BANNER_URL_PREFIX}/{name}"}
+        for name in _list_banner_files()
+    )
     return api_success({"items": items}, message="加载成功")

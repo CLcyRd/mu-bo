@@ -3,8 +3,8 @@
     <view class="container">
       <view class="hero-section">
         <view class="title-wrapper">
-          <view class="title-line">寻找</view>
-          <view class="main-title">爱电影的你</view>
+          <view class="title-line">加入志愿者</view>
+          <view class="main-title">寻找爱电影的你</view>
         </view>
         <view class="poetic-text">
           <view class="poetic-paragraph">作为谢晋故居的一位志愿者，<text class="line-break" />您是“工作人员”，也是故居当天的“临时主人”。</view>
@@ -40,7 +40,7 @@
 const dailyInfo = [
   {
     label: '工作时间',
-    value: '每周三、周六 10:00 - 16:00'
+    value: '每周六 13:00 - 17:00'
   },
   {
     label: '工作地点',
@@ -48,7 +48,7 @@ const dailyInfo = [
   },
   {
     label: '工作内容',
-    value: '配合游客参观，做好引导与秩序维护，闭馆前整理工作台账。在需要的时候，为来访者指一指路、聊一聊谢晋、聊一聊电影。'
+    value: '配合故居活动的组织与执行，包括现场布置、签到引导、秩序维护及活动协助。在需要的时候，为来访者指一指路、聊一聊谢晋、聊一聊电影。闭馆前协助整理场地及简单工作台账。'
   }
 ]
 const goToVolunteerForm = () => {

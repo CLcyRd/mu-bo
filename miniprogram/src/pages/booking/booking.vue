@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <view class="page-header">
-      <view class="page-title">参观预约</view>
+      <view class="page-title">开放日预约</view>
       <view class="page-subtitle">Visit Booking</view>
     </view>
     <view class="form-card">
@@ -21,7 +21,7 @@
       
       <view class="form-item">
         <text class="label">参观日期</text>
-        <picker mode="date" :start="startDate" :end="endDate" @change="onDateChange">
+        <picker mode="selector" :range="saturdayDateOptions" @change="onDateChange">
           <view class="picker-value">{{ form.visit_date || '请选择日期' }}</view>
         </picker>
       </view>
@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { reactive } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { ensureLoginOrRedirect } from '../../utils/auth'
 import { buildApiUrl } from '../../utils/api'
@@ -57,26 +57,39 @@ const form = reactive({
   visitor_count: 1
 })
 
-const countdown = ref(0)
-const timeSlots = ['10:00-11:00', '11:00-12:00', '12:00-13:00', '13:00-14:00', '14:00-15:00']
+const bookingWindowDays = 60
+const timeSlots = ['13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00']
 
-const startDate = computed(() => {
-  const d = new Date()
-  return d.toISOString().split('T')[0]
-})
+const formatDate = (date: Date) => {
+  const year = date.getFullYear()
+  const month = `${date.getMonth() + 1}`.padStart(2, '0')
+  const day = `${date.getDate()}`.padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
 
-const endDate = computed(() => {
-  const d = new Date()
-  d.setDate(d.getDate() + 30)
-  return d.toISOString().split('T')[0]
-})
+const createSaturdayDateOptions = () => {
+  const options: string[] = []
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  for (let offset = 0; offset <= bookingWindowDays; offset += 1) {
+    const current = new Date(today)
+    current.setDate(today.getDate() + offset)
+    if (current.getDay() === 6) {
+      options.push(formatDate(current))
+    }
+  }
+  return options
+}
+
+const saturdayDateOptions = createSaturdayDateOptions()
 
 const onDateChange = (e: any) => {
-  form.visit_date = e.detail.value
+  const selected = saturdayDateOptions[Number(e.detail.value)]
+  form.visit_date = selected || ''
 }
 
 const onTimeChange = (e: any) => {
-  form.visit_time = timeSlots[e.detail.value]
+  form.visit_time = timeSlots[Number(e.detail.value)] || ''
 }
 
 const onCountChange = (e: any) => {
@@ -107,6 +120,12 @@ onLoad((options) => {
   form.visit_date = typeof options.visit_date === 'string' ? decodeURIComponent(options.visit_date) : ''
   form.visit_time = typeof options.visit_time === 'string' ? decodeURIComponent(options.visit_time) : ''
   form.visitor_count = toNumber(options.visitor_count, 1)
+  if (form.visit_date && !saturdayDateOptions.includes(form.visit_date)) {
+    form.visit_date = ''
+  }
+  if (form.visit_time && !timeSlots.includes(form.visit_time)) {
+    form.visit_time = ''
+  }
 })
 
 
@@ -117,6 +136,14 @@ const submitBooking = async () => {
   }
   if (!form.visitor_name || !form.visitor_phone || !form.visit_date || !form.visit_time) {
     uni.showToast({ title: '请完善预约信息', icon: 'none' })
+    return
+  }
+  if (!saturdayDateOptions.includes(form.visit_date)) {
+    uni.showToast({ title: '请选择周六参观日期', icon: 'none' })
+    return
+  }
+  if (!timeSlots.includes(form.visit_time)) {
+    uni.showToast({ title: '请选择13:00-17:00内时间段', icon: 'none' })
     return
   }
   

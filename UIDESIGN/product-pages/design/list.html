@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文创周边</title>
+    <style>
+        :root {
+            --bg-body: #F0F2F5;
+            --bg-surface: #f6f8e1;
+            --bg-simulator: #2b3a6b;
+            --text-primary: #1A1A1A;
+            --text-secondary: #5F6368;
+            --border-color: #E0E0E0;
+            --accent-color: #3a60a7;
+            --accent-light: rgba(143, 192, 9, 0.1);
+            --accent-fg: #ffffff;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-body: #000000;
+                --bg-surface: #1E1E1E;
+                --bg-simulator: #121212;
+                --text-primary: #E0E0E0;
+                --text-secondary: #A0A0A0;
+                --border-color: #333333;
+                --shadow-sm: 0 4px 12px rgba(0,0,0,0.3);
+                --shadow-md: 0 8px 24px rgba(0,0,0,0.5);
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .device-simulator {
+            width: 375px;
+            height: 812px;
+            background: var(--bg-simulator);
+            border-radius: 40px;
+            box-shadow: var(--shadow-md), inset 0 0 0 8px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-bar { height: 30px; }
+        .notch {
+            width: 120px; height: 25px;
+            background: #000;
+            border-radius: 0 0 15px 15px;
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-simulator);
+        }
+
+        .page-header {
+            padding: 40px 20px 16px;
+            background: var(--bg-simulator);
+            z-index: 10;
+        }
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        .page-subtitle {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 4px;
+        }
+
+        .product-list {
+            flex: 1;
+            padding: 8px 16px 24px;
+            overflow-y: auto;
+            scrollbar-width: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            align-content: start;
+        }
+        .product-list::-webkit-scrollbar { display: none; }
+
+        .product-card {
+            background: var(--bg-surface);
+            border-radius: 18px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+            color: inherit;
+        }
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-color);
+        }
+        .product-card:active { transform: scale(0.97); }
+
+        .product-cover-wrap {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+        }
+        .product-cover {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .product-info {
+            padding: 10px 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .product-color-count {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .product-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: 0.5px;
+        }
+
+        .home-indicator {
+            width: 130px; height: 5px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 3px;
+            position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+
+<div class="device-simulator">
+    <div class="notch"></div>
+    <div class="status-bar"></div>
+
+    <div class="content-area">
+        <header class="page-header">
+            <div class="page-title">文创周边</div>
+            <div class="page-subtitle">精选博物馆定制好物</div>
+        </header>
+
+        <main class="product-list">
+            <a class="product-card" href="detail.html?id=tshirt">
+                <div class="product-cover-wrap"><img class="product-cover" src="img/tshirt_black.jpg" alt="T恤"></div>
+                <div class="product-info">
+                    <span class="product-color-count">3 色</span>
+                    <div class="product-name">T恤</div>
+                </div>
+            </a>
+
+            <a class="product-card" href="detail.html?id=vest">
+                <div class="product-cover-wrap"><img class="product-cover" src="img/vest_black.jpg" alt="马甲"></div>
+                <div class="product-info">
+                    <span class="product-color-count">2 色</span>
+                    <div class="product-name">马甲</div>
+                </div>
+            </a>
+
+            <a class="product-card" href="detail.html?id=cap">
+                <div class="product-cover-wrap"><img class="product-cover" src="img/cap_beige_purple.jpg" alt="帽子"></div>
+                <div class="product-info">
+                    <span class="product-color-count">4 色</span>
+                    <div class="product-name">帽子</div>
+                </div>
+            </a>
+
+            <a class="product-card" href="detail.html?id=cup">
+                <div class="product-cover-wrap"><img class="product-cover" src="img/cup_blue.jpg" alt="水杯"></div>
+                <div class="product-info">
+                    <span class="product-color-count">7 色</span>
+                    <div class="product-name">水杯</div>
+                </div>
+            </a>
+        </main>
+    </div>
+
+    <div class="home-indicator"></div>
+</div>
+
+</body>
+</html>

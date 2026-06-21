@@ -2,7 +2,7 @@
   <view class="page">
     <view class="page-header">
       <view class="page-kicker">MUSEUM STORE</view>
-      <view class="page-title">文创产品展示</view>
+      <view class="page-title">故居文创</view>
       <view class="page-subtitle">选择产品种类，查看对应颜色与产品信息。</view>
     </view>
 

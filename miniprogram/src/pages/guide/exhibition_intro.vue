@@ -34,7 +34,12 @@
           </view>
 
           <view class="image-placeholder">
-            <image class="zone-image" :src="zone.imageUrl" mode="aspectFill" />
+            <image
+              v-if="zone.imageUrl"
+              class="zone-image"
+              :src="zone.imageUrl"
+              mode="aspectFill"
+            />
           </view>
 
           <view class="zone-points">
@@ -54,11 +59,28 @@
 </template>
 
 <script setup lang="ts">
-// 将原有扁平的数据结构重构为嵌套结构，更利于页面渲染和未来扩展
-const formattedZones = [
+import { ref } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { buildApiUrl, normalizeApiAssetUrl } from '../../utils/api'
+
+type MuseumImageItem = {
+  filename: string
+  url: string
+}
+
+type ApiResponse<T> = {
+  code: number
+  message: string
+  data: T
+}
+
+const museumImageUrl = (filename: string) => normalizeApiAssetUrl(`/uploads/museum_img/${filename}`)
+
+const formattedZones = ref([
   {
     title: '家庭 | 朋友',
-    imageUrl: '/static/museum_img/f9c3cb52f1859ff33b569b6024773334.jpg',
+    imageFilename: 'f9c3cb52f1859ff33b569b6024773334.jpg',
+    imageUrl: museumImageUrl('f9c3cb52f1859ff33b569b6024773334.jpg'),
     points: [
       {
         name: '点位 · 家庭',
@@ -72,7 +94,8 @@ const formattedZones = [
   },
   {
     title: '场景 | 创作',
-    imageUrl: '/static/museum_img/a794f1ec2977772d115f3bfceee23717.jpg',
+    imageFilename: 'a794f1ec2977772d115f3bfceee23717.jpg',
+    imageUrl: museumImageUrl('a794f1ec2977772d115f3bfceee23717.jpg'),
     points: [
       {
         name: '点位 · 创作现场',
@@ -86,7 +109,8 @@ const formattedZones = [
   },
   {
     title: '作品与荣誉',
-    imageUrl: '/static/museum_img/20260303215335_541_22.jpg',
+    imageFilename: '20260303215335_541_22.jpg',
+    imageUrl: museumImageUrl('20260303215335_541_22.jpg'),
     points: [
       {
         name: '点位 · 作品',
@@ -98,7 +122,30 @@ const formattedZones = [
       }
     ]
   }
-]
+])
+
+const fetchMuseumImages = () => {
+  uni.request({
+    url: buildApiUrl('/api/museum-info/banners'),
+    method: 'GET',
+    success: (res: any) => {
+      if (res.statusCode >= 200 && res.statusCode < 300 && res.data?.code === 0) {
+        const payload = res.data as ApiResponse<{ items: MuseumImageItem[] }>
+        const imageMap = new Map(
+          (payload.data?.items || []).map((item) => [item.filename, normalizeApiAssetUrl(item.url)])
+        )
+        formattedZones.value = formattedZones.value.map((zone) => ({
+          ...zone,
+          imageUrl: imageMap.get(zone.imageFilename) || zone.imageUrl
+        }))
+      }
+    }
+  })
+}
+
+onLoad(() => {
+  fetchMuseumImages()
+})
 </script>
 
 <style lang="scss">

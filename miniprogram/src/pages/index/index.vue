@@ -7,8 +7,20 @@
 
     <view class="banner-wrap">
       <swiper class="banner-swiper" circular autoplay :interval="3000" :duration="500">
-        <swiper-item v-for="item in bannerImages" :key="item">
-          <image class="banner-image" :src="item" mode="aspectFill"></image>
+        <swiper-item v-for="item in mediaItems" :key="item.id">
+          <view v-if="item.type === 'video'" class="video-banner" @click="goToVideo(item)">
+            <image class="banner-image" :src="item.coverUrl" mode="aspectFill"></image>
+            <view class="video-mask"></view>
+            <view class="play-button">
+              <view class="play-triangle"></view>
+            </view>
+            <view class="video-copy">
+              <view class="video-title">{{ item.title }}</view>
+              <view class="video-subtitle">{{ item.subtitle }}</view>
+            </view>
+            <view class="video-badge">视频入口</view>
+          </view>
+          <image v-else class="banner-image" :src="item.url" mode="aspectFill"></image>
         </swiper-item>
       </swiper>
     </view>
@@ -38,21 +50,65 @@ import { buildApiUrl, normalizeApiAssetUrl } from '../../utils/api'
 
 type NavAction = 'guide' | 'booking' | 'news' | 'volunteer'
 
-type BannerItem = { filename: string; url: string }
+type ImageMediaItem = {
+  id: string
+  type: 'image'
+  url: string
+}
+
+type VideoMediaItem = {
+  id: string
+  type: 'video'
+  title: string
+  subtitle: string
+  coverUrl: string
+  videoUrl: string
+}
+
+type HomeMediaItem = ImageMediaItem | VideoMediaItem
+
+type ApiMediaItem =
+  | { type: 'image'; filename?: string; url: string }
+  | { type: 'video'; title: string; subtitle: string; cover_url: string; video_url: string }
+
 type ApiResponse<T> = { code: number; message: string; data: T | null }
 
-const bannerImages = ref<string[]>([])
+const mediaItems = ref<HomeMediaItem[]>([])
 
-const fetchBanners = () => {
+const fetchHomepageMedia = () => {
   uni.request({
-    url: buildApiUrl('/api/museum-info/banners'),
+    url: buildApiUrl('/api/museum-info/homepage-media'),
     method: 'GET',
     success: (res: any) => {
       if (res.statusCode >= 200 && res.statusCode < 300 && res.data?.code === 0) {
-        const payload = res.data as ApiResponse<{ items: BannerItem[] }>
-        bannerImages.value = (payload.data?.items || [])
-          .map((item) => normalizeApiAssetUrl(item.url))
-          .filter(Boolean)
+        const payload = res.data as ApiResponse<{ items: ApiMediaItem[] }>
+        mediaItems.value = (payload.data?.items || [])
+          .map((item, index): HomeMediaItem | null => {
+            if (item.type === 'video') {
+              const coverUrl = normalizeApiAssetUrl(item.cover_url)
+              const videoUrl = normalizeApiAssetUrl(item.video_url)
+              if (!coverUrl || !videoUrl) {
+                return null
+              }
+              return {
+                id: `video-${index}`,
+                type: 'video',
+                title: item.title,
+                subtitle: item.subtitle,
+                coverUrl,
+                videoUrl
+              }
+            }
+            const url = normalizeApiAssetUrl(item.url)
+            return url
+              ? {
+                  id: item.filename || `image-${index}`,
+                  type: 'image',
+                  url
+                }
+              : null
+          })
+          .filter((item): item is HomeMediaItem => Boolean(item))
         return
       }
       uni.showToast({ title: res.data?.message || '轮播图加载失败', icon: 'none' })
@@ -60,6 +116,12 @@ const fetchBanners = () => {
     fail: () => {
       uni.showToast({ title: '轮播图加载失败', icon: 'none' })
     }
+  })
+}
+
+const goToVideo = (item: VideoMediaItem) => {
+  uni.navigateTo({
+    url: `/pages/video-player/video-player?src=${encodeURIComponent(item.videoUrl)}&title=${encodeURIComponent(item.title)}`
   })
 }
 
@@ -73,19 +135,19 @@ const createIcon = (body: string) =>
 const navItems: { action: NavAction; cn: string; en: string; icon: string }[] = [
   {
     action: 'guide',
-    cn: '参观导览',
+    cn: '展陈导览',
     en: 'Visitor Information',
     icon: createIcon('<path d="M10 8v32"/><path d="M10 10h14l4 4h10v14H24l-4-4H10"/><path d="M24 28h14v10H24"/>')
   },
   {
     action: 'booking',
-    cn: '点击预约',
+    cn: '开放日预约',
     en: 'Visit Booking',
     icon: createIcon('<path d="M8 16h32v18H8z"/><path d="M16 16v-4h16v4"/><path d="M16 25h16"/>')
   },
   {
     action: 'news',
-    cn: '最新资讯',
+    cn: '活动资讯',
     en: 'Latest News',
     icon: createIcon('<rect x="8" y="10" width="32" height="28"/><path d="M15 18h18"/><path d="M15 24h18"/><path d="M15 30h12"/>')
   },
@@ -146,7 +208,7 @@ const handleNavClick = async (action: NavAction) => {
 }
 
 onLoad(() => {
-  fetchBanners()
+  fetchHomepageMedia()
 })
 
 onShow(() => {
@@ -198,6 +260,82 @@ onShow(() => {
 .banner-image {
   width: 100%;
   height: 100%;
+}
+
+.video-banner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.video-mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(6, 10, 24, 0.08), rgba(6, 10, 24, 0.64));
+}
+
+.play-button {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 112rpx;
+  height: 112rpx;
+  margin-left: -56rpx;
+  margin-top: -56rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 18rpx 44rpx rgba(0, 0, 0, 0.26);
+}
+
+.play-triangle {
+  width: 0;
+  height: 0;
+  margin-left: 8rpx;
+  border-top: 22rpx solid transparent;
+  border-bottom: 22rpx solid transparent;
+  border-left: 34rpx solid #2b65ab;
+}
+
+.video-copy {
+  position: absolute;
+  left: 28rpx;
+  bottom: 26rpx;
+  right: 170rpx;
+}
+
+.video-title {
+  color: #ffffff;
+  font-size: 34rpx;
+  line-height: 1.2;
+  font-weight: 700;
+  text-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.45);
+}
+
+.video-subtitle {
+  margin-top: 6rpx;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 22rpx;
+  line-height: 1.3;
+}
+
+.video-badge {
+  position: absolute;
+  right: 24rpx;
+  bottom: 28rpx;
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  font-size: 22rpx;
+  line-height: 1.2;
+  font-weight: 600;
 }
 
 .nav-grid {
