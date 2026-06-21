@@ -18,7 +18,7 @@
               <view class="video-title">{{ item.title }}</view>
               <view class="video-subtitle">{{ item.subtitle }}</view>
             </view>
-            <view class="video-badge">视频入口</view>
+            <!-- <view class="video-badge">视频入口</view> -->
           </view>
           <image v-else class="banner-image" :src="item.url" mode="aspectFill"></image>
         </swiper-item>

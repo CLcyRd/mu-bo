@@ -55,7 +55,7 @@ def list_homepage_media():
             {
                 "type": "video",
                 "title": "走进谢晋故居",
-                "subtitle": "宣传视频 · 点击全屏播放",
+                "subtitle": "点击全屏播放",
                 "cover_url": f"{PROMO_VIDEO_URL_PREFIX}/{PROMO_VIDEO_COVER_FILENAME}",
                 "video_url": f"{PROMO_VIDEO_URL_PREFIX}/{PROMO_VIDEO_FILENAME}",
             }
