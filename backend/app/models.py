@@ -119,6 +119,7 @@ class Volunteer(Base):
     ethnicity = Column(String(30), nullable=True)
     phone = Column(String(11), nullable=False)
     service_time = Column(String(100), nullable=True)
+    monthly_service_count = Column(Integer, nullable=True)
     organization = Column(String(120), nullable=True)
     position = Column(String(120), nullable=True)
     email = Column(String(100), nullable=True)

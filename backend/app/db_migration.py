@@ -27,5 +27,6 @@ def run_schema_migrations(engine: Engine):
     _add_column_if_missing(engine, "volunteers", "age", "INTEGER")
     _add_column_if_missing(engine, "volunteers", "ethnicity", "VARCHAR(30)")
     _add_column_if_missing(engine, "volunteers", "service_time", "VARCHAR(100)")
+    _add_column_if_missing(engine, "volunteers", "monthly_service_count", "INTEGER")
     _add_column_if_missing(engine, "volunteers", "organization", "VARCHAR(120)")
     _add_column_if_missing(engine, "volunteers", "position", "VARCHAR(120)")

@@ -30,18 +30,10 @@
           <input v-model="form.phone" class="form-control input-control" type="number" placeholder="请输入手机号码" />
         </view>
         <view class="form-group">
-          <view class="form-label">服务时段</view>
-          <view class="service-time-group">
-            <view
-              v-for="slot in serviceTimeOptions"
-              :key="slot"
-              class="service-time-chip"
-              :class="{ active: form.service_times.includes(slot) }"
-              @click="toggleServiceTime(slot)"
-            >
-              {{ slot }}
-            </view>
-          </view>
+          <view class="form-label">每月服务次数</view>
+          <picker class="picker-control" mode="selector" :range="monthlyServiceCountOptions" :value="monthlyServiceCountIndex" @change="onMonthlyServiceCountChange">
+            <view class="picker-value">{{ form.monthly_service_count ? `${form.monthly_service_count}次` : '请选择每月服务次数' }}</view>
+          </picker>
         </view>
         <view class="form-group">
           <view class="form-label">学校 / 单位</view>
@@ -78,7 +70,7 @@ const form = reactive({
   age: '',
   ethnicity: '',
   phone: '',
-  service_times: [] as string[],
+  monthly_service_count: null as number | null,
   organization: '',
   position: '',
   email: '',
@@ -86,7 +78,8 @@ const form = reactive({
 })
 const submitting = ref(false)
 const genderOptions = ['女', '男']
-const serviceTimeOptions = ['周三', '周六']
+const monthlyServiceCountOptions = ['1次', '2次', '3次', '4次']
+const defaultServiceTime = '周六'
 
 type ApiResponse<T> = {
   code: number
@@ -112,19 +105,17 @@ const onGenderChange = (event: any) => {
   form.gender = selected || ''
 }
 
-const toggleServiceTime = (slot: string) => {
-  const index = form.service_times.indexOf(slot)
-  if (index >= 0) {
-    form.service_times.splice(index, 1)
-    return
+const getMonthlyServiceCountIndex = () => {
+  if (!form.monthly_service_count) {
+    return 0
   }
-  form.service_times.push(slot)
+  const index = form.monthly_service_count - 1
+  return index >= 0 && index < monthlyServiceCountOptions.length ? index : 0
 }
 
-const normalizeServiceTime = () => {
-  const unique = Array.from(new Set(form.service_times))
-  const ordered = serviceTimeOptions.filter((item) => unique.includes(item))
-  form.service_times = ordered
+const onMonthlyServiceCountChange = (event: any) => {
+  const selectedIndex = Number(event?.detail?.value || 0)
+  form.monthly_service_count = selectedIndex + 1
 }
 
 const requestWithToken = <T>(url: string, method: 'GET' | 'POST', data?: Record<string, unknown>) => {
@@ -160,7 +151,7 @@ const createVolunteerRedirectUrl = () => {
   if (form.age) query.push(`age=${encodeURIComponent(form.age)}`)
   if (form.ethnicity) query.push(`ethnicity=${encodeURIComponent(form.ethnicity)}`)
   if (form.phone) query.push(`phone=${encodeURIComponent(form.phone)}`)
-  if (form.service_times.length) query.push(`service_times=${encodeURIComponent(form.service_times.join(','))}`)
+  if (form.monthly_service_count) query.push(`monthly_service_count=${form.monthly_service_count}`)
   if (form.organization) query.push(`organization=${encodeURIComponent(form.organization)}`)
   if (form.position) query.push(`position=${encodeURIComponent(form.position)}`)
   if (form.email) query.push(`email=${encodeURIComponent(form.email)}`)
@@ -181,10 +172,10 @@ onLoad((options) => {
   form.age = typeof options.age === 'string' ? decodeURIComponent(options.age) : ''
   form.ethnicity = typeof options.ethnicity === 'string' ? decodeURIComponent(options.ethnicity) : ''
   form.phone = typeof options.phone === 'string' ? decodeURIComponent(options.phone) : ''
-  form.service_times = typeof options.service_times === 'string' && options.service_times
-    ? decodeURIComponent(options.service_times).split(',').map((item) => item.trim()).filter(Boolean)
-    : []
-  normalizeServiceTime()
+  const monthlyServiceCount = Number(options.monthly_service_count)
+  form.monthly_service_count = Number.isInteger(monthlyServiceCount) && monthlyServiceCount >= 1 && monthlyServiceCount <= 4
+    ? monthlyServiceCount
+    : null
   form.organization = typeof options.organization === 'string' ? decodeURIComponent(options.organization) : ''
   form.position = typeof options.position === 'string' ? decodeURIComponent(options.position) : ''
   form.email = typeof options.email === 'string' ? decodeURIComponent(options.email) : ''
@@ -221,9 +212,8 @@ const submitForm = async () => {
     uni.showToast({ title: '请输入正确手机号', icon: 'none' })
     return
   }
-  normalizeServiceTime()
-  if (!form.service_times.length) {
-    uni.showToast({ title: '请选择服务时段', icon: 'none' })
+  if (!Number.isInteger(form.monthly_service_count) || !form.monthly_service_count || form.monthly_service_count < 1 || form.monthly_service_count > 4) {
+    uni.showToast({ title: '请选择每月服务次数', icon: 'none' })
     return
   }
   if (!form.organization.trim()) {
@@ -254,7 +244,8 @@ const submitForm = async () => {
       age: ageValue,
       ethnicity: form.ethnicity.trim(),
       phone: form.phone.trim(),
-      service_time: form.service_times.join('、'),
+      service_time: defaultServiceTime,
+      monthly_service_count: form.monthly_service_count,
       organization: form.organization.trim(),
       position: form.position.trim(),
       email: form.email.trim() || null,
@@ -280,7 +271,7 @@ const submitForm = async () => {
       form.age = ''
       form.ethnicity = ''
       form.phone = ''
-      form.service_times = []
+      form.monthly_service_count = null
       form.organization = ''
       form.position = ''
       form.email = ''
@@ -295,6 +286,7 @@ const submitForm = async () => {
 }
 
 const genderIndex = computed(() => getGenderIndex())
+const monthlyServiceCountIndex = computed(() => getMonthlyServiceCountIndex())
 </script>
 
 <style lang="scss">
@@ -359,29 +351,6 @@ const genderIndex = computed(() => getGenderIndex())
   color: #fff;
   font-size: 30rpx;
   box-sizing: border-box;
-}
-
-.service-time-group {
-  display: flex;
-  gap: 16rpx;
-}
-
-.service-time-chip {
-  flex: 1;
-  height: 72rpx;
-  border-radius: 36rpx;
-  border: 1rpx solid rgba(212, 175, 55, 0.45);
-  color: #d4af37;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28rpx;
-}
-
-.service-time-chip.active {
-  background: rgba(212, 175, 55, 0.18);
-  border-color: #d4af37;
-  color: #f0f4f8;
 }
 
 .section-subtitle {

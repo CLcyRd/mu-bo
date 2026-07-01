@@ -8,6 +8,11 @@
     <el-table :data="volunteers" v-loading="loading" stripe>
       <el-table-column prop="name" label="姓名" min-width="120" />
       <el-table-column prop="phone" label="手机号" min-width="140" />
+      <el-table-column label="每月服务次数" min-width="130">
+        <template #default="{ row }">
+          <span>{{ formatMonthlyServiceCount(row.monthly_service_count) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="邮箱" min-width="220">
         <template #default="{ row }">
           <span>{{ row.email || '-' }}</span>
@@ -77,6 +82,7 @@ type VolunteerItem = {
   ethnicity: string | null
   phone: string
   service_time: string | null
+  monthly_service_count: number | null
   organization: string | null
   position: string | null
   email: string | null
@@ -224,12 +230,16 @@ const normalizeText = (value: string | number | null | undefined) => {
   return String(value).trim()
 }
 
-const isChecked = (serviceTime: string, key: string) => {
-  return serviceTime.includes(key) ? '☑' : '☐'
+const formatMonthlyServiceCount = (value: number | null | undefined) => {
+  if (!value) {
+    return '-'
+  }
+  return `${value}次`
 }
 
 const buildWordHtml = (row: VolunteerItem) => {
-  const serviceTime = normalizeText(row.service_time)
+  const serviceTime = normalizeText(row.service_time) || '周六'
+  const monthlyServiceCount = formatMonthlyServiceCount(row.monthly_service_count)
   const note = normalizeText(row.note) || '无'
   return `<!DOCTYPE html>
 <html>
@@ -272,13 +282,19 @@ const buildWordHtml = (row: VolunteerItem) => {
       <td class="label">邮箱</td>
       <td class="value">${escapeHtml(normalizeText(row.email))}</td>
       <td class="label">服务时段</td>
-      <td class="value">${isChecked(serviceTime, '周三')} 周三　${isChecked(serviceTime, '周六')} 周六</td>
+      <td class="value">${escapeHtml(serviceTime)}</td>
     </tr>
     <tr>
+      <td class="label">每月服务次数</td>
+      <td class="value">${escapeHtml(monthlyServiceCount)}</td>
       <td class="label">学校 / 单位</td>
       <td class="value">${escapeHtml(normalizeText(row.organization))}</td>
+    </tr>
+    <tr>
       <td class="label">专业 / 职务</td>
       <td class="value">${escapeHtml(normalizeText(row.position))}</td>
+      <td class="label">审核状态</td>
+      <td class="value">${escapeHtml(normalizeText(row.status))}</td>
     </tr>
     <tr>
       <td class="intro-label">个人简介</td>

@@ -4,22 +4,22 @@
       <view class="image-stage">
         <scroll-view class="gallery" scroll-x :scroll-into-view="activeSlideId" scroll-with-animation>
           <view
-            v-for="(color, index) in product.colors"
+            v-for="(image, index) in product.images"
             :id="`slide-${index}`"
-            :key="color.label"
+            :key="`${image.label}-${index}`"
             class="gallery-item"
           >
             <image
-              v-if="color.imageUrl"
+              v-if="image.imageUrl"
               class="gallery-image"
-              :src="color.imageUrl"
+              :src="image.imageUrl"
               mode="aspectFill"
             ></image>
           </view>
         </scroll-view>
       </view>
 
-      <view class="color-panel">
+      <view v-if="product.colors.length > 0" class="color-panel">
         <view class="panel-label">颜色选择</view>
         <view class="color-options">
           <view
@@ -54,11 +54,17 @@ import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { buildApiUrl, normalizeApiAssetUrl } from '../../utils/api'
 
-type ProductKey = 'tshirt' | 'vest' | 'cap' | 'cup'
+type ProductKey = 'tshirt' | 'vest' | 'cap' | 'cup' | 'book' | 'stamp_folder' | 'bag'
+
+type ProductImage = {
+  label: string
+  imageUrl: string
+}
 
 type ProductDetail = {
   name: string
   summary: string
+  images: ProductImage[]
   colors: Array<{
     label: string
     value: string
@@ -81,7 +87,11 @@ type ProductApiItem = {
   name?: string
   title?: string
   summary: string
-  colors: Array<{
+  images?: Array<{
+    label?: string
+    image_url?: string
+  }>
+  colors?: Array<{
     label?: string
     name?: string
     value: string
@@ -97,6 +107,11 @@ const products: Record<ProductKey, ProductDetail> = {
   tshirt: {
     name: 'T恤',
     summary: '纯棉宽松版型，适合日常穿着与文创展示。',
+    images: [
+      { label: '黑色', imageUrl: '' },
+      { label: '深灰', imageUrl: '' },
+      { label: '浅灰', imageUrl: '' }
+    ],
     colors: [
       { label: '黑色', value: '#1d1d1f', imageUrl: '' },
       { label: '深灰', value: '#4f5357', imageUrl: '' },
@@ -112,6 +127,10 @@ const products: Record<ProductKey, ProductDetail> = {
   vest: {
     name: '马甲',
     summary: '多功能穿搭单品，后背可脱卸，适合户外和日常场景。',
+    images: [
+      { label: '黑色', imageUrl: '' },
+      { label: '灰色', imageUrl: '' }
+    ],
     colors: [
       { label: '黑色', value: '#111214', imageUrl: '' },
       { label: '灰色', value: '#8c8f91', imageUrl: '' }
@@ -126,6 +145,12 @@ const products: Record<ProductKey, ProductDetail> = {
   cap: {
     name: '帽子',
     summary: '速干材质帽款，适合晴天出行与户外活动。',
+    images: [
+      { label: '米紫', imageUrl: '' },
+      { label: '米黄', imageUrl: '' },
+      { label: '黑绿', imageUrl: '' },
+      { label: '灰白', imageUrl: '' }
+    ],
     colors: [
       { label: '米紫', value: 'linear-gradient(135deg,#d7c9af 50%,#6d5aa7 50%)', imageUrl: '' },
       { label: '米黄', value: 'linear-gradient(135deg,#d7c9af 50%,#e6c94b 50%)', imageUrl: '' },
@@ -142,6 +167,15 @@ const products: Record<ProductKey, ProductDetail> = {
   cup: {
     name: '水杯',
     summary: '双层不锈钢杯身，防烫隔冷，适合随身携带。',
+    images: [
+      { label: '黑色', imageUrl: '' },
+      { label: '蓝色', imageUrl: '' },
+      { label: '绿色', imageUrl: '' },
+      { label: '橙色', imageUrl: '' },
+      { label: '紫色', imageUrl: '' },
+      { label: '红色', imageUrl: '' },
+      { label: '黄色', imageUrl: '' }
+    ],
     colors: [
       { label: '黑色', value: '#171819', imageUrl: '' },
       { label: '蓝色', value: '#2e6bb7', imageUrl: '' },
@@ -156,6 +190,42 @@ const products: Record<ProductKey, ProductDetail> = {
       { label: '颜色', value: '红色、蓝色、黄色、黑色、紫色、绿色、橙色' },
       { label: '容量', value: '255ML' },
       { label: '尺寸', value: '杯高8.5cm，杯宽7.5cm' }
+    ]
+  },
+  book: {
+    name: '书籍',
+    summary: '《永不谢幕—百年谢晋百人谈》',
+    images: [{ label: '封面', imageUrl: '' }],
+    colors: [],
+    specs: [
+      { label: '介绍', value: '《永不谢幕——百年谢晋百人谈》由上海谢晋电影艺术基金会主编、上海人民出版社出版。' }
+    ]
+  },
+  stamp_folder: {
+    name: '邮折',
+    summary: '谢晋主题纪念邮折，展示故居纪念视觉与收藏内容。',
+    images: [
+      { label: '封面', imageUrl: '' },
+      { label: '内部', imageUrl: '' }
+    ],
+    colors: [],
+    specs: [
+      { label: '介绍', value: '谢晋主题纪念邮折，包含封面与内部展示，适合作为故居文创收藏。' }
+    ]
+  },
+  bag: {
+    name: '帆布包',
+    summary: '谢晋故居主题帆布包，轻便实用，适合日常通勤与参观携带。',
+    images: [
+      { label: '粉色', imageUrl: '' },
+      { label: '黄色', imageUrl: '' }
+    ],
+    colors: [
+      { label: '粉色', value: '#C95183', imageUrl: '' },
+      { label: '黄色', value: '#eeec60', imageUrl: '' }
+    ],
+    specs: [
+      { label: '颜色', value: '粉色、黄色' }
     ]
   }
 }
@@ -178,7 +248,16 @@ const selectColor = (index: number) => {
 const mapApiProduct = (item: ProductApiItem): ProductDetail => ({
   name: item.name || item.title || '',
   summary: item.summary,
-  colors: item.colors.map((color) => ({
+  images: ((item.images && item.images.length > 0)
+    ? item.images.map((image) => ({
+        label: image.label || '',
+        imageUrl: normalizeApiAssetUrl(image.image_url || '')
+      }))
+    : (item.colors || []).map((color) => ({
+        label: color.label || color.name || '',
+        imageUrl: normalizeApiAssetUrl(color.image_url || '')
+      }))),
+  colors: (item.colors || []).map((color) => ({
     label: color.label || color.name || '',
     value: color.value,
     imageUrl: normalizeApiAssetUrl(color.image_url || '')
@@ -210,7 +289,7 @@ onLoad((options) => {
   const key = typeof options?.product === 'string' ? decodeURIComponent(options.product) : ''
   productKey.value = isProductKey(key) ? key : 'tshirt'
   uni.setNavigationBarTitle({ title: `${products[productKey.value].name}详情` })
-  fetchProductDetail(productKey.value)
+  fetchProductDetail(key || productKey.value)
 })
 </script>
 

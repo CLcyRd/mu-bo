@@ -104,23 +104,82 @@ PRODUCTS = {
             {"name": "紫色", "label": "紫色", "value": "#7753a6", "image_url": product_image_url("cup_purple.jpg")},
             {"name": "红色", "label": "红色", "value": "#ba3931", "image_url": product_image_url("cup_red.jpg")},
             {"name": "黄色", "label": "黄色", "value": "#e6c542", "image_url": product_image_url("cup_yellow.jpg")},
+            {"name": "银色", "label": "银色", "value": "#e3e5e6", "image_url": product_image_url("cup_silver.jpg")},
         ],
         "specs": [
             {"label": "材质", "value": "不锈钢原色内壁，双层不锈钢防烫隔冷"},
-            {"label": "颜色", "value": "红色、蓝色、黄色、黑色、紫色、绿色、橙色"},
+            {"label": "颜色", "value": "红色、蓝色、黄色、黑色、紫色、绿色、橙色、银色"},
             {"label": "容量", "value": "255ML"},
             {"label": "尺寸", "value": "杯高8.5cm，杯宽7.5cm"},
+        ],
+    },
+    "book": {
+        "id": "book",
+        "title": "书籍",
+        "name": "书籍",
+        "desc": "《永不谢幕—百年谢晋百人谈》",
+        "summary": "《永不谢幕—百年谢晋百人谈》",
+        "meta": "单册",
+        "colors": [],
+        "images": [
+            {"label": "封面", "image_url": product_image_url("book.jpg")},
+        ],
+        "specs": [
+            {"label": "介绍", "value": "《永不谢幕——百年谢晋百人谈》由上海谢晋电影艺术基金会主编、上海人民出版社出版。本书以“百年谢晋百人谈”为思路，邀请海内外和谢晋有过交集并在各自领域具有一定影响力的代表担任采访嘉宾。近百位大咖的口述实录、大量鲜为人知的生动细节、真情回忆现场飙泪的叙述，汇聚出一个鲜活、立体、激情又真实的谢晋。"},
+        ],
+    },
+    "stamp_folder": {
+        "id": "stamp_folder",
+        "title": "邮折",
+        "name": "邮折",
+        "desc": "谢晋主题纪念邮折",
+        "summary": "谢晋主题纪念邮折，展示故居纪念视觉与收藏内容。",
+        "meta": "",
+        "colors": [],
+        "images": [
+            {"label": "封面", "image_url": product_image_url("stamp_folder_cover.jpg")},
+            {"label": "内部", "image_url": product_image_url("stamp_folder.jpg")},
+        ],
+        "specs": [
+            {"label": "介绍", "value": "谢晋主题纪念邮折，适合作为故居文创收藏。"},
+        ],
+    },
+    "bag": {
+        "id": "bag",
+        "title": "帆布包",
+        "name": "帆布包",
+        "desc": "主题帆布包，日常通勤与参观携带皆宜。",
+        "summary": "谢晋故居主题帆布包，轻便实用，适合日常通勤与参观携带。",
+        "meta": "粉色/黄色",
+        "colors": [
+            {"name": "粉色", "label": "粉色", "value": "#C95183", "image_url": product_image_url("bag_pink.jpg")},
+            {"name": "黄色", "label": "黄色", "value": "#eeec60", "image_url": product_image_url("bag_yellow.jpg")},
+        ],
+        "specs": [
+            {"label": "颜色", "value": "粉色、黄色"},
         ],
     },
 }
 
 
 def serialize_product(product: dict) -> dict:
-    colors = product["colors"]
+    colors = product.get("colors", [])
+    images = product.get("images") or [
+        {"label": color.get("label") or color.get("name") or "", "image_url": color.get("image_url", "")}
+        for color in colors
+        if color.get("image_url")
+    ]
+    primary_image_url = product.get("primary_image_url", "")
+    if not primary_image_url and images:
+        primary_image_url = images[0].get("image_url", "")
+    if not primary_image_url and colors:
+        primary_image_url = colors[0].get("image_url", "")
     return {
         **product,
+        "colors": colors,
+        "images": images,
         "color_count": len(colors),
-        "primary_image_url": colors[0]["image_url"] if colors else "",
+        "primary_image_url": primary_image_url,
     }
 
 
@@ -135,7 +194,8 @@ def list_products():
 
 @router.get("/{product_id}", response_model=schemas.ApiResponse)
 def get_product(product_id: str):
-    product = PRODUCTS.get(product_id)
+    normalized_id = "stamp_folder" if product_id == "stamp_foler" else product_id
+    product = PRODUCTS.get(normalized_id)
     if not product:
         raise ApiError(code=4004, message="产品不存在", http_status=404)
     return api_success({"item": serialize_product(product)}, message="加载成功")

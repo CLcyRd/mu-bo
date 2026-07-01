@@ -48,7 +48,7 @@ const dailyInfo = [
   },
   {
     label: '工作内容',
-    value: '配合故居活动的组织与执行，包括现场布置、签到引导、秩序维护及活动协助。在需要的时候，为来访者指一指路、聊一聊谢晋、聊一聊电影。闭馆前协助整理场地及简单工作台账。'
+    value: '配合故居活动的组织与执行，包括现场布置、签到引导、秩序维护及活动协助。闭馆前协助整理场地及简单工作台账。'
   }
 ]
 const goToVolunteerForm = () => {
@@ -201,7 +201,7 @@ const goToVolunteerForm = () => {
 
 .footer-decor {
   text-align: center;
-  margin-top: 40rpx;
+  margin-top: 45rpx;
   opacity: 0.3;
   font-size: 44rpx;
 }

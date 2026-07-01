@@ -55,7 +55,8 @@ class VolunteerRegisterRequest(BaseModel):
     age: int = Field(ge=1, le=120)
     ethnicity: constr(strip_whitespace=True, min_length=1, max_length=30)
     phone: constr(strip_whitespace=True, min_length=11, max_length=11)
-    service_time: constr(strip_whitespace=True, min_length=1, max_length=100)
+    service_time: constr(strip_whitespace=True, min_length=1, max_length=100) = "周六"
+    monthly_service_count: int = Field(ge=1, le=4)
     organization: constr(strip_whitespace=True, min_length=1, max_length=120)
     position: constr(strip_whitespace=True, min_length=1, max_length=120)
     email: Optional[constr(strip_whitespace=True, max_length=100)] = None
@@ -118,6 +119,7 @@ class VolunteerOut(BaseModel):
     ethnicity: Optional[str] = None
     phone: str
     service_time: Optional[str] = None
+    monthly_service_count: Optional[int] = None
     organization: Optional[str] = None
     position: Optional[str] = None
     email: Optional[str] = None

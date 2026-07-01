@@ -26,12 +26,12 @@
           <view>
             <view class="product-title-row">
               <view class="product-title">{{ product.title }}</view>
-              <view class="product-count">{{ product.colorCount }}色</view>
+              <view v-if="product.colorCount > 0" class="product-count">{{ product.colorCount }}色</view>
             </view>
             <view class="product-desc">{{ product.desc }}</view>
           </view>
 
-          <view class="color-row">
+          <view v-if="product.colors.length > 0" class="color-row">
             <view
               v-for="color in product.colors"
               :key="color.name"
@@ -81,14 +81,18 @@ type ProductApiItem = {
   id: string
   title?: string
   name?: string
-  desc: string
-  meta: string
+  desc?: string
+  meta?: string
   color_count?: number
   primary_image_url?: string
-  colors: Array<{
+  colors?: Array<{
     name?: string
     label?: string
     value: string
+  }>
+  images?: Array<{
+    label?: string
+    image_url?: string
   }>
 }
 
@@ -156,11 +160,11 @@ const products = ref<ProductItem[]>(fallbackProducts)
 const mapApiProduct = (item: ProductApiItem): ProductItem => ({
   id: item.id,
   title: item.title || item.name || '',
-  colorCount: item.color_count ?? item.colors.length,
-  desc: item.desc,
-  meta: item.meta,
+  colorCount: item.color_count ?? (item.colors || []).length,
+  desc: item.desc || '',
+  meta: item.meta || '',
   primaryImageUrl: normalizeApiAssetUrl(item.primary_image_url || ''),
-  colors: item.colors.map((color) => ({
+  colors: (item.colors || []).map((color) => ({
     name: color.name || color.label || '',
     value: color.value
   }))

@@ -40,6 +40,9 @@
       
       <button class="submit-btn" type="button" @click="submitBooking">立即预约</button>
     </view>
+    <view class="team-booking-tip">
+      团队预约请联系: 18458526607
+    </view>
   </view>
 </template>
 
@@ -252,5 +255,12 @@ const submitBooking = async () => {
 }
 .submit-btn:active {
   background-color: #2f4f8f;
+}
+.team-booking-tip {
+  margin-top: 40rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 1.5;
+  text-align: center;
 }
 </style>
